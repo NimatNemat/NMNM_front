@@ -1,0 +1,32 @@
+.h1 {
+  font-size: 48px;
+  font-weight: 700;
+}
+.h2 {
+  font-size: 40px;
+  font-weight: 700;
+}
+.h3 {
+  font-size: 24px;
+  font-weight: 700;
+}
+.p1bold {
+  font-size: 16px;
+  font-weight: 700;
+}
+.p1regular {
+  font-size: 16px;
+  font-weight: 400;
+}
+.p1medium {
+  font-size: 16px;
+  font-weight: 500;
+}
+.p2medium {
+  font-size: 12px;
+  font-weight: 500;
+}
+.p2regular {
+  font-size: 12px;
+  font-weight: 400;
+}
