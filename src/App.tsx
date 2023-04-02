@@ -11,6 +11,7 @@ import Mypage from './pages/MyPage';
 import PreferencePage from './pages/PreferencePage';
 import RegisterPage from './pages/RegisterPage';
 import RegisterDetailPage from './pages/RegisterDetailPage';
+import Styles from './config/globalFontStyle.module.css';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/detail/*" element={<DetailPage />} />
         </Routes>
       </BrowserRouter>
+      <div>Font Test</div>
     </div>
   );
 }
