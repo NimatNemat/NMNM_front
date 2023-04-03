@@ -12,11 +12,13 @@ import PreferencePage from './pages/PreferencePage';
 import RegisterPage from './pages/RegisterPage';
 import RegisterDetailPage from './pages/RegisterDetailPage';
 import Styles from './config/globalFontStyle.module.css';
+import Header from './components/Header';
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
+    <BrowserRouter>
+      <Header />
+      <div className="Content">
         <Routes>
           <Route path="/" element={<IntroPage />} />
           <Route path="/main/*" element={<Main />} />
@@ -29,9 +31,8 @@ function App() {
           <Route path="/registerdetail/*" element={<RegisterDetailPage />} />
           <Route path="/detail/*" element={<DetailPage />} />
         </Routes>
-      </BrowserRouter>
-      <div>Font Test</div>
-    </div>
+      </div>
+    </BrowserRouter>
   );
 }
 
