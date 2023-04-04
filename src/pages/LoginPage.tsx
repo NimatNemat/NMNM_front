@@ -1,7 +1,70 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import StyledInput from '../components/Input';
+import Styles from '../config/globalFontStyle.module.css';
+import StyledButton from '../components/StyledButton';
+
+const LoginPageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  & h1 {
+    margin: 0;
+  }
+  gap: 24px;
+`;
 
 function LoginPage() {
-  return <div className="LoginPage">Login</div>;
+  const [idValue, setIdValue] = useState('');
+  const [passwordValue, setPasswordValue] = useState('');
+
+  const handleIdEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIdValue(event.target.value);
+  };
+
+  const handlePasswordEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPasswordValue(event.target.value);
+  };
+
+  const onClickfunction = () => {
+    console.log('click');
+  };
+
+  return (
+    <LoginPageContainer className="LoginPage">
+      <Container>
+        <h1 className={Styles.h3}>로그인</h1>
+        <StyledInput
+          value={idValue}
+          type="text"
+          placeholder="아이디를 입력하세요."
+          width="600px"
+          onChange={handleIdEvent}
+        />
+        <StyledInput
+          value={passwordValue}
+          type="password"
+          placeholder="비밀번호를 입력하세요."
+          width="600px"
+          onChange={handlePasswordEvent}
+        />
+        <Link to="/idsearch/" className={Styles.p1bold} style={{ alignSelf: 'flex-end' }}>
+          로그인 정보를 잊으셨나요?
+        </Link>
+        <StyledButton onClick={onClickfunction}>Login</StyledButton>
+        <Link to="/register/" className={Styles.p1bold} style={{ alignSelf: 'center' }}>
+          아직 회원이 아니신가요?
+        </Link>
+      </Container>
+    </LoginPageContainer>
+  );
 }
 
 export default LoginPage;
