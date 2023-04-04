@@ -30,7 +30,6 @@ function Header() {
   return (
     <StyledHeader>
       {/* 이미지 */}
-
       <StyledLink to="/">NimatNemat</StyledLink>
 
       <Usericon />
