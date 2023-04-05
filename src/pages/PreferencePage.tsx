@@ -11,7 +11,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   gap: 2.4rem;
   width: 100%;
 `;
@@ -24,6 +24,7 @@ const Title = styled.div`
 
 const SubTitle = styled.div`
   display: flex;
+  justify-content: center;
   align-items: center;
   white=space: nowrap;
   color: rgba(128, 128, 128, 1);
@@ -62,6 +63,13 @@ const GroupContent = styled.div`
   background-color: white;
   padding: 2.4rem;
   box-shadow: 0.5rem 0.5rem 1.2rem rgba(0, 0, 0, 0.1);
+`;
+const BtnContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60rem;
+  height: 8rem;
 `;
 
 function PreferencePage() {
@@ -142,6 +150,15 @@ function PreferencePage() {
             </GroupContent>
           </Group>
         </GroupContainer>
+        <BtnContainer>
+          <StyledButton
+            onClick={() => {
+              console.log('click');
+            }}
+          >
+            다음
+          </StyledButton>
+        </BtnContainer>
       </Container>
     </PreferencePageContainer>
   );
