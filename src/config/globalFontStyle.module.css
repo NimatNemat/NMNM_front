@@ -30,3 +30,6 @@
   font-size: 1.2rem;
   font-weight: 400;
 }
+.gray {
+  color: rgba(128, 128, 128, 1);
+}
