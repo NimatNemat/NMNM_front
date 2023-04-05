@@ -1,46 +1,25 @@
-# Getting Started with Create React App
+#Git Commit message규칙
+################
+# <타입> : <제목> 의 형식으로 제목을 아래 공백줄에 작성
+# 제목은 50자 이내 / 변경사항이 "무엇"인지 명확히 작성 / 끝에 마침표 금지
+# 예) feat : 로그인 기능 추가
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 바로 아래 공백은 지우지 마세요 (제목과 본문의 분리를 위함)
 
-## Available Scripts
+################
+# 본문(구체적인 내용)을 아랫줄에 작성
+# 여러 줄의 메시지를 작성할 땐 "-"로 구분 (한 줄은 72자 이내)
 
-In the project directory, you can run:
+################
+# 꼬릿말(footer)을 아랫줄에 작성 (현재 커밋과 관련된 이슈 번호 추가 등)
+# 예) Close #7
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+################
+# feat : 새로운 기능 추가
+# fix : 버그 수정
+# docs : 문서 수정
+# test : 테스트 코드 추가
+# refact : 코드 리팩토링
+# style : 코드 의미에 영향을 주지 않는 변경사항
+# chore : 빌드 부분 혹은 패키지 매니저 수정사항
+################
