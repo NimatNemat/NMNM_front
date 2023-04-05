@@ -13,16 +13,16 @@ const Input = styled.input<StyledInputProps>`
   display: flex;
   flex-direction: row;
   align-items: center;
-  height: calc(100%-32px);
-  width: ${(props) => (props.width === '600px' ? '600px' : props.width)};
+  height: calc(100%-3.2rem);
+  width: ${(props) => (props.width === '60rem' ? '60rem' : props.width)};
   border: 1px solid #dfdfdf;
   background: #fffdf5;
-  padding: 16px 32px;
+  padding: 1.6rem 3.2rem;
 `;
 
 const Div = styled.div`
   width: 100%;
-  height: 48px;
+  height: 4.8rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,7 +40,7 @@ function StyledInput(props: StyledInputProps) {
 }
 
 StyledInput.defaultProps = {
-  width: '600px',
+  width: '60rem',
 };
 
 export default StyledInput;

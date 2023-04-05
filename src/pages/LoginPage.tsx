@@ -7,18 +7,19 @@ import StyledButton from '../components/StyledButton';
 
 const LoginPageContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
 `;
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: flex-start;
   & h1 {
     margin: 0;
   }
-  gap: 24px;
+  gap: 2.4rem;
+  width: 60rem;
 `;
 
 function LoginPage() {
@@ -40,26 +41,34 @@ function LoginPage() {
   return (
     <LoginPageContainer className="LoginPage">
       <Container>
-        <h1 className={Styles.h3}>로그인</h1>
+        <span className={Styles.h3}>로그인</span>
         <StyledInput
           value={idValue}
           type="text"
           placeholder="아이디를 입력하세요."
-          width="600px"
+          width="100%"
           onChange={handleIdEvent}
         />
         <StyledInput
           value={passwordValue}
           type="password"
           placeholder="비밀번호를 입력하세요."
-          width="600px"
+          width="100%"
           onChange={handlePasswordEvent}
         />
-        <Link to="/idsearch/" className={Styles.p1bold} style={{ alignSelf: 'flex-end' }}>
+        <Link
+          to="/idsearch/"
+          className={Styles.p1bold}
+          style={{ alignSelf: 'flex-end', textDecoration: 'none', color: 'black' }}
+        >
           로그인 정보를 잊으셨나요?
         </Link>
         <StyledButton onClick={onClickfunction}>Login</StyledButton>
-        <Link to="/register/" className={Styles.p1bold} style={{ alignSelf: 'center' }}>
+        <Link
+          to="/register/"
+          className={Styles.p1bold}
+          style={{ alignSelf: 'center', textDecoration: 'none', color: 'black' }}
+        >
           아직 회원이 아니신가요?
         </Link>
       </Container>
