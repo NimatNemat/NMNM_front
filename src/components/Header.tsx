@@ -8,19 +8,19 @@ const StyledHeader = styled.header`
   height: 7.4rem;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
-  border-bottom: 1px solid rgba(208, 208, 208, 1);
+  padding: 0 2.4rem;
+  border-bottom: 0.1rem solid rgba(208, 208, 208, 1);
 `;
 const Usericon = styled.div`
-  width: 50px;
-  height: 50px;
+  width: 5rem;
+  height: 5rem;
   border-radius: 50%;
   background-color: #a5a5a5;
 `;
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: rgba(255, 137, 35, 0.6);
-  font-size: 24px;
+  font-size: 2.4rem;
   font-weight: 700;
   width: 100%;
   height: 100%;
@@ -28,8 +28,8 @@ const StyledLink = styled(Link)`
   align-items: center;
 `;
 const StyledImg = styled.img`
-  width: 125px;
-  height: 50px;
+  width: 12.5rem;
+  height: 5rem;
 `;
 
 function Header() {
