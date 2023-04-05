@@ -211,7 +211,9 @@ function RegisterPage() {
             <span className={Styles.p1regular}>마케팅 정보 수신 동의</span>
           </Linebox>
         </PrivacyContainer>
-        <StyledButton onClick={Submit}>회원가입</StyledButton>
+        <StyledButton onClick={Submit}>
+          <span className={Styles.p1bold}>회원가입</span>
+        </StyledButton>
       </Container>
     </RegisterPageContainer>
   );

@@ -13,7 +13,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   gap: 2.4rem;
-  width: 100%;
+  width: 120rem;
 `;
 const Title = styled.div`
   display: flex;

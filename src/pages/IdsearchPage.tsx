@@ -39,7 +39,7 @@ const Nav = styled.nav`
 const NavItem = styled.div<{ active?: boolean }>`
   color: ${({ active }) => (active ? 'black' : 'white')};
   background: ${({ active }) => (active ? '#FFFDF5' : 'rgba(0, 0, 0, 0.6)')};
-  width: 30rem;
+  width: 50%;
   height: 5rem;
   display: flex;
   justify-content: center;

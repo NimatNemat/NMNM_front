@@ -24,6 +24,14 @@ function IdFindComponent() {
   const onClickfunction = () => {
     console.log('click');
   };
+  const Btnbox = styled.div`
+    display: flex;
+    width: 100%;
+    height: 5.6rem;
+    justify-content: center;
+    align-items: center;
+  `;
+
   return (
     <Div>
       <span className={Styles.p1bold}>가입하신 이메일로 아이디를 확인하세요</span>
@@ -34,9 +42,11 @@ function IdFindComponent() {
         width="100%"
         onChange={handleEmailEvent}
       />
-      <div style={{ height: '5rem', display: 'flex' }}>
-        <StyledButton onClick={onClickfunction}>인증번호 발송</StyledButton>
-      </div>
+      <Btnbox>
+        <StyledButton onClick={onClickfunction}>
+          <span className={Styles.p1bold}>인증번호 발송</span>
+        </StyledButton>
+      </Btnbox>
       <StyledInput
         value={confirmValue}
         type="number"
@@ -44,7 +54,11 @@ function IdFindComponent() {
         width="100%"
         onChange={handleConfirmEvent}
       />
-      <StyledButton onClick={onClickfunction}>인증번호 확인</StyledButton>
+      <Btnbox>
+        <StyledButton onClick={onClickfunction}>
+          <span className={Styles.p1bold}>인증번호 확인</span>
+        </StyledButton>
+      </Btnbox>
     </Div>
   );
 }

@@ -63,7 +63,9 @@ function LoginPage() {
         >
           로그인 정보를 잊으셨나요?
         </Link>
-        <StyledButton onClick={onClickfunction}>Login</StyledButton>
+        <StyledButton onClick={onClickfunction}>
+          <span className={Styles.p1bold}>Login</span>
+        </StyledButton>
         <Link
           to="/register/"
           className={Styles.p1bold}
