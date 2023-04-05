@@ -26,7 +26,7 @@ function IdFindComponent() {
   };
   return (
     <Div>
-      <span className={Styles.h3}>가입하신 이메일로 아이디를 확인하세요</span>
+      <span className={Styles.p1bold}>가입하신 이메일로 아이디를 확인하세요</span>
       <StyledInput
         value={emailValue}
         type="email"
@@ -34,7 +34,9 @@ function IdFindComponent() {
         width="100%"
         onChange={handleEmailEvent}
       />
-      <StyledButton onClick={onClickfunction}>인증번호 발송</StyledButton>
+      <div style={{ height: '5rem', display: 'flex' }}>
+        <StyledButton onClick={onClickfunction}>인증번호 발송</StyledButton>
+      </div>
       <StyledInput
         value={confirmValue}
         type="number"

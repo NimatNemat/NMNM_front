@@ -19,7 +19,7 @@ const Container = styled.div`
     margin: 0;
   }
   gap: 2.4rem;
-  width: 60rem;
+  width: 36rem;
 `;
 
 function LoginPage() {
