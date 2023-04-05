@@ -5,7 +5,7 @@ import Styles from '../config/globalFontStyle.module.css';
 
 const StyledHeader = styled.header`
   display: flex;
-  height: 74px;
+  height: 7.4rem;
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
