@@ -15,7 +15,7 @@ const IdSearchPageContainer = styled.div`
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  justfiy-content: center;
+  justify-content: center;
   align-items: flex-start;
   width: 60rem;
   gap: 2.4rem;
