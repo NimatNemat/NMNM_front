@@ -19,6 +19,9 @@ const Btn = styled.button<StyledButtonProps>`
   border: 0px;
   padding: 16px 32px;
   background-color: ${(props) => (props.color === 'rgba(255, 137, 35, 0.6)' ? 'rgba(255, 137, 35, 0.6)' : props.color)};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 function StyledButton(props: StyledButtonProps) {

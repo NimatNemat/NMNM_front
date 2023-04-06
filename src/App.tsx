@@ -13,6 +13,7 @@ import RegisterPage from './pages/RegisterPage';
 import RegisterDetailPage from './pages/RegisterDetailPage';
 import Styles from './config/globalFontStyle.module.css';
 import Header from './components/Header';
+import PrivacyPage from './pages/PrivacyPage';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/register/*" element={<RegisterPage />} />
           <Route path="/registerdetail/*" element={<RegisterDetailPage />} />
           <Route path="/detail/*" element={<DetailPage />} />
+          <Route path="/privacy/*" element={<PrivacyPage />} />
         </Routes>
       </div>
     </BrowserRouter>

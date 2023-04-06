@@ -15,9 +15,9 @@ const IdSearchPageContainer = styled.div`
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  justfiy-content: center;
+  justify-content: center;
   align-items: flex-start;
-  width: 60rem;
+  width: 36rem;
   gap: 2.4rem;
 `;
 
@@ -39,8 +39,8 @@ const Nav = styled.nav`
 const NavItem = styled.div<{ active?: boolean }>`
   color: ${({ active }) => (active ? 'black' : 'white')};
   background: ${({ active }) => (active ? '#FFFDF5' : 'rgba(0, 0, 0, 0.6)')};
-  width: 30rem;
-  height: 10rem;
+  width: 50%;
+  height: 5rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -55,10 +55,10 @@ function IdsearchPage() {
         <span className={Styles.h3}>아이디/비밀번호 찾기</span>
         <Div>
           <Nav>
-            <NavItem className={Styles.h3} active={selected === 'id'} onClick={() => setSelected('id')}>
+            <NavItem className={Styles.p1bold} active={selected === 'id'} onClick={() => setSelected('id')}>
               아이디 찾기
             </NavItem>
-            <NavItem className={Styles.h3} active={selected === 'pw'} onClick={() => setSelected('pw')}>
+            <NavItem className={Styles.p1bold} active={selected === 'pw'} onClick={() => setSelected('pw')}>
               비밀번호 찾기
             </NavItem>
           </Nav>

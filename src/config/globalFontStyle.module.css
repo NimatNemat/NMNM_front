@@ -10,6 +10,10 @@
   font-size: 2.4rem;
   font-weight: 700;
 }
+.h4 {
+  font-size: 2rem;
+  font-weight: 700;
+}
 .p1bold {
   font-size: 1.6rem;
   font-weight: 700;
@@ -29,4 +33,7 @@
 .p2regular {
   font-size: 1.2rem;
   font-weight: 400;
+}
+.gray {
+  color: rgba(128, 128, 128, 1);
 }
