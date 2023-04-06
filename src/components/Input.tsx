@@ -17,12 +17,12 @@ const Input = styled.input<StyledInputProps>`
   width: ${(props) => (props.width === '60rem' ? '60rem' : props.width)};
   border: 1px solid #dfdfdf;
   background: #fffdf5;
-  padding: 1.6rem 3.2rem;
+  padding: 1.6rem 1.6rem;
 `;
 
 const Div = styled.div`
   width: 100%;
-  height: 4.8rem;
+  //height: 4.8rem;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -11,16 +11,18 @@ const Div = styled.div`
   gap: 2.4rem;
   width: 100%;
 `;
-
+const Btnbox = styled.div`
+  display: flex;
+  width: 100%;
+  height: 5.6rem;
+  justify-content: center;
+  align-items: center;
+`;
 function PwFindComponent() {
   const [idValue, setIdValue] = useState('');
-  const [emailValue, setEmailValue] = useState('');
   const [confirmValue, setConfirmValue] = useState('');
   const handleIdEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIdValue(event.target.value);
-  };
-  const handleEmailEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmailValue(event.target.value);
   };
   const handleConfirmEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
     setConfirmValue(event.target.value);
@@ -30,7 +32,7 @@ function PwFindComponent() {
   };
   return (
     <Div>
-      <span className={Styles.h3}>가입하신 아이디와 이메일로 비밀번호를 확인하세요</span>
+      <span className={Styles.p1bold}>가입하신 아이디로 비밀번호를 확인하세요</span>
       <StyledInput
         value={idValue}
         type="text"
@@ -38,15 +40,11 @@ function PwFindComponent() {
         width="100%"
         onChange={handleIdEvent}
       />
-      <StyledButton onClick={onClickfunction}>아이디 검사</StyledButton>
-      <StyledInput
-        value={emailValue}
-        type="email"
-        placeholder="이메일을 입력해주세요"
-        width="100%"
-        onChange={handleEmailEvent}
-      />
-      <StyledButton onClick={onClickfunction}>인증번호 발송</StyledButton>
+      <Btnbox>
+        <StyledButton onClick={onClickfunction}>
+          <span className={Styles.p1bold}>인증번호 발송</span>
+        </StyledButton>
+      </Btnbox>
       <StyledInput
         value={confirmValue}
         type="number"
@@ -54,7 +52,11 @@ function PwFindComponent() {
         width="100%"
         onChange={handleConfirmEvent}
       />
-      <StyledButton onClick={onClickfunction}>인증번호 확인</StyledButton>
+      <Btnbox>
+        <StyledButton onClick={onClickfunction}>
+          <span className={Styles.p1bold}>인증번호 확인</span>
+        </StyledButton>
+      </Btnbox>
     </Div>
   );
 }
