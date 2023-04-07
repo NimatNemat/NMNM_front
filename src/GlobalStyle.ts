@@ -3,7 +3,7 @@ import './assets/fonts/fonts.css';
 
 const GlobalStyle = createGlobalStyle`
 
-html {
+body {
   font-family: 'Pretendard';
 }
 /* 세로모드 모바일 디바이스 ( 해상도가 767px 보다 작은 화면 ) */
