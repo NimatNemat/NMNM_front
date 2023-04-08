@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { BsBookmark, BsBookmarkFill, BsFillHeartFill, BsHeart } from 'react-icons/bs';
 import Styles from '../config/globalFontStyle.module.css';
@@ -32,6 +33,7 @@ const CardInfoBox = styled.div`
   align-items: flex-start;
   padding: 1.2rem;
   width: 100%;
+  box-sizing: border-box;
 `;
 
 const LikeBox = styled.div`
@@ -60,40 +62,46 @@ function StyledCard(props: StyledCardProps) {
   const { imgSrc, likes, name, category, hashtag, showIconBox } = props;
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
-  const handleLikeClick = () => {
+
+  const handleLikeClick: React.MouseEventHandler<SVGElement> = (event) => {
+    event.preventDefault();
     setLiked(!liked);
   };
-  const handleBookmarkClick = () => {
+  const handleBookmarkClick: React.MouseEventHandler<SVGElement> = (event) => {
+    event.preventDefault();
     setBookmarked(!bookmarked);
   };
+
   return (
-    <Card>
-      <CardImage src={imgSrc} alt="" />
-      <CardInfoBox>
-        {showIconBox && (
-          <LikeBox>
-            <span className={Styles.p2bold}>좋아요 {likes}</span>
-            <IconBox>
-              {liked ? (
-                <BsFillHeartFill size="2.4rem" color="red" onClick={handleLikeClick} />
-              ) : (
-                <BsHeart size="2.4rem" onClick={handleLikeClick} />
-              )}
-              {bookmarked ? (
-                <BsBookmarkFill size="2.4rem" color="#FF7B69" onClick={handleBookmarkClick} />
-              ) : (
-                <BsBookmark size="2.4rem" onClick={handleBookmarkClick} />
-              )}
-            </IconBox>
-          </LikeBox>
-        )}
-        <InfoBox>
-          <span className={Styles.p1bold}>{name}</span>
-          <span className={Styles.p2medium}>{category}</span>
-          <span className={Styles.p2medium}>{hashtag}</span>
-        </InfoBox>
-      </CardInfoBox>
-    </Card>
+    <Link to="/detail/" style={{ textDecoration: 'none', color: 'black' }}>
+      <Card>
+        <CardImage src={imgSrc} alt="" />
+        <CardInfoBox>
+          {showIconBox && (
+            <LikeBox>
+              <span className={Styles.p2bold}>좋아요 {likes}</span>
+              <IconBox>
+                {liked ? (
+                  <BsFillHeartFill size="2.4rem" color="red" onClick={handleLikeClick} />
+                ) : (
+                  <BsHeart size="2.4rem" onClick={handleLikeClick} />
+                )}
+                {bookmarked ? (
+                  <BsBookmarkFill size="2.4rem" color="#FF7B69" onClick={handleBookmarkClick} />
+                ) : (
+                  <BsBookmark size="2.4rem" onClick={handleBookmarkClick} />
+                )}
+              </IconBox>
+            </LikeBox>
+          )}
+          <InfoBox>
+            <span className={Styles.p1bold}>{name}</span>
+            <span className={Styles.p2medium}>{category}</span>
+            <span className={Styles.p2medium}>{hashtag}</span>
+          </InfoBox>
+        </CardInfoBox>
+      </Card>
+    </Link>
   );
 }
 

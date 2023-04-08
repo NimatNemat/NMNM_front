@@ -31,13 +31,13 @@ const Linebox = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  white=space: nowrap;
+  white-space: nowrap;
 `;
 const SubTitle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  white=space: nowrap;
+  white-space: nowrap;
   width: 12rem;
 `;
 const Line = styled.div`
