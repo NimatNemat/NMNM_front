@@ -22,6 +22,9 @@ const Btn = styled.button<StyledButtonProps>`
   display: flex;
   align-items: center;
   justify-content: center;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 function StyledButton(props: StyledButtonProps) {

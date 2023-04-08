@@ -29,10 +29,10 @@ const Container = styled.div`
     width: 80%;
   }
   @media (min-width: 1024px) {
-    width: 70%;
+    width: 50%;
   }
   @media (min-width: 1440px) {
-    width: 70%;
+    width: 50%;
   }
   display: flex;
   flex-direction: column;
@@ -71,7 +71,7 @@ const Rowcenterbox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.5vw;
+  gap: 2vw;
 `;
 const Rowbox = styled.div`
   display: flex;
@@ -117,7 +117,7 @@ function DetailPage() {
     xPosition: '127.075735440582',
     yPosition: '37.5463365886719',
     cuisineType: '일식',
-    avgPreference: 0,
+    avgPreference: 4,
     address: '서울 광진구 화양동 498-1',
     roadAddress: '서울 광진구 광나루로 418',
     number: '02-444-2355',
@@ -168,7 +168,7 @@ function DetailPage() {
             <Rowcenterbox>
               <Text className={Styles.h2}>{info.name}</Text>
               <Text className={Styles.h2} style={{ color: '#808080' }}>
-                {info.avgPreference}
+                {info.avgPreference.toFixed(1)}
               </Text>
             </Rowcenterbox>
             <Rowcenterbox>
