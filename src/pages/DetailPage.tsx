@@ -13,6 +13,7 @@ import {
 } from 'react-icons/ai';
 import Map from '../components/Map';
 import StyledInput from '../components/Input';
+import StyledCard from '../components/CardItem';
 import Styles from '../config/globalFontStyle.module.css';
 
 const DetailPageContainer = styled.div`
@@ -28,10 +29,10 @@ const Container = styled.div`
     width: 80%;
   }
   @media (min-width: 1024px) {
-    width: 70%;
+    width: 50%;
   }
   @media (min-width: 1440px) {
-    width: 70%;
+    width: 50%;
   }
   display: flex;
   flex-direction: column;
@@ -70,7 +71,7 @@ const Rowcenterbox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.5vw;
+  gap: 2vw;
 `;
 const Rowbox = styled.div`
   display: flex;
@@ -95,6 +96,20 @@ const Menu = styled.div`
   align-items: center;
   margin-bottom: 0.5vh;
 `;
+const Menutext = styled.div`
+  display: flex;
+  width: 25%;
+  justify-content: center;
+`;
+const Flexbox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 1vh;
+  overflow: auto;
+  padding: 1vh 0 2vh 0;
+`;
 function DetailPage() {
   const info = {
     restaurantId: 0,
@@ -102,7 +117,7 @@ function DetailPage() {
     xPosition: '127.075735440582',
     yPosition: '37.5463365886719',
     cuisineType: '일식',
-    avgPreference: 0,
+    avgPreference: 4,
     address: '서울 광진구 화양동 498-1',
     roadAddress: '서울 광진구 광나루로 418',
     number: '02-444-2355',
@@ -136,6 +151,14 @@ function DetailPage() {
       },
     ],
   };
+  const data = {
+    imgSrc: '/img.png',
+    likes: '5',
+    name: '가츠시',
+    category: '일식',
+    hashtag: '돈까스, 우동',
+  };
+
   return (
     <DetailPageContainer>
       <Container>
@@ -145,7 +168,7 @@ function DetailPage() {
             <Rowcenterbox>
               <Text className={Styles.h2}>{info.name}</Text>
               <Text className={Styles.h2} style={{ color: '#808080' }}>
-                {info.avgPreference}
+                {info.avgPreference.toFixed(1)}
               </Text>
             </Rowcenterbox>
             <Rowcenterbox>
@@ -180,18 +203,16 @@ function DetailPage() {
             <Box>
               <Text className={Styles.p1regular}>
                 <AiOutlineBulb />
-                <b>주소 :</b>
-                {info.address} / {info.roadAddress}
+                주소 : {info.address} / {info.roadAddress}
               </Text>
+
               <Text className={Styles.p1regular}>
                 <AiOutlineClockCircle />
-                <b>운영시간 :</b>
-                {info.businessHours}
+                운영시간 :{info.businessHours}
               </Text>
               <Text className={Styles.p1regular}>
                 <AiOutlineBulb />
-                <b>전화번호 :</b>
-                {info.number}
+                전화번호 :{info.number}
               </Text>
             </Box>
           </Content>
@@ -214,15 +235,75 @@ function DetailPage() {
             <Box>
               {info.menu.map((item) => (
                 <Menu>
-                  <div style={{ display: 'flex', width: '25%', justifyContent: 'center' }}>
+                  <Menutext>
                     <Text className={Styles.p1regular}>{item.name}</Text>
-                  </div>
+                  </Menutext>
                   <div style={{ width: '50%', backgroundColor: 'black', height: '1px' }} />
-                  <div style={{ display: 'flex', width: '25%', justifyContent: 'center' }}>
+                  <Menutext>
                     <Text className={Styles.p1regular}>{item.price}</Text>
-                  </div>
+                  </Menutext>
                 </Menu>
               ))}
+            </Box>
+          </Content>
+        </Section>
+        <Section>
+          <Content>
+            <Title>
+              <Text className={Styles.h4}>리뷰</Text>
+            </Title>
+            <Box>
+              <Rowbox>
+                <Text className={Styles.p1regular}>평점</Text>
+                <Text className={Styles.p1regular}>리뷰</Text>
+              </Rowbox>
+              <Rowbox>
+                <Text className={Styles.p1regular}>평점</Text>
+                <Text className={Styles.p1regular}>리뷰</Text>
+              </Rowbox>
+            </Box>
+          </Content>
+        </Section>
+        <Section>
+          <Content>
+            <Title>
+              <Text className={Styles.h4}>이런 가게는 어때요?</Text>
+            </Title>
+            <Box>
+              <Flexbox>
+                <StyledCard
+                  imgSrc={data.imgSrc}
+                  likes={data.likes}
+                  name={data.name}
+                  category={data.category}
+                  hashtag={data.hashtag}
+                  showIconBox={false}
+                />
+                <StyledCard
+                  imgSrc={data.imgSrc}
+                  likes={data.likes}
+                  name={data.name}
+                  category={data.category}
+                  hashtag={data.hashtag}
+                  showIconBox={false}
+                />
+                <StyledCard
+                  imgSrc={data.imgSrc}
+                  likes={data.likes}
+                  name={data.name}
+                  category={data.category}
+                  hashtag={data.hashtag}
+                  showIconBox={false}
+                />
+                <StyledCard
+                  imgSrc={data.imgSrc}
+                  likes={data.likes}
+                  name={data.name}
+                  category={data.category}
+                  hashtag={data.hashtag}
+                  showIconBox={false}
+                />
+              </Flexbox>
             </Box>
           </Content>
         </Section>
