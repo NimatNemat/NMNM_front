@@ -35,7 +35,7 @@ const TagListContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  gap: 0.8vw;
+  gap: 5px;
   width: 100%;
   @media (max-width: 470px) {
     justify-content: center;
@@ -59,8 +59,8 @@ const GridContainer = styled.div`
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(3, 1fr);
   column-gap: 4vh;
-  row-gap: 6vw;
-  padding: 0.4rem 0rem;
+  row-gap: 4vh;
+  padding: 5px;
   overflow: auto;
   width: 100%;
   @media (max-width: 1200px) {
@@ -83,109 +83,115 @@ function MainPage() {
       <Container>
         <ListContainer>
           <TagContainer>
-            <span className={Styles.h3} style={{ width: '100%', textAlign: 'left' }}>
+            <div className={Styles.h3} style={{ width: '100%', textAlign: 'left' }}>
               종류
-            </span>
+            </div>
             <TagListContainer>
               <StyledTag imgSrc={icons('./korea.png')} text="한식" />
               <StyledTag imgSrc={icons('./china.png')} text="중식" />
               <StyledTag imgSrc={icons('./japan.png')} text="일식" />
               <StyledTag imgSrc={icons('./us.png')} text="양식" />
             </TagListContainer>
-            <span className={Styles.h3}>태그</span>
+            <div className={Styles.h3} style={{ width: '100%', textAlign: 'left' }}>
+              태그
+            </div>
             <TagListContainer>
               <StyledTag imgSrc={icons('./korea.png')} text="한식" />
               <StyledTag imgSrc={icons('./china.png')} text="중식" />
               <StyledTag imgSrc={icons('./japan.png')} text="일식" />
               <StyledTag imgSrc={icons('./us.png')} text="양식" />
             </TagListContainer>
-            <span className={Styles.h3}>함께먹기</span>
+            <div className={Styles.h3} style={{ width: '100%', textAlign: 'left' }}>
+              함께먹기
+            </div>
             <TagListContainer>
               <StyledTag imgSrc={icons('./korea.png')} text="한식" />
               <StyledTag text="+" />
             </TagListContainer>
           </TagContainer>
-          <span className={Styles.h3}>진정한 한국인의 추천 리스트</span>
+          <div className={Styles.h3} style={{ width: '100%', textAlign: 'left' }}>
+            진정한 한국인의 추천리스트
+          </div>
           <GridContainer>
             <StyledCard
-              imgSrc=""
+              imgSrc="/img.png"
               likes="12개"
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
             />
             <StyledCard
-              imgSrc=""
+              imgSrc="/img.png"
               likes="12개"
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
             />
             <StyledCard
-              imgSrc=""
+              imgSrc="/img.png"
               likes="12개"
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
             />
             <StyledCard
-              imgSrc=""
+              imgSrc="/img.png"
               likes="12개"
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
             />
             <StyledCard
-              imgSrc=""
+              imgSrc="/img.png"
               likes="12개"
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
             />
             <StyledCard
-              imgSrc=""
+              imgSrc="/img.png"
               likes="12개"
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
             />
             <StyledCard
-              imgSrc=""
+              imgSrc="/img.png"
               likes="12개"
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
             />
             <StyledCard
-              imgSrc=""
+              imgSrc="/img.png"
               likes="12개"
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
             />
             <StyledCard
-              imgSrc=""
+              imgSrc="/img.png"
               likes="12개"
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
             />
             <StyledCard
-              imgSrc=""
+              imgSrc="/img.png"
               likes="12개"
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
             />
             <StyledCard
-              imgSrc=""
+              imgSrc="/img.png"
               likes="12개"
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
             />
             <StyledCard
-              imgSrc=""
+              imgSrc="/img.png"
               likes="12개"
               name="마리모"
               category="돈까스, 우동"

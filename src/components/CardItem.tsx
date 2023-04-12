@@ -18,7 +18,7 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 24.3rem;
+  width: 100%;
   background: #ffffff;
   box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
 `;
@@ -42,7 +42,7 @@ const LikeBox = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
-  width: 21.9rem;
+  width: 100%;
 `;
 
 const IconBox = styled.div`
