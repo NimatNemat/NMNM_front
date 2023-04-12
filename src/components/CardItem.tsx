@@ -19,13 +19,14 @@ const Card = styled.div`
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
+  height: 100%;
   background: #ffffff;
   box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
 `;
 
 const CardImage = styled.img`
   width: 100%;
-  height: 22.1rem;
+  object-fit: cover;
 `;
 
 const CardInfoBox = styled.div`

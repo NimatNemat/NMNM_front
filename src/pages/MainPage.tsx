@@ -56,14 +56,12 @@ const ListContainer = styled.div`
 
 const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(300px, auto));
+  /* grid-template-rows: repeat(3, 1fr); */
   column-gap: 4vh;
   row-gap: 4vh;
-  padding: 5px;
-  overflow: auto;
   width: 100%;
-  @media (max-width: 1024px) {
+  /* @media (max-width: 1024px) {
     grid-template-columns: repeat(3, 1fr);
   }
   @media (max-width: 768px) {
@@ -72,7 +70,7 @@ const GridContainer = styled.div`
   @media (max-width: 425px) {
     grid-template-columns: repeat(1, 1fr);
     place-items: center;
-  }
+  } */
 `;
 
 const icons = require.context('../assets/icons', true);
@@ -121,7 +119,7 @@ function MainPage() {
               hashtag="#일식 가정식 #혼밥 #제로페이"
             />
             <StyledCard
-              imgSrc="/img.png"
+              imgSrc="/logo.png"
               likes="12개"
               name="마리모"
               category="돈까스, 우동"
