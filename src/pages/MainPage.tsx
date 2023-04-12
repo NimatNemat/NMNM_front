@@ -15,9 +15,9 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   gap: 4vh;
-  @media (max-width: 600px) {
+  /* @media (max-width: 600px) {
     width: 100%;
-  }
+  } */
 `;
 const TagContainer = styled.div`
   display: flex;
@@ -25,10 +25,10 @@ const TagContainer = styled.div`
   gap: 1.6vh;
   width: 100%;
   align-items: flex-start;
-  @media (max-width: 470px) {
+  /* @media (max-width: 470px) {
     justify-content: center;
     align-items: center;
-  }
+  } */
 `;
 
 const TagListContainer = styled.div`
@@ -37,9 +37,9 @@ const TagListContainer = styled.div`
   align-items: flex-start;
   gap: 5px;
   width: 100%;
-  @media (max-width: 470px) {
+  /* @media (max-width: 470px) {
     justify-content: center;
-  }
+  } */
 `;
 
 const ListContainer = styled.div`
@@ -63,13 +63,13 @@ const GridContainer = styled.div`
   padding: 5px;
   overflow: auto;
   width: 100%;
-  @media (max-width: 1200px) {
+  @media (max-width: 1024px) {
     grid-template-columns: repeat(3, 1fr);
   }
-  @media (max-width: 900px) {
+  @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
   }
-  @media (max-width: 470px) {
+  @media (max-width: 425px) {
     grid-template-columns: repeat(1, 1fr);
     place-items: center;
   }

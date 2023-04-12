@@ -56,7 +56,7 @@ const InfoBox = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 0.4rem;
-  width: 21.9rem;
+  width: 100%;
 `;
 
 function StyledCard(props: StyledCardProps) {
