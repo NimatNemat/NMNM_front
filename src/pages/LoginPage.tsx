@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 import StyledInput from '../components/Input';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledButton from '../components/StyledButton';
@@ -34,8 +35,32 @@ function LoginPage() {
     setPasswordValue(event.target.value);
   };
 
-  const onClickfunction = () => {
-    console.log('click');
+  const loginUser = async (formData: FormData) => {
+    try {
+      const response = await axios.post('http://3.39.232.5:8080/api/users/login', formData);
+      window.location.href = '/main';
+
+      console.log(response.data);
+    } catch (error) {
+      alert('아이디, 비밀번호를 다시 한번 확인하세요.');
+    }
+  };
+  const Loginfunction = () => {
+    const formData = new FormData();
+
+    if (!idValue) {
+      alert('아이디를 입력해주세요.');
+      return;
+    }
+    if (!passwordValue) {
+      alert('비밀번호를 입력해주세요.');
+      return;
+    }
+
+    formData.append('email', idValue);
+    formData.append('password', passwordValue);
+
+    loginUser(formData);
   };
 
   return (
@@ -55,6 +80,11 @@ function LoginPage() {
           placeholder="비밀번호를 입력하세요."
           width="100%"
           onChange={handlePasswordEvent}
+          onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) => {
+            if (event.key === 'Enter') {
+              Loginfunction();
+            }
+          }}
         />
         <Link
           to="/idsearch/"
@@ -63,7 +93,7 @@ function LoginPage() {
         >
           로그인 정보를 잊으셨나요?
         </Link>
-        <StyledButton onClick={onClickfunction}>
+        <StyledButton onClick={Loginfunction}>
           <span className={Styles.p1bold}>Login</span>
         </StyledButton>
         <Link

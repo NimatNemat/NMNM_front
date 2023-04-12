@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledButton from '../components/StyledButton';
 import StyledCard from '../components/CardItem';
+import Choicebtn from '../components/ChoiceBtn';
 
 const PreferencePageContainer = styled.div`
   display: flex;
@@ -17,10 +18,10 @@ const Container = styled.div`
     width: 80%;
   }
   @media (min-width: 1024px) {
-    width: 70%;
+    width: 80%;
   }
   @media (min-width: 1440px) {
-    width: 70%;
+    width: 80%;
   }
   display: flex;
   flex-direction: column;
@@ -31,14 +32,43 @@ const Container = styled.div`
 const Content = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 2rem;
+  height: 35rem;
+  /* width: 26.3rem; */
   width: 80%;
-  justify-content: center;
-  gap: 2.4vw;
+  padding: 2vh 5vw;
   background: white;
   box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.1);
   border-radius: 30px;
-  padding: 3vw;
-  overflow: scroll;
+  margin: 3vw 24rem;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    display: block;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 30px;
+    width: 20vw;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+  }
+  &::-webkit-scrollbar-track {
+    border-radius: 30px;
+  }
+  &::-webkit-scrollbar-button:horizontal:start:decrement {
+    width: 2vw;
+    height: 0;
+  }
+  &::-webkit-scrollbar-button:horizontal:end:increment {
+    width: 2vw;
+    height: 0;
+  }
 `;
 
 const Title = styled.div`
@@ -60,26 +90,7 @@ const BtnContainer = styled.div`
   width: 36rem;
   height: 6rem;
 `;
-interface IChoicebtn {
-  selected: boolean;
-}
 
-const Choicebtn = styled.button<IChoicebtn>`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 25vw;
-  height: 10vh;
-  border-radius: 30px;
-  background: ${(props) => (props.selected ? 'rgba(255, 137, 35, 0.6)' : '#ffffff')};
-  box-shadow: 0.5rem 0.5rem 1.2rem rgba(0, 0, 0, 0.1);
-  border: none;
-  &:hover {
-    box-shadow: 0.5rem 0.5rem 1.2rem rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-  }
-`;
 const Menu = styled.div`
   width: 100%;
   display: flex;
@@ -98,7 +109,7 @@ function PreferencePage() {
     category: '일식',
     hashtag: '돈까스, 우동',
   };
-  const [selected, setSelected] = useState(false);
+  const [selected, setSelected] = useState(true);
   const [selected2, setSelected2] = useState(false);
   const [selected3, setSelected3] = useState(false);
   const [selected4, setSelected4] = useState(false);
@@ -146,24 +157,24 @@ function PreferencePage() {
         <SubTitle className={Styles.h4}>해당 그룹의 데이터를 바탕으로 음식점을 추천해 드립니다.</SubTitle>
         <Menu>
           <Choicebtn selected={selected} onClick={onClick}>
-            <Title className={Styles.h2}>🥩</Title>
-            <SubTitle className={Styles.p1bold}>육식맨</SubTitle>
+            <Title className={Styles.h2}>👅</Title>
+            <SubTitle className={Styles.p1bold}>미식가</SubTitle>
           </Choicebtn>
           <Choicebtn selected={selected2} onClick={onClick2}>
-            <Title className={Styles.h2}>🥩</Title>
-            <SubTitle className={Styles.p1bold}>육식맨</SubTitle>
+            <Title className={Styles.h2}>💵</Title>
+            <SubTitle className={Styles.p1bold}>가성비</SubTitle>
           </Choicebtn>
           <Choicebtn selected={selected3} onClick={onClick3}>
-            <Title className={Styles.h2}>🥩</Title>
-            <SubTitle className={Styles.p1bold}>육식맨</SubTitle>
+            <Title className={Styles.h2}>🥬</Title>
+            <SubTitle className={Styles.p1bold}>웰빙</SubTitle>
           </Choicebtn>
           <Choicebtn selected={selected4} onClick={onClick4}>
             <Title className={Styles.h2}>🥩</Title>
             <SubTitle className={Styles.p1bold}>육식맨</SubTitle>
           </Choicebtn>
           <Choicebtn selected={selected5} onClick={onClick5}>
-            <Title className={Styles.h2}>🥩</Title>
-            <SubTitle className={Styles.p1bold}>육식맨</SubTitle>
+            <Title className={Styles.h2}>👶🏻</Title>
+            <SubTitle className={Styles.p1bold}>초딩입맛</SubTitle>
           </Choicebtn>
         </Menu>
         <Content>

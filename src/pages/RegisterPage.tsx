@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 import StyledInput from '../components/Input';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledButton from '../components/StyledButton';
@@ -67,12 +68,27 @@ const PrivacyLink = styled(Link)`
     text-decoration: underline;
   }
 `;
+const Styeldselect = styled.select`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: right;
+  width: 100%;
+  height: calc(100%-3.2rem);
+  border: 1px solid #dfdfdf;
+  border-radius: 0%;
+  color: rgba(128, 128, 128);
+  background: #fffdf5;
+  padding: 1.4rem 1.4rem;
+`;
 
 function RegisterPage() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
   const [email, setEmail] = useState('');
+  const [gender, setGender] = useState(0);
+  const [nickname, setNickname] = useState('');
   const [privacy1, setPrivacy1] = useState(false);
   const [privacy2, setPrivacy2] = useState(false);
   const [privacy3, setPrivacy3] = useState(false);
@@ -90,6 +106,9 @@ function RegisterPage() {
       setcheck(true);
     }
   };
+  const handleGenderEvent = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setGender(Number(event.target.value));
+  };
 
   const handleIdEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
     setId(event.target.value);
@@ -103,7 +122,11 @@ function RegisterPage() {
   const handleEmailEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   };
+  const handleNicknameEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNickname(event.target.value);
+  };
   const Submit = () => {
+    const formData = new FormData();
     if (
       id === '' ||
       password === '' ||
@@ -111,7 +134,8 @@ function RegisterPage() {
       email === '' ||
       privacy1 === false ||
       privacy2 === false ||
-      privacy3 === false
+      privacy3 === false ||
+      nickname === ''
     ) {
       alert('모든 항목을 입력해주세요.');
       return;
@@ -124,17 +148,32 @@ function RegisterPage() {
       alert('비밀번호는 8자 이상이어야 합니다.');
       return;
     }
-    if (id.length < 6) {
-      alert('아이디는 6자 이상이어야 합니다.');
-      return;
-    }
 
     if (email.indexOf('@') === -1) {
       alert('이메일 형식이 올바르지 않습니다.');
       return;
     }
-
-    alert('회원가입이 완료되었습니다.');
+    formData.append('userId', id);
+    formData.append('password', password);
+    formData.append('email', email);
+    formData.append('age', '23');
+    formData.append('gender', gender.toString());
+    formData.append('nickName', nickname);
+    formData.append('profileImage', 'null');
+    regisgterUser(formData);
+  };
+  const regisgterUser = async (formData: FormData) => {
+    try {
+      const response = await axios.post('http://3.39.232.5:8080/api/users/register', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      window.location.href = '/main';
+      console.log(response.data);
+    } catch (error) {
+      alert('빈칸을 올바르게 입력하세요.');
+    }
   };
 
   return (
@@ -181,6 +220,23 @@ function RegisterPage() {
               placeholder="이메일을 입력하세요."
               width="100%"
               onChange={handleEmailEvent}
+            />
+          </Linebox>
+          <Linebox>
+            <SubTitle className={Styles.p1bold}>성별</SubTitle>
+            <Styeldselect className={Styles.p1regular} value={gender} onChange={handleGenderEvent}>
+              <option value={1}>남자</option>
+              <option value={2}>여자</option>
+            </Styeldselect>
+          </Linebox>
+          <Linebox>
+            <SubTitle className={Styles.p1bold}>닉네임</SubTitle>
+            <StyledInput
+              value={nickname}
+              type="text"
+              placeholder="닉네임을 입력하세요."
+              width="100%"
+              onChange={handleNicknameEvent}
             />
           </Linebox>
           <Line />

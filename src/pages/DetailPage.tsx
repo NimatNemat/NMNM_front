@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-
+import axios from 'axios';
 import {
   AiOutlineShareAlt,
   AiOutlineHeart,
@@ -9,10 +9,8 @@ import {
   AiOutlineStop,
   AiOutlineBulb,
   AiOutlineClockCircle,
-  AiOutlinePhone,
 } from 'react-icons/ai';
 import Map from '../components/Map';
-import StyledInput from '../components/Input';
 import StyledCard from '../components/CardItem';
 import Styles from '../config/globalFontStyle.module.css';
 
@@ -82,7 +80,7 @@ const Rowbox = styled.div`
 `;
 const StyledImg = styled.img`
   width: 100%;
-  height: 35vh;
+  height: 25vh;
 `;
 const Title = styled.div`
   display: flex;
@@ -158,7 +156,16 @@ function DetailPage() {
     category: '일식',
     hashtag: '돈까스, 우동',
   };
+  const [restaurant, setRestaurant] = useState([]);
 
+  const fetchData = () => {
+    axios.get(`http://3.39.232.5:8080/api/restaurant/all`).then(function (response) {
+      setRestaurant(response.data);
+    });
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <DetailPageContainer>
       <Container>

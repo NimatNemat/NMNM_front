@@ -3,11 +3,12 @@ import styled, { css } from 'styled-components';
 import Styles from '../config/globalFontStyle.module.css';
 
 interface StyledInputProps {
-  value: string;
+  value: string | number;
   type: string;
   placeholder: string;
   width?: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyPress?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 const Input = styled.input<StyledInputProps>`
   display: flex;
@@ -31,16 +32,24 @@ const Div = styled.div`
   `}
 `;
 function StyledInput(props: StyledInputProps) {
-  const { value, type, placeholder, width, onChange } = props;
+  const { value, type, placeholder, width, onChange, onKeyPress } = props;
   return (
     <Div className={Styles.p1bold}>
-      <Input value={value} type={type} style={{ width }} placeholder={placeholder} onChange={onChange} />
+      <Input
+        value={value}
+        type={type}
+        style={{ width }}
+        placeholder={placeholder}
+        onChange={onChange}
+        onKeyPress={onKeyPress}
+      />
     </Div>
   );
 }
 
 StyledInput.defaultProps = {
   width: '60rem',
+  onKeyPress: null,
 };
 
 export default StyledInput;

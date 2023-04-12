@@ -19,6 +19,8 @@ function Map(props: Props) {
     const options = {
       center: new kakao.maps.LatLng(X, Y),
       level: 2,
+      disableDoubleClickZoom: true,
+      scrollwheel: false,
     };
     const map = new kakao.maps.Map(container, options);
     const marker = new kakao.maps.Marker({
