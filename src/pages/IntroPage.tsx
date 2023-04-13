@@ -36,8 +36,8 @@ function IntroPage() {
         </Link>
       </div>
       <div>
-        <Link to="/registerdetail/" className={Styles.h1}>
-          registerdetail
+        <Link to="/modify/" className={Styles.h1}>
+          modify
         </Link>
       </div>
       <div>

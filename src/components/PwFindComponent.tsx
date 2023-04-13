@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Styles from '../config/globalFontStyle.module.css';
-import StyledInput from '../components/Input';
+import StyledInput from './StyledInput';
 import StyledButton from '../components/StyledButton';
 
 const Div = styled.div`

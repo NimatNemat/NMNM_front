@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import StyledInput from '../components/Input';
+import StyledInput from '../components/StyledInput';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledButton from '../components/StyledButton';
 import IdFindComponent from '../components/IdFindComponent';

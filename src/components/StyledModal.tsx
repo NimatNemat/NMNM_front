@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AiOutlineClose, AiOutlinePlus, AiOutlineLock, AiOutlineUnlock } from 'react-icons/ai';
 import Styles from '../config/globalFontStyle.module.css';
+import StyledInput from './StyledInput';
 
 interface ModalProps {
   onClose: () => void;
@@ -20,6 +21,7 @@ const ModalWrapper = styled.div<{ show: boolean }>`
   left: 50%;
   top: 50%;
   width: 25%;
+  min-width: 36rem;
   transform: translate(-50%, -50%);
   overflow: auto;
   background-color: #ffffff;
@@ -81,11 +83,19 @@ const InputBox = styled.input`
   width: 100%;
   height: 3vh;
 `;
+const Div = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+`;
 
-function Modal(props: ModalProps) {
+function StyledModal(props: ModalProps) {
   const { onClose, show } = props;
   const [inputVisible, setInputVisible] = useState<boolean>(false);
   const [name, setName] = useState<string>('');
+  const [playListName, setPlayListName] = useState<string>('');
   const [rows, setRows] = useState<ModalRowProps[]>([
     { name: '노동욱님의 맛집리스트', locked: false },
     { name: '선동운님의 맛집리스트', locked: true },
@@ -112,6 +122,10 @@ function Modal(props: ModalProps) {
     }
   };
 
+  const handlePlayListNameEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPlayListName(event.target.value);
+  };
+
   const showInputBox = () => {
     return (
       <ModalRow>
@@ -127,8 +141,28 @@ function Modal(props: ModalProps) {
     );
   };
 
-  const toggleLock = (index: number) => {
-    setRows((prevRows) => prevRows.map((row, i) => (i === index ? { ...row, locked: !row.locked } : row)));
+  const showInputBox2 = () => {
+    return (
+      <Div>
+        <div className={Styles.p1bold} style={{ width: '100%', textAlign: 'left' }}>
+          이름
+        </div>
+        <StyledInput
+          value={playListName}
+          type="text"
+          placeholder="맛플리 이름 입력"
+          width="100%"
+          onChange={handlePlayListNameEvent}
+          border="none"
+          borderBottom="1px solid #6E6E6E"
+          background="black"
+          padding="0"
+        />
+        <div className={Styles.p1bold} style={{ width: '100%', textAlign: 'left' }}>
+          공개 범위 설정
+        </div>
+      </Div>
+    );
   };
   return (
     <ModalWrapper show={show}>
@@ -137,39 +171,39 @@ function Modal(props: ModalProps) {
           <span className={Styles.h3}>그룹선택</span>
           <AiOutlineClose size="2.4rem" onClick={handleClose} />
         </ModalHeader>
+        {rows.map((row) => (
+          <ModalRow>
+            <IconBox>
+              {row.locked ? (
+                <AiOutlineLock size="4rem" color="#6E6E6E" />
+              ) : (
+                <AiOutlineUnlock size="4rem" color="#6E6E6E" />
+              )}
+            </IconBox>
+            <TextBox>
+              <span className={Styles.p1bold} style={{ color: '#6E6E6E' }}>
+                {row.name}
+              </span>
+            </TextBox>
+          </ModalRow>
+        ))}
         {inputVisible ? (
-          showInputBox()
+          showInputBox2()
         ) : (
           <ModalRow onClick={() => setInputVisible(true)}>
             <IconBox>
               <AiOutlinePlus size="4rem" color="#6E6E6E" />
             </IconBox>
             <TextBox>
-              <span className={Styles.h3} style={{ color: '#6E6E6E' }}>
+              <span className={Styles.p1bold} style={{ color: '#6E6E6E' }}>
                 새폴더 생성
               </span>
             </TextBox>
           </ModalRow>
         )}
-        {rows.map((row, index) => (
-          <ModalRow>
-            <IconBox>
-              {row.locked ? (
-                <AiOutlineLock size="4rem" color="6E6E6E" onClick={() => toggleLock(index)} />
-              ) : (
-                <AiOutlineUnlock size="4rem" color="6E6E6E" onClick={() => toggleLock(index)} />
-              )}
-            </IconBox>
-            <TextBox>
-              <span className={Styles.h3} style={{ color: '#6E6E6E' }}>
-                {row.name}
-              </span>
-            </TextBox>
-          </ModalRow>
-        ))}
       </ModalContent>
     </ModalWrapper>
   );
 }
 
-export default Modal;
+export default StyledModal;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledButton from '../components/StyledButton';
-import StyledCard from '../components/CardItem';
+import StyledCard from '../components/StyledCard';
 import Choicebtn from '../components/ChoiceBtn';
 
 const PreferencePageContainer = styled.div`

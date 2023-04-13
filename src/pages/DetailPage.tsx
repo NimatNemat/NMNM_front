@@ -11,7 +11,7 @@ import {
   AiOutlineClockCircle,
 } from 'react-icons/ai';
 import Map from '../components/Map';
-import StyledCard from '../components/CardItem';
+import StyledCard from '../components/StyledCard';
 import Styles from '../config/globalFontStyle.module.css';
 
 const DetailPageContainer = styled.div`

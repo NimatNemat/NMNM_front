@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { BsBookmark, BsBookmarkFill, BsFillHeartFill, BsHeart } from 'react-icons/bs';
 import Styles from '../config/globalFontStyle.module.css';
-import Modal from './PopUp';
+import StyledModal from './StyledModal';
 
 interface StyledCardProps {
   imgSrc: string;
@@ -14,7 +14,7 @@ interface StyledCardProps {
   showIconBox?: boolean;
 }
 
-const Card = styled.div`
+const Card = styled.div<{ dim: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -22,6 +22,7 @@ const Card = styled.div`
   height: 100%;
   background: #ffffff;
   box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+  opacity: ${({ dim }) => (dim ? 0.5 : 1)};
 `;
 
 const CardImage = styled.img`
@@ -83,7 +84,7 @@ function StyledCard(props: StyledCardProps) {
   return (
     <>
       <Link to="/detail/" style={{ textDecoration: 'none', color: 'black' }}>
-        <Card>
+        <Card dim={showModal}>
           <CardImage src={imgSrc} alt="" />
           <CardInfoBox>
             {showIconBox && (
@@ -111,7 +112,7 @@ function StyledCard(props: StyledCardProps) {
           </CardInfoBox>
         </Card>
       </Link>
-      <Modal show={showModal} onClose={closeModal} />
+      <StyledModal show={showModal} onClose={closeModal} />
     </>
   );
 }
