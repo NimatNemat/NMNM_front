@@ -200,7 +200,7 @@ function DetailPage() {
 
                 <Text className={Styles.p1regular}>
                   <AiOutlineClockCircle />
-                  운영 시간 : {restaurant.businessHours}
+                  운영시간 : {restaurant.businessHours}
                 </Text>
                 <Text className={Styles.p1regular}>
                   <AiOutlineBulb />
