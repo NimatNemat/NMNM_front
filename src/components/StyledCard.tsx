@@ -12,17 +12,17 @@ interface StyledCardProps {
   category: string;
   hashtag: string;
   showIconBox?: boolean;
+  width?: string;
 }
 
-const Card = styled.div<{ dim: boolean }>`
+const Card = styled.div<{ width?: string }>`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 100%;
+  width: ${({ width }) => (width === '100%' ? '100%' : width)};
   height: 100%;
   background: #ffffff;
   box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
-  opacity: ${({ dim }) => (dim ? 0.5 : 1)};
 `;
 
 const CardImage = styled.img`
@@ -62,7 +62,7 @@ const InfoBox = styled.div`
 `;
 
 function StyledCard(props: StyledCardProps) {
-  const { imgSrc, likes, name, category, hashtag, showIconBox } = props;
+  const { imgSrc, likes, name, category, hashtag, showIconBox, width } = props;
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -84,7 +84,7 @@ function StyledCard(props: StyledCardProps) {
   return (
     <>
       <Link to="/detail/" style={{ textDecoration: 'none', color: 'black' }}>
-        <Card dim={showModal}>
+        <Card width={width}>
           <CardImage src={imgSrc} alt="" />
           <CardInfoBox>
             {showIconBox && (
@@ -119,6 +119,7 @@ function StyledCard(props: StyledCardProps) {
 
 StyledCard.defaultProps = {
   showIconBox: true,
+  width: '100%',
 };
 
 export default StyledCard;

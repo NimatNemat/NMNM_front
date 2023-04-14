@@ -35,10 +35,8 @@ const Content = styled.div`
   justify-content: flex-start;
   align-items: center;
   gap: 2rem;
-  height: 35rem;
-  /* width: 26.3rem; */
   width: 80%;
-  padding: 2vh 5vw;
+  padding: 3vh 3vw;
   background: white;
   box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.1);
   border-radius: 30px;
@@ -185,6 +183,7 @@ function PreferencePage() {
             category={data.category}
             hashtag={data.hashtag}
             showIconBox={false}
+            width="25rem"
           />
           <StyledCard
             imgSrc={data.imgSrc}
@@ -193,6 +192,7 @@ function PreferencePage() {
             category={data.category}
             hashtag={data.hashtag}
             showIconBox={false}
+            width="25rem"
           />
           <StyledCard
             imgSrc={data.imgSrc}
@@ -201,6 +201,7 @@ function PreferencePage() {
             category={data.category}
             hashtag={data.hashtag}
             showIconBox={false}
+            width="25rem"
           />
           <StyledCard
             imgSrc={data.imgSrc}
@@ -209,6 +210,7 @@ function PreferencePage() {
             category={data.category}
             hashtag={data.hashtag}
             showIconBox={false}
+            width="25rem"
           />
           <StyledCard
             imgSrc={data.imgSrc}
@@ -217,6 +219,7 @@ function PreferencePage() {
             category={data.category}
             hashtag={data.hashtag}
             showIconBox={false}
+            width="25rem"
           />
           <StyledCard
             imgSrc={data.imgSrc}
@@ -225,6 +228,7 @@ function PreferencePage() {
             category={data.category}
             hashtag={data.hashtag}
             showIconBox={false}
+            width="25rem"
           />
           <StyledCard
             imgSrc={data.imgSrc}
@@ -233,6 +237,7 @@ function PreferencePage() {
             category={data.category}
             hashtag={data.hashtag}
             showIconBox={false}
+            width="25rem"
           />
           <StyledCard
             imgSrc={data.imgSrc}
@@ -241,6 +246,7 @@ function PreferencePage() {
             category={data.category}
             hashtag={data.hashtag}
             showIconBox={false}
+            width="25rem"
           />
           <StyledCard
             imgSrc={data.imgSrc}
@@ -249,6 +255,7 @@ function PreferencePage() {
             category={data.category}
             hashtag={data.hashtag}
             showIconBox={false}
+            width="25rem"
           />
         </Content>
         <BtnContainer>

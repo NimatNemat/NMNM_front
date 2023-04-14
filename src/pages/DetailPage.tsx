@@ -94,7 +94,11 @@ const Menu = styled.div`
   align-items: center;
   margin-bottom: 0.5vh;
 `;
-const Menutext = styled.div`
+const MenuTitle = styled.div`
+  display: flex;
+  width: 25%;
+`;
+const Menuprice = styled.div`
   display: flex;
   width: 25%;
   justify-content: center;
@@ -109,46 +113,6 @@ const Flexbox = styled.div`
   padding: 1vh 0 2vh 0;
 `;
 function DetailPage() {
-  const info = {
-    restaurantId: 0,
-    name: '가츠시 건대점',
-    xPosition: '127.075735440582',
-    yPosition: '37.5463365886719',
-    cuisineType: '일식',
-    avgPreference: 4,
-    address: '서울 광진구 화양동 498-1',
-    roadAddress: '서울 광진구 광나루로 418',
-    number: '02-444-2355',
-    businessHours: '매일 11:00 ~ 21:30',
-    tags: '#제로페이',
-    img: '/img.png',
-    menu: [
-      {
-        name: '안심 돈까스',
-        price: 8500,
-      },
-      {
-        name: '등심 돈까스',
-        price: 8000,
-      },
-      {
-        name: '생선까스',
-        price: 8000,
-      },
-      {
-        name: '생선까스',
-        price: 8000,
-      },
-      {
-        name: '모듬까스',
-        price: 10000,
-      },
-      {
-        name: '철판 돈까스',
-        price: 9000,
-      },
-    ],
-  };
   const data = {
     imgSrc: '/img.png',
     likes: '5',
@@ -173,13 +137,12 @@ function DetailPage() {
     menu: [[string, string]];
   }
   const [restaurant, setRestaurant] = useState<Restaurant>({} as Restaurant);
-
   const fetchData = async () => {
     setIsLoaded(false);
     const response = await axios.get(`http://3.39.232.5:8080/api/restaurant/all`);
     setRestaurant(response.data[5]);
     setIsLoaded(true);
-    console.log(restaurant);
+    console.log(response.data);
   };
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -192,7 +155,7 @@ function DetailPage() {
       {isLoaded ? (
         <Container>
           <Section>
-            <StyledImg src={info.img} alt="logo" />
+            <StyledImg src={data.imgSrc} alt="logo" />
             <Content>
               <Rowcenterbox>
                 <Text className={Styles.h2}>{restaurant.name}</Text>
@@ -227,7 +190,7 @@ function DetailPage() {
             <Content>
               <Title>
                 <Text className={Styles.h4}>상세정보</Text>
-                <Text>정보수정요청</Text>
+                <Text className={Styles.p2bold}>정보수정요청</Text>
               </Title>
               <Box>
                 <Text className={Styles.p1regular}>
@@ -237,11 +200,11 @@ function DetailPage() {
 
                 <Text className={Styles.p1regular}>
                   <AiOutlineClockCircle />
-                  운영시간 :{restaurant.businessHours}
+                  운영시간 : {restaurant.businessHours}
                 </Text>
                 <Text className={Styles.p1regular}>
                   <AiOutlineBulb />
-                  전화번호 :{restaurant.number}
+                  전화번호 : {restaurant.number}
                 </Text>
               </Box>
             </Content>
@@ -264,13 +227,14 @@ function DetailPage() {
               <Box>
                 {restaurant.menu.map((item) => (
                   <Menu>
-                    <Menutext>
-                      <Text className={Styles.p1regular}>{item[0]}</Text>
-                    </Menutext>
-                    <div style={{ width: '50%', backgroundColor: 'black', height: '1px' }} />
-                    <Menutext>
-                      <Text className={Styles.p1regular}>{item[1]}</Text>
-                    </Menutext>
+                    <MenuTitle>
+                      <Text className={Styles.p2bold}>{item[0]}</Text>
+                    </MenuTitle>
+
+                    <div style={{ width: '30%', backgroundColor: 'black', height: '1px' }} />
+                    <Menuprice>
+                      <Text className={Styles.p2bold}>{item[1]}</Text>
+                    </Menuprice>
                   </Menu>
                 ))}
               </Box>

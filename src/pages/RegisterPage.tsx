@@ -87,7 +87,7 @@ function RegisterPage() {
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
   const [email, setEmail] = useState('');
-  const [gender, setGender] = useState(0);
+  const [gender, setGender] = useState(1);
   const [nickname, setNickname] = useState('');
   const [privacy1, setPrivacy1] = useState(false);
   const [privacy2, setPrivacy2] = useState(false);
