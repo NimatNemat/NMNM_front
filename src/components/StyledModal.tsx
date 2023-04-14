@@ -5,8 +5,9 @@ import Styles from '../config/globalFontStyle.module.css';
 import StyledInput from './StyledInput';
 
 interface ModalProps {
-  onClose: () => void;
+  onClose?: () => void;
   show: boolean;
+  data: number;
 }
 
 interface ModalRowProps {
@@ -119,7 +120,7 @@ const Styeldselect = styled.select`
 `;
 
 function StyledModal(props: ModalProps) {
-  const { onClose, show } = props;
+  const { onClose = () => null, show, data } = props;
   const [inputVisible, setInputVisible] = useState<boolean>(false);
   const [playListName, setPlayListName] = useState<string>('');
   const [lock, setLock] = useState<number>(1);
@@ -235,4 +236,7 @@ function StyledModal(props: ModalProps) {
   );
 }
 
+StyledModal.defaultProps = {
+  onClose: () => null,
+};
 export default StyledModal;

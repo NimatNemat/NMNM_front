@@ -16,6 +16,7 @@ interface StyledCardProps {
   showModal?: boolean;
   openModal?: () => void;
   closeModal?: () => void;
+  modaldata?: (data: number) => void;
 }
 
 const Card = styled.div<{ width?: string }>`
@@ -65,7 +66,8 @@ const InfoBox = styled.div`
 `;
 
 function StyledCard(props: StyledCardProps) {
-  const { imgSrc, likes, name, category, hashtag, showIconBox, width, showModal, openModal, closeModal } = props;
+  const { imgSrc, likes, name, category, hashtag, showIconBox, width, showModal, openModal, closeModal, modaldata } =
+    props;
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
 
@@ -78,6 +80,9 @@ function StyledCard(props: StyledCardProps) {
     setBookmarked(!bookmarked);
     if (openModal) {
       openModal();
+      if (modaldata) {
+        modaldata(1);
+      }
     }
   };
 
@@ -118,8 +123,9 @@ StyledCard.defaultProps = {
   showIconBox: true,
   width: '100%',
   showModal: false,
-  openModal: null,
-  closeModal: null,
+  openModal: () => null,
+  closeModal: () => null,
+  modaldata: () => null,
 };
 
 export default StyledCard;
