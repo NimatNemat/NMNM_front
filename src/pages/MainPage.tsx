@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledTag from '../components/StyledTag';
@@ -30,9 +30,6 @@ const TagListContainer = styled.div`
   align-items: flex-start;
   gap: 5px;
   width: 100%;
-  /* @media (max-width: 470px) {
-    justify-content: center;
-  } */
 `;
 
 const ListContainer = styled.div`
@@ -58,6 +55,22 @@ const GridContainer = styled.div`
 const icons = require.context('../assets/icons', true);
 
 function MainPage() {
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [blur, setBlur] = useState<boolean>(false);
+
+  const openModal = () => {
+    setShowModal(true);
+    setBlur(true);
+  };
+  const closeModal = () => {
+    setShowModal(false);
+    setBlur(false);
+  };
+  const blurStyle = {
+    filter: blur ? 'blur(3px)' : 'none',
+    transition: 'filter 0.3s',
+  };
+
   return (
     <MainPageContainer className="MainPage">
       <Container>
@@ -99,13 +112,9 @@ function MainPage() {
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
-            />
-            <StyledCard
-              imgSrc="/logo.png"
-              likes="12개"
-              name="마리모"
-              category="돈까스, 우동"
-              hashtag="#일식 가정식 #혼밥 #제로페이"
+              showModal={showModal}
+              openModal={openModal}
+              closeModal={closeModal}
             />
             <StyledCard
               imgSrc="/img.png"
@@ -113,6 +122,9 @@ function MainPage() {
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
+              showModal={showModal}
+              openModal={openModal}
+              closeModal={closeModal}
             />
             <StyledCard
               imgSrc="/img.png"
@@ -120,6 +132,9 @@ function MainPage() {
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
+              showModal={showModal}
+              openModal={openModal}
+              closeModal={closeModal}
             />
             <StyledCard
               imgSrc="/img.png"
@@ -127,6 +142,9 @@ function MainPage() {
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
+              showModal={showModal}
+              openModal={openModal}
+              closeModal={closeModal}
             />
             <StyledCard
               imgSrc="/img.png"
@@ -134,6 +152,9 @@ function MainPage() {
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
+              showModal={showModal}
+              openModal={openModal}
+              closeModal={closeModal}
             />
             <StyledCard
               imgSrc="/img.png"
@@ -141,6 +162,9 @@ function MainPage() {
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
+              showModal={showModal}
+              openModal={openModal}
+              closeModal={closeModal}
             />
             <StyledCard
               imgSrc="/img.png"
@@ -148,6 +172,9 @@ function MainPage() {
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
+              showModal={showModal}
+              openModal={openModal}
+              closeModal={closeModal}
             />
             <StyledCard
               imgSrc="/img.png"
@@ -155,6 +182,9 @@ function MainPage() {
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
+              showModal={showModal}
+              openModal={openModal}
+              closeModal={closeModal}
             />
             <StyledCard
               imgSrc="/img.png"
@@ -162,6 +192,9 @@ function MainPage() {
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
+              showModal={showModal}
+              openModal={openModal}
+              closeModal={closeModal}
             />
             <StyledCard
               imgSrc="/img.png"
@@ -169,6 +202,9 @@ function MainPage() {
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
+              showModal={showModal}
+              openModal={openModal}
+              closeModal={closeModal}
             />
             <StyledCard
               imgSrc="/img.png"
@@ -176,6 +212,19 @@ function MainPage() {
               name="마리모"
               category="돈까스, 우동"
               hashtag="#일식 가정식 #혼밥 #제로페이"
+              showModal={showModal}
+              openModal={openModal}
+              closeModal={closeModal}
+            />
+            <StyledCard
+              imgSrc="/img.png"
+              likes="12개"
+              name="마리모"
+              category="돈까스, 우동"
+              hashtag="#일식 가정식 #혼밥 #제로페이"
+              showModal={showModal}
+              openModal={openModal}
+              closeModal={closeModal}
             />
           </GridContainer>
         </ListContainer>

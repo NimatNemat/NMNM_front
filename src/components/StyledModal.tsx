@@ -10,7 +10,7 @@ interface ModalProps {
 }
 
 interface ModalRowProps {
-  name: string;
+  playListName: string;
   locked: boolean;
 }
 
@@ -36,7 +36,7 @@ const ModalContent = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
-  gap: 4.8vh;
+  gap: 3.2vh;
 `;
 const ModalHeader = styled.div`
   display: flex;
@@ -73,15 +73,20 @@ const ButtonBox = styled.div`
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  flex-grow: 1;
+  width: 100%;
 `;
 const Button = styled.button`
   white-space: nowrap;
   height: 3vh;
-`;
-const InputBox = styled.input`
-  width: 100%;
-  height: 3vh;
+  border: none;
+  padding: 0.5rem 2rem;
+  background-color: #ffffff;
+  &:hover {
+    background-color: #f2f4f6;
+    color: black;
+    cursor: pointer;
+    border-radius: 3rem;
+  }
 `;
 const Div = styled.div`
   display: flex;
@@ -89,16 +94,38 @@ const Div = styled.div`
   justify-content: flex-start;
   align-items: center;
   width: 100%;
+  gap: 1.6vh;
+`;
+const RowDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+`;
+const Styeldselect = styled.select`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #6e6e6e;
+  color: rgba(128, 128, 128);
+  background: #ffffff;
+  appearance: none;
+  -webkit-appearance: none; // 크롬, 사파리 등 웹킷 기반 브라우저에서 기본 스타일 제거
+  -moz-appearance: none; // 파이어폭스에서 기본 스타일 제거
 `;
 
 function StyledModal(props: ModalProps) {
   const { onClose, show } = props;
   const [inputVisible, setInputVisible] = useState<boolean>(false);
-  const [name, setName] = useState<string>('');
   const [playListName, setPlayListName] = useState<string>('');
+  const [lock, setLock] = useState<number>(1);
   const [rows, setRows] = useState<ModalRowProps[]>([
-    { name: '노동욱님의 맛집리스트', locked: false },
-    { name: '선동운님의 맛집리스트', locked: true },
+    { playListName: '노동욱님의 맛집리스트', locked: false },
+    { playListName: '선동운님의 맛집리스트', locked: true },
   ]);
 
   const setInputVisibleFalse = () => {
@@ -110,14 +137,14 @@ function StyledModal(props: ModalProps) {
     onClose();
   };
 
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
-  };
-
   const handleSubmit = () => {
-    if (name !== '') {
-      setRows((prevRows) => [...prevRows, { name, locked: false }]);
-      setName('');
+    if (playListName !== '') {
+      if (lock === 1) {
+        setRows((prevRows) => [...prevRows, { playListName, locked: false }]);
+      } else {
+        setRows((prevRows) => [...prevRows, { playListName, locked: true }]);
+      }
+      setPlayListName('');
       setInputVisible(false);
     }
   };
@@ -126,41 +153,43 @@ function StyledModal(props: ModalProps) {
     setPlayListName(event.target.value);
   };
 
-  const showInputBox = () => {
-    return (
-      <ModalRow>
-        <TextBox>
-          <InputBox type="text" value={name} onChange={handleNameChange} placeholder="맛플리 이름 입력" />
-        </TextBox>
-        <ButtonBox>
-          <Button type="button" onClick={handleSubmit}>
-            확인
-          </Button>
-        </ButtonBox>
-      </ModalRow>
-    );
+  const handleLockEvent = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setLock(Number(event.target.value));
   };
 
-  const showInputBox2 = () => {
+  const showInputBox = () => {
     return (
       <Div>
-        <div className={Styles.p1bold} style={{ width: '100%', textAlign: 'left' }}>
-          이름
-        </div>
-        <StyledInput
-          value={playListName}
-          type="text"
-          placeholder="맛플리 이름 입력"
-          width="100%"
-          onChange={handlePlayListNameEvent}
-          border="none"
-          borderBottom="1px solid #6E6E6E"
-          background="black"
-          padding="0"
-        />
-        <div className={Styles.p1bold} style={{ width: '100%', textAlign: 'left' }}>
-          공개 범위 설정
-        </div>
+        <RowDiv>
+          <div className={Styles.p1bold} style={{ width: '100%', textAlign: 'left' }}>
+            이름
+          </div>
+          <StyledInput
+            value={playListName}
+            type="text"
+            placeholder="맛플리 이름 입력"
+            width="100%"
+            onChange={handlePlayListNameEvent}
+            border="none"
+            borderBottom="1px solid #6E6E6E"
+            background="#FFFFFF"
+            padding="0"
+          />
+        </RowDiv>
+        <RowDiv>
+          <div className={Styles.p1bold} style={{ width: '100%', textAlign: 'left' }}>
+            공개 범위 설정
+          </div>
+          <Styeldselect className={Styles.p1bold} value={lock} onChange={handleLockEvent}>
+            <option value={1}>공개</option>
+            <option value={2}>비공개</option>
+          </Styeldselect>
+        </RowDiv>
+        <ButtonBox>
+          <Button type="button" onClick={handleSubmit}>
+            만들기
+          </Button>
+        </ButtonBox>
       </Div>
     );
   };
@@ -182,13 +211,13 @@ function StyledModal(props: ModalProps) {
             </IconBox>
             <TextBox>
               <span className={Styles.p1bold} style={{ color: '#6E6E6E' }}>
-                {row.name}
+                {row.playListName}
               </span>
             </TextBox>
           </ModalRow>
         ))}
         {inputVisible ? (
-          showInputBox2()
+          showInputBox()
         ) : (
           <ModalRow onClick={() => setInputVisible(true)}>
             <IconBox>

@@ -13,6 +13,9 @@ interface StyledCardProps {
   hashtag: string;
   showIconBox?: boolean;
   width?: string;
+  showModal?: boolean;
+  openModal?: () => void;
+  closeModal?: () => void;
 }
 
 const Card = styled.div<{ width?: string }>`
@@ -62,10 +65,9 @@ const InfoBox = styled.div`
 `;
 
 function StyledCard(props: StyledCardProps) {
-  const { imgSrc, likes, name, category, hashtag, showIconBox, width } = props;
+  const { imgSrc, likes, name, category, hashtag, showIconBox, width, showModal, openModal, closeModal } = props;
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
-  const [showModal, setShowModal] = useState(false);
 
   const handleLikeClick: React.MouseEventHandler<SVGElement> = (event) => {
     event.preventDefault();
@@ -74,52 +76,50 @@ function StyledCard(props: StyledCardProps) {
   const handleBookmarkClick: React.MouseEventHandler<SVGElement> = (event) => {
     event.preventDefault();
     setBookmarked(!bookmarked);
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
+    if (openModal) {
+      openModal();
+    }
   };
 
   return (
-    <>
-      <Link to="/detail/" style={{ textDecoration: 'none', color: 'black' }}>
-        <Card width={width}>
-          <CardImage src={imgSrc} alt="" />
-          <CardInfoBox>
-            {showIconBox && (
-              <LikeBox>
-                <span className={Styles.p2bold}>좋아요 {likes}</span>
-                <IconBox>
-                  {liked ? (
-                    <BsFillHeartFill size="2.4rem" color="red" onClick={handleLikeClick} />
-                  ) : (
-                    <BsHeart size="2.4rem" onClick={handleLikeClick} />
-                  )}
-                  {bookmarked ? (
-                    <BsBookmarkFill size="2.4rem" color="#FF7B69" onClick={handleBookmarkClick} />
-                  ) : (
-                    <BsBookmark size="2.4rem" onClick={handleBookmarkClick} />
-                  )}
-                </IconBox>
-              </LikeBox>
-            )}
-            <InfoBox>
-              <span className={Styles.p1bold}>{name}</span>
-              <span className={Styles.p2medium}>{category}</span>
-              <span className={Styles.p2medium}>{hashtag}</span>
-            </InfoBox>
-          </CardInfoBox>
-        </Card>
-      </Link>
-      <StyledModal show={showModal} onClose={closeModal} />
-    </>
+    <Link to="/detail/" style={{ textDecoration: 'none', color: 'black' }}>
+      <Card width={width}>
+        <CardImage src={imgSrc} alt="" />
+        <CardInfoBox>
+          {showIconBox && (
+            <LikeBox>
+              <span className={Styles.p2bold}>좋아요 {likes}</span>
+              <IconBox>
+                {liked ? (
+                  <BsFillHeartFill size="2.4rem" color="red" onClick={handleLikeClick} />
+                ) : (
+                  <BsHeart size="2.4rem" onClick={handleLikeClick} />
+                )}
+                {bookmarked ? (
+                  <BsBookmarkFill size="2.4rem" color="#FF7B69" onClick={handleBookmarkClick} />
+                ) : (
+                  <BsBookmark size="2.4rem" onClick={handleBookmarkClick} />
+                )}
+              </IconBox>
+            </LikeBox>
+          )}
+          <InfoBox>
+            <span className={Styles.p1bold}>{name}</span>
+            <span className={Styles.p2medium}>{category}</span>
+            <span className={Styles.p2medium}>{hashtag}</span>
+          </InfoBox>
+        </CardInfoBox>
+      </Card>
+    </Link>
   );
 }
 
 StyledCard.defaultProps = {
   showIconBox: true,
   width: '100%',
+  showModal: false,
+  openModal: null,
+  closeModal: null,
 };
 
 export default StyledCard;
