@@ -156,165 +156,190 @@ function DetailPage() {
     category: '일식',
     hashtag: '돈까스, 우동',
   };
-  const [restaurant, setRestaurant] = useState([]);
 
-  const fetchData = () => {
-    axios.get(`http://3.39.232.5:8080/api/restaurant/all`).then(function (response) {
-      setRestaurant(response.data);
-    });
+  interface Restaurant {
+    restaurantId: number;
+    name: string;
+    xPosition: number;
+    yPosition: number;
+    cuisineType: string;
+    avgPreference: number;
+    address: string;
+    roadAddress: string;
+    number: string;
+    businessHours: string;
+    tags: string;
+    img: string;
+    menu: [[string, string]];
+  }
+  const [restaurant, setRestaurant] = useState<Restaurant>({} as Restaurant);
+
+  const fetchData = async () => {
+    setIsLoaded(false);
+    const response = await axios.get(`http://3.39.232.5:8080/api/restaurant/all`);
+    setRestaurant(response.data[5]);
+    setIsLoaded(true);
+    console.log(restaurant);
   };
+  const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
     fetchData();
   }, []);
+
   return (
     <DetailPageContainer>
-      <Container>
-        <Section>
-          <StyledImg src={info.img} alt="logo" />
-          <Content>
-            <Rowcenterbox>
-              <Text className={Styles.h2}>{info.name}</Text>
-              <Text className={Styles.h2} style={{ color: '#808080' }}>
-                {info.avgPreference.toFixed(1)}
-              </Text>
-            </Rowcenterbox>
-            <Rowcenterbox>
-              <Text className={Styles.h5}>{info.tags}</Text>
-            </Rowcenterbox>
-            <Rowcenterbox>
-              <Text className={Styles.h5}>
-                <AiOutlineHeart />
-                좋아요
-              </Text>
-              <Text className={Styles.h5}>
-                <AiOutlineShareAlt />
-                공유하기
-              </Text>
-              <Text className={Styles.h5}>
-                <AiOutlineStar />
-                평가하기
-              </Text>
-              <Text className={Styles.h5}>
-                <AiOutlineStop />
-                안볼래요
-              </Text>
-            </Rowcenterbox>
-          </Content>
-        </Section>
-        <Section>
-          <Content>
-            <Title>
-              <Text className={Styles.h4}>상세정보</Text>
-              <Text>정보수정요청</Text>
-            </Title>
-            <Box>
-              <Text className={Styles.p1regular}>
-                <AiOutlineBulb />
-                주소 : {info.address} / {info.roadAddress}
-              </Text>
+      {isLoaded ? (
+        <Container>
+          <Section>
+            <StyledImg src={info.img} alt="logo" />
+            <Content>
+              <Rowcenterbox>
+                <Text className={Styles.h2}>{restaurant.name}</Text>
+                <Text className={Styles.h2} style={{ color: '#808080' }}>
+                  {restaurant.avgPreference.toFixed(1)}
+                </Text>
+              </Rowcenterbox>
+              <Rowcenterbox>
+                <Text className={Styles.h5}>{restaurant.tags}</Text>
+              </Rowcenterbox>
+              <Rowcenterbox>
+                <Text className={Styles.h5}>
+                  <AiOutlineHeart />
+                  좋아요
+                </Text>
+                <Text className={Styles.h5}>
+                  <AiOutlineShareAlt />
+                  공유하기
+                </Text>
+                <Text className={Styles.h5}>
+                  <AiOutlineStar />
+                  평가하기
+                </Text>
+                <Text className={Styles.h5}>
+                  <AiOutlineStop />
+                  안볼래요
+                </Text>
+              </Rowcenterbox>
+            </Content>
+          </Section>
+          <Section>
+            <Content>
+              <Title>
+                <Text className={Styles.h4}>상세정보</Text>
+                <Text>정보수정요청</Text>
+              </Title>
+              <Box>
+                <Text className={Styles.p1regular}>
+                  <AiOutlineBulb />
+                  주소 : {restaurant.address} / {restaurant.roadAddress}
+                </Text>
 
-              <Text className={Styles.p1regular}>
-                <AiOutlineClockCircle />
-                운영시간 :{info.businessHours}
-              </Text>
-              <Text className={Styles.p1regular}>
-                <AiOutlineBulb />
-                전화번호 :{info.number}
-              </Text>
-            </Box>
-          </Content>
-        </Section>
-        <Section>
-          <Content>
-            <Title>
-              <Text className={Styles.h4}>지도</Text>
-            </Title>
-            <div style={{ width: '100%', height: '50vw' }}>
-              <Map x={info.xPosition} y={info.yPosition} name={info.name} />
-            </div>
-          </Content>
-        </Section>
-        <Section>
-          <Content>
-            <Title>
-              <Text className={Styles.h4}>메뉴</Text>
-            </Title>
-            <Box>
-              {info.menu.map((item) => (
-                <Menu>
-                  <Menutext>
-                    <Text className={Styles.p1regular}>{item.name}</Text>
-                  </Menutext>
-                  <div style={{ width: '50%', backgroundColor: 'black', height: '1px' }} />
-                  <Menutext>
-                    <Text className={Styles.p1regular}>{item.price}</Text>
-                  </Menutext>
-                </Menu>
-              ))}
-            </Box>
-          </Content>
-        </Section>
-        <Section>
-          <Content>
-            <Title>
-              <Text className={Styles.h4}>리뷰</Text>
-            </Title>
-            <Box>
-              <Rowbox>
-                <Text className={Styles.p1regular}>평점</Text>
-                <Text className={Styles.p1regular}>리뷰</Text>
-              </Rowbox>
-              <Rowbox>
-                <Text className={Styles.p1regular}>평점</Text>
-                <Text className={Styles.p1regular}>리뷰</Text>
-              </Rowbox>
-            </Box>
-          </Content>
-        </Section>
-        <Section>
-          <Content>
-            <Title>
-              <Text className={Styles.h4}>이런 가게는 어때요?</Text>
-            </Title>
-            <Box>
-              <Flexbox>
-                <StyledCard
-                  imgSrc={data.imgSrc}
-                  likes={data.likes}
-                  name={data.name}
-                  category={data.category}
-                  hashtag={data.hashtag}
-                  showIconBox={false}
-                />
-                <StyledCard
-                  imgSrc={data.imgSrc}
-                  likes={data.likes}
-                  name={data.name}
-                  category={data.category}
-                  hashtag={data.hashtag}
-                  showIconBox={false}
-                />
-                <StyledCard
-                  imgSrc={data.imgSrc}
-                  likes={data.likes}
-                  name={data.name}
-                  category={data.category}
-                  hashtag={data.hashtag}
-                  showIconBox={false}
-                />
-                <StyledCard
-                  imgSrc={data.imgSrc}
-                  likes={data.likes}
-                  name={data.name}
-                  category={data.category}
-                  hashtag={data.hashtag}
-                  showIconBox={false}
-                />
-              </Flexbox>
-            </Box>
-          </Content>
-        </Section>
-      </Container>
+                <Text className={Styles.p1regular}>
+                  <AiOutlineClockCircle />
+                  운영시간 :{restaurant.businessHours}
+                </Text>
+                <Text className={Styles.p1regular}>
+                  <AiOutlineBulb />
+                  전화번호 :{restaurant.number}
+                </Text>
+              </Box>
+            </Content>
+          </Section>
+          <Section>
+            <Content>
+              <Title>
+                <Text className={Styles.h4}>지도</Text>
+              </Title>
+              <div style={{ width: '100%', height: '50vw' }}>
+                <Map x={restaurant.xPosition} y={restaurant.yPosition} name={restaurant.name} />
+              </div>
+            </Content>
+          </Section>
+          <Section>
+            <Content>
+              <Title>
+                <Text className={Styles.h4}>메뉴</Text>
+              </Title>
+              <Box>
+                {restaurant.menu.map((item) => (
+                  <Menu>
+                    <Menutext>
+                      <Text className={Styles.p1regular}>{item[0]}</Text>
+                    </Menutext>
+                    <div style={{ width: '50%', backgroundColor: 'black', height: '1px' }} />
+                    <Menutext>
+                      <Text className={Styles.p1regular}>{item[1]}</Text>
+                    </Menutext>
+                  </Menu>
+                ))}
+              </Box>
+            </Content>
+          </Section>
+          <Section>
+            <Content>
+              <Title>
+                <Text className={Styles.h4}>리뷰</Text>
+              </Title>
+              <Box>
+                <Rowbox>
+                  <Text className={Styles.p1regular}>평점</Text>
+                  <Text className={Styles.p1regular}>리뷰</Text>
+                </Rowbox>
+                <Rowbox>
+                  <Text className={Styles.p1regular}>평점</Text>
+                  <Text className={Styles.p1regular}>리뷰</Text>
+                </Rowbox>
+              </Box>
+            </Content>
+          </Section>
+          <Section>
+            <Content>
+              <Title>
+                <Text className={Styles.h4}>이런 가게는 어때요?</Text>
+              </Title>
+              <Box>
+                <Flexbox>
+                  <StyledCard
+                    imgSrc={data.imgSrc}
+                    likes={data.likes}
+                    name={data.name}
+                    category={data.category}
+                    hashtag={data.hashtag}
+                    showIconBox={false}
+                  />
+                  <StyledCard
+                    imgSrc={data.imgSrc}
+                    likes={data.likes}
+                    name={data.name}
+                    category={data.category}
+                    hashtag={data.hashtag}
+                    showIconBox={false}
+                  />
+                  <StyledCard
+                    imgSrc={data.imgSrc}
+                    likes={data.likes}
+                    name={data.name}
+                    category={data.category}
+                    hashtag={data.hashtag}
+                    showIconBox={false}
+                  />
+                  <StyledCard
+                    imgSrc={data.imgSrc}
+                    likes={data.likes}
+                    name={data.name}
+                    category={data.category}
+                    hashtag={data.hashtag}
+                    showIconBox={false}
+                  />
+                </Flexbox>
+              </Box>
+            </Content>
+          </Section>
+        </Container>
+      ) : (
+        <h1>로딩중입니다.</h1>
+      )}
     </DetailPageContainer>
   );
 }

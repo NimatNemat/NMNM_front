@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react';
 
 interface Props {
-  x: string;
-  y: string;
+  x: number;
+  y: number;
   name: string;
 }
 
 const { kakao } = window as any;
 function Map(props: Props) {
   const { x, y, name } = props;
-  const X = parseFloat(y);
-  const Y = parseFloat(x);
-  // const X = 37.5463365886719;
-  // const Y = 127.075735440582;
+  // const X = y;
+  // const Y = x;
+  const X = 37.5463365886719;
+  const Y = 127.075735440582;
   console.log(X, Y);
   useEffect(() => {
     const container = document.getElementById('map');
