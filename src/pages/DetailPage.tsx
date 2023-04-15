@@ -248,7 +248,6 @@ function DetailPage() {
               </Title>
               <Box>
                 <ReviewComponent />
-                <ReviewComponent />
               </Box>
             </Content>
           </Section>

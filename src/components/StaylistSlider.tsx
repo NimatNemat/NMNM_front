@@ -1,11 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, ReactComponentElement } from 'react';
 import styled from 'styled-components';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { set } from 'react-native-reanimated';
 
-function StaylistSlider() {
+interface Props {
+  children: React.ReactNode;
+}
+function StaylistSlider(props: Props) {
+  const { children } = props;
   const settings = {
     dots: true,
     infinite: true,
@@ -22,10 +25,7 @@ function StaylistSlider() {
         slidesToShow={settings.slidesToShow}
         slidesToScroll={settings.slidesToScroll}
       >
-        <img src="/img.png" alt="img" />
-        <img src="/img.png" alt="img" />
-        <img src="/img.png" alt="img" />
-        <img src="/img.png" alt="img" />
+        {children}
       </StyledSlider>
     </div>
   );
@@ -37,6 +37,7 @@ const StyledSlider = styled(Slider)`
   }
   .slick-slide img {
     width: 100%;
+    object-fit: scale-down;
   }
   .slick-list {
     width: 100%;

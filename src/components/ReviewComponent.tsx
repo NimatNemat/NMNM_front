@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Slider from 'react-slick';
 import styled from 'styled-components';
 import Styles from '../config/globalFontStyle.module.css';
 import StaylistSlider from './StaylistSlider';
@@ -85,7 +84,17 @@ function ReviewComponent() {
       </ProfileContainer>
       <Content className={Styles.p1medium}>
         <SliderContainer>
-          <StaylistSlider />
+          <StaylistSlider>
+            <div style={{ width: '100%' }}>
+              <img src="/img.png" alt="sdf" />
+            </div>
+            <div style={{ width: '100%' }}>
+              <img src="/logo.png" alt="sdf" />
+            </div>
+            <div style={{ width: '100%' }}>
+              <img src="/img.png" alt="sdf" />
+            </div>
+          </StaylistSlider>
         </SliderContainer>
         <ReviewTextContainer className={Styles.p1medium} isMoreView={isMoreView}>
           {data.content}
