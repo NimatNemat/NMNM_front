@@ -58,9 +58,10 @@ const icons = require.context('../assets/icons', true);
 
 function MainPage() {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [modal, setModalData] = useState<number>(0);
+  const [modalData, setModalData] = useState<number>(0);
   const [blur, setBlur] = useState<boolean>(false);
-  const modaldata = (data: number) => {
+
+  const handleModalData = (data: number) => {
     setModalData(data);
   };
   const openModal = () => {
@@ -118,16 +119,113 @@ function MainPage() {
                 name="마리모"
                 category="돈까스, 우동"
                 hashtag="#일식 가정식 #혼밥 #제로페이"
-                showModal={showModal}
-                modaldata={modaldata}
+                setModalData={handleModalData}
                 openModal={openModal}
-                closeModal={closeModal}
+              />
+              <StyledCard
+                imgSrc="/img.png"
+                likes="12개"
+                name="마리모"
+                category="돈까스, 우동"
+                hashtag="#일식 가정식 #혼밥 #제로페이"
+                setModalData={handleModalData}
+                openModal={openModal}
+              />
+              <StyledCard
+                imgSrc="/img.png"
+                likes="12개"
+                name="마리모"
+                category="돈까스, 우동"
+                hashtag="#일식 가정식 #혼밥 #제로페이"
+                setModalData={handleModalData}
+                openModal={openModal}
+              />
+              <StyledCard
+                imgSrc="/img.png"
+                likes="12개"
+                name="마리모"
+                category="돈까스, 우동"
+                hashtag="#일식 가정식 #혼밥 #제로페이"
+                setModalData={handleModalData}
+                openModal={openModal}
+              />
+              <StyledCard
+                imgSrc="/img.png"
+                likes="12개"
+                name="마리모"
+                category="돈까스, 우동"
+                hashtag="#일식 가정식 #혼밥 #제로페이"
+                setModalData={handleModalData}
+                openModal={openModal}
+              />
+              <StyledCard
+                imgSrc="/img.png"
+                likes="12개"
+                name="마리모"
+                category="돈까스, 우동"
+                hashtag="#일식 가정식 #혼밥 #제로페이"
+                setModalData={handleModalData}
+                openModal={openModal}
+              />
+              <StyledCard
+                imgSrc="/img.png"
+                likes="12개"
+                name="마리모"
+                category="돈까스, 우동"
+                hashtag="#일식 가정식 #혼밥 #제로페이"
+                setModalData={handleModalData}
+                openModal={openModal}
+              />
+              <StyledCard
+                imgSrc="/img.png"
+                likes="12개"
+                name="마리모"
+                category="돈까스, 우동"
+                hashtag="#일식 가정식 #혼밥 #제로페이"
+                setModalData={handleModalData}
+                openModal={openModal}
+              />
+              <StyledCard
+                imgSrc="/img.png"
+                likes="12개"
+                name="마리모"
+                category="돈까스, 우동"
+                hashtag="#일식 가정식 #혼밥 #제로페이"
+                setModalData={handleModalData}
+                openModal={openModal}
+              />
+              <StyledCard
+                imgSrc="/img.png"
+                likes="12개"
+                name="마리모"
+                category="돈까스, 우동"
+                hashtag="#일식 가정식 #혼밥 #제로페이"
+                setModalData={handleModalData}
+                openModal={openModal}
+              />
+              <StyledCard
+                imgSrc="/img.png"
+                likes="12개"
+                name="마리모"
+                category="돈까스, 우동"
+                hashtag="#일식 가정식 #혼밥 #제로페이"
+                setModalData={handleModalData}
+                openModal={openModal}
+              />
+              <StyledCard
+                imgSrc="/img.png"
+                likes="12개"
+                name="마리모"
+                category="돈까스, 우동"
+                hashtag="#일식 가정식 #혼밥 #제로페이"
+                setModalData={handleModalData}
+                openModal={openModal}
               />
             </GridContainer>
           </ListContainer>
         </Container>
       </MainPageContainer>
-      {showModal ? <StyledModal show={showModal} onClose={closeModal} data={modal} /> : null}
+      {showModal ? <StyledModal show={showModal} onClose={closeModal} data={modalData} /> : null}
     </>
   );
 }
