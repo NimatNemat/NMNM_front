@@ -13,6 +13,7 @@ import {
 import Map from '../components/Map';
 import StyledCard from '../components/StyledCard';
 import Styles from '../config/globalFontStyle.module.css';
+import ReviewComponent from '../components/ReviewComponent';
 
 const DetailPageContainer = styled.div`
   display: flex;
@@ -246,14 +247,7 @@ function DetailPage() {
                 <Text className={Styles.h4}>리뷰</Text>
               </Title>
               <Box>
-                <Rowbox>
-                  <Text className={Styles.p1regular}>평점</Text>
-                  <Text className={Styles.p1regular}>리뷰</Text>
-                </Rowbox>
-                <Rowbox>
-                  <Text className={Styles.p1regular}>평점</Text>
-                  <Text className={Styles.p1regular}>리뷰</Text>
-                </Rowbox>
+                <ReviewComponent />
               </Box>
             </Content>
           </Section>

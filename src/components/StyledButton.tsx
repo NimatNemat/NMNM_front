@@ -8,6 +8,7 @@ interface StyledButtonProps {
   onClick: () => void;
   children: React.ReactNode;
   fontsize?: string;
+  padding?: string;
 }
 
 const Btn = styled.button<StyledButtonProps>`
@@ -17,7 +18,7 @@ const Btn = styled.button<StyledButtonProps>`
   font-size: ${(props) => (props.fontsize === '24px' ? '24px' : props.fontsize)};
   font-weight: 700;
   border: 0px;
-  padding: 16px 32px;
+  padding: ${(props) => (props.padding === '1.6rem 3.2rem' ? '1.6rem 3.2rem' : props.padding)};
   background-color: ${(props) => (props.color === 'rgba(255, 137, 35, 0.6)' ? 'rgba(255, 137, 35, 0.6)' : props.color)};
   display: flex;
   align-items: center;
@@ -28,9 +29,9 @@ const Btn = styled.button<StyledButtonProps>`
 `;
 
 function StyledButton(props: StyledButtonProps) {
-  const { color, onClick, children, fontsize } = props;
+  const { color, onClick, children, fontsize, padding } = props;
   return (
-    <Btn color={color} onClick={onClick} fontsize={fontsize}>
+    <Btn color={color} onClick={onClick} fontsize={fontsize} padding={padding}>
       {children}
     </Btn>
   );
@@ -39,5 +40,6 @@ function StyledButton(props: StyledButtonProps) {
 StyledButton.defaultProps = {
   color: 'rgba(255, 137, 35, 0.6)',
   fontsize: '24px',
+  padding: '1.6rem 3.2rem',
 };
 export default StyledButton;
