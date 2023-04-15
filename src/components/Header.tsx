@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import Styles from '../config/globalFontStyle.module.css';
 
@@ -33,6 +33,8 @@ const StyledImg = styled.img`
 `;
 
 function Header() {
+  // const location = useLocation();
+  // if (location.pathname === '/main/') return null;
   return (
     <StyledHeader>
       {/* 이미지 */}
