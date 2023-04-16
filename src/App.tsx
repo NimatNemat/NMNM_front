@@ -11,9 +11,9 @@ import Mypage from './pages/MyPage';
 import PreferencePage from './pages/PreferencePage';
 import RegisterPage from './pages/RegisterPage';
 import RegisterDetailPage from './pages/RegisterDetailPage';
-import Styles from './config/globalFontStyle.module.css';
 import Header from './components/Header';
 import PrivacyPage from './pages/PrivacyPage';
+import NavPage from './pages/NavPage';
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
       <Header />
       <div className="Content">
         <Routes>
-          <Route path="/" element={<IntroPage />} />
+          <Route path="/" element={<NavPage />} />
           <Route path="/main/*" element={<Main />} />
           <Route path="/login/*" element={<LoginPage />} />
           <Route path="/idsearch/*" element={<IdsearchPage />} />
@@ -32,6 +32,11 @@ function App() {
           <Route path="/registerdetail/*" element={<RegisterDetailPage />} />
           <Route path="/detail/*" element={<DetailPage />} />
           <Route path="/privacy/*" element={<PrivacyPage />} />
+        </Routes>
+      </div>
+      <div className="NoPaddingContent">
+        <Routes>
+          <Route path="/intro/*" element={<IntroPage />} />
         </Routes>
       </div>
     </BrowserRouter>

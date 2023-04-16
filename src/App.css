@@ -1,3 +1,7 @@
 .Content {
   padding: 2.4rem;
 }
+
+.NoPaddingContent {
+  padding: 0rem;
+}

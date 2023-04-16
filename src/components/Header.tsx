@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import Styles from '../config/globalFontStyle.module.css';
 
 const StyledHeader = styled.header`
   display: flex;
@@ -33,8 +32,8 @@ const StyledImg = styled.img`
 `;
 
 function Header() {
-  // const location = useLocation();
-  // if (location.pathname === '/main/') return null;
+  const location = useLocation();
+  if (location.pathname === '/intro/') return null;
   return (
     <StyledHeader>
       {/* 이미지 */}
