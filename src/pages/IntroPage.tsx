@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import StyledButton from '../components/StyledButton';
 import Styles from '../config/globalFontStyle.module.css';
@@ -17,7 +17,7 @@ const Container = styled.div<{ backGround: string }>`
   align-items: center;
   width: 100%;
   min-width: 36rem;
-  height: 40rem;
+  height: 64rem;
   background: ${({ backGround }) => backGround};
 `;
 const FirstContainer = styled(Container)`
@@ -72,6 +72,26 @@ function IntroPage() {
   const onClickFunction = () => {
     window.location.href = '/login';
   };
+  const contentRefs = useRef<Array<React.RefObject<HTMLDivElement>>>([]);
+  contentRefs.current = [0, 1, 2, 3, 4].map((_, i) => contentRefs.current[i] ?? React.createRef());
+
+  useEffect(() => {
+    const onScroll = () => {
+      contentRefs.current.forEach((ref, i) => {
+        if (ref.current) {
+          const rect = ref.current.getBoundingClientRect();
+          if (rect.top <= window.innerHeight * 0.75 && rect.bottom >= 0) {
+            ref.current.classList.add(Styles.visible);
+          } else {
+            ref.current.classList.remove(Styles.visible);
+          }
+        }
+      });
+    };
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
     <IntroPageContainer>
       <FirstContainer backGround="none">
@@ -88,7 +108,11 @@ function IntroPage() {
       </FirstContainer>
       <Container backGround="#FFFDF5">
         <ContentContainer justifyContent="flex-start">
-          <StyledTextDiv alignItems="flex-start">
+          <StyledTextDiv
+            alignItems="flex-start"
+            ref={contentRefs.current[0]}
+            className={`${Styles.fadeInOnScroll} ${Styles.visible}`}
+          >
             <div className={Styles.h3}>세상에 없던</div>
             <div className={Styles.h3}>새로운 추천</div>
             <div className={Styles.p1regular}>개인의 취향분석을 통해</div>
@@ -98,7 +122,11 @@ function IntroPage() {
       </Container>
       <Container backGround="#FFFFFF">
         <ContentContainer justifyContent="flex-start">
-          <StyledTextDiv alignItems="flex-start">
+          <StyledTextDiv
+            alignItems="flex-start"
+            ref={contentRefs.current[1]}
+            className={`${Styles.fadeInOnScroll} ${Styles.visible}`}
+          >
             <div className={Styles.h3}>나만의</div>
             <div className={Styles.h3}>맛집리스트</div>
             <div className={Styles.p1regular}>자신이 원하는 테마별로</div>
@@ -108,7 +136,11 @@ function IntroPage() {
       </Container>
       <Container backGround="#FFFDF5">
         <ContentContainer justifyContent="flex-start">
-          <StyledTextDiv alignItems="flex-start">
+          <StyledTextDiv
+            alignItems="flex-start"
+            ref={contentRefs.current[2]}
+            className={`${Styles.fadeInOnScroll} ${Styles.visible}`}
+          >
             <div className={Styles.h3}>우리 뭐 먹을래?</div>
             <div className={Styles.p1regular}>친구와 함께 맛집을 찾아보세요!</div>
           </StyledTextDiv>
@@ -116,7 +148,11 @@ function IntroPage() {
       </Container>
       <Container backGround="#FFFFFF">
         <ContentContainer justifyContent="flex-start">
-          <StyledTextDiv alignItems="flex-start">
+          <StyledTextDiv
+            alignItems="flex-start"
+            ref={contentRefs.current[3]}
+            className={`${Styles.fadeInOnScroll} ${Styles.visible}`}
+          >
             <div className={Styles.h3}>여기 뭐라쓰지?</div>
             <div className={Styles.p1regular}>내가 쓴 리뷰,</div>
             <div className={Styles.p1regular}>좋아요한 식당</div>
@@ -127,7 +163,7 @@ function IntroPage() {
       </Container>
       <Container backGround="#FFFDF5">
         <ContentContainer justifyContent="center">
-          <FooterContainer>
+          <FooterContainer ref={contentRefs.current[4]} className={`${Styles.fadeInOnScroll} ${Styles.visible}`}>
             <StyledLogoDiv>
               <img src="/logo.png" alt="logo" style={{ width: '12.5rem', height: '5rem' }} />
             </StyledLogoDiv>

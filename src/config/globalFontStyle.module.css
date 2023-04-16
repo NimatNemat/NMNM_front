@@ -45,3 +45,10 @@
 .gray {
   color: rgba(128, 128, 128, 1);
 }
+.fadeInOnScroll {
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}
+.visible {
+  opacity: 1;
+}
