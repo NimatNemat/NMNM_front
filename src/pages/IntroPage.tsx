@@ -45,12 +45,17 @@ const StyledLogoDiv = styled.div`
   justify-content: center;
   align-items: center;
 `;
+const StyledImage = styled.img`
+  width: 50%;
+  object-fit: cover;
+`;
 const StyledTextDiv = styled.div<{ alignItems: string }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: ${({ alignItems }) => alignItems};
   gap: 0.8rem;
+  width: 50%;
 `;
 const StyledButtonDiv = styled.div`
   display: flex;
@@ -69,6 +74,7 @@ const FooterContainer = styled.div`
 `;
 
 function IntroPage() {
+  const [className, setClassName] = useState<string>('');
   const onClickFunction = () => {
     window.location.href = '/login';
   };
@@ -77,7 +83,7 @@ function IntroPage() {
 
   useEffect(() => {
     const onScroll = () => {
-      contentRefs.current.forEach((ref, i) => {
+      contentRefs.current.forEach((ref) => {
         if (ref.current) {
           const rect = ref.current.getBoundingClientRect();
           if (rect.top <= window.innerHeight * 0.75 && rect.bottom >= 0) {
@@ -92,15 +98,34 @@ function IntroPage() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  useEffect(() => {
+    const updateClassName = () => {
+      if (window.innerWidth <= 767) {
+        setClassName(Styles.mobileH3);
+      } else if (window.innerWidth <= 1439) {
+        setClassName(Styles.tabletH3);
+      } else {
+        setClassName(Styles.desktopH3);
+      }
+    };
+
+    updateClassName();
+    window.addEventListener('resize', updateClassName);
+
+    return () => {
+      window.removeEventListener('resize', updateClassName);
+    };
+  }, []);
+
   return (
     <IntroPageContainer>
       <FirstContainer backGround="none">
         <ContentContainer justifyContent="flex-start">
           <StyledTextDiv alignItems="flex-start">
-            <div className={Styles.h3} style={{ color: '#FFFFFF', width: '100%' }}>
+            <div className={className} style={{ color: '#FFFFFF', width: '100%' }}>
               내 입맛에 맞는 식당
             </div>
-            <div className={Styles.h3} style={{ color: '#FFFFFF', width: '100%' }}>
+            <div className={className} style={{ color: '#FFFFFF', width: '100%' }}>
               니맛내맛에서 확인하세요
             </div>
           </StyledTextDiv>
@@ -113,11 +138,12 @@ function IntroPage() {
             ref={contentRefs.current[0]}
             className={`${Styles.fadeInOnScroll} ${Styles.visible}`}
           >
-            <div className={Styles.h3}>세상에 없던</div>
-            <div className={Styles.h3}>새로운 추천</div>
+            <div className={className}>세상에 없던</div>
+            <div className={className}>새로운 추천</div>
             <div className={Styles.p1regular}>개인의 취향분석을 통해</div>
             <div className={Styles.p1regular}>같은 그룹에 속한 사람들로부터 추천받기</div>
           </StyledTextDiv>
+          <StyledImage src="/logo.png" alt="" />
         </ContentContainer>
       </Container>
       <Container backGround="#FFFFFF">
@@ -127,11 +153,12 @@ function IntroPage() {
             ref={contentRefs.current[1]}
             className={`${Styles.fadeInOnScroll} ${Styles.visible}`}
           >
-            <div className={Styles.h3}>나만의</div>
-            <div className={Styles.h3}>맛집리스트</div>
+            <div className={className}>나만의</div>
+            <div className={className}>맛집리스트</div>
             <div className={Styles.p1regular}>자신이 원하는 테마별로</div>
             <div className={Styles.p1regular}>맛집을 저장해 보세요!</div>
           </StyledTextDiv>
+          <StyledImage src="/logo.png" alt="" />
         </ContentContainer>
       </Container>
       <Container backGround="#FFFDF5">
@@ -141,9 +168,10 @@ function IntroPage() {
             ref={contentRefs.current[2]}
             className={`${Styles.fadeInOnScroll} ${Styles.visible}`}
           >
-            <div className={Styles.h3}>우리 뭐 먹을래?</div>
+            <div className={className}>우리 뭐 먹을래?</div>
             <div className={Styles.p1regular}>친구와 함께 맛집을 찾아보세요!</div>
           </StyledTextDiv>
+          <StyledImage src="/logo.png" alt="" />
         </ContentContainer>
       </Container>
       <Container backGround="#FFFFFF">
@@ -153,12 +181,13 @@ function IntroPage() {
             ref={contentRefs.current[3]}
             className={`${Styles.fadeInOnScroll} ${Styles.visible}`}
           >
-            <div className={Styles.h3}>여기 뭐라쓰지?</div>
+            <div className={className}>여기 뭐라쓰지?</div>
             <div className={Styles.p1regular}>내가 쓴 리뷰,</div>
             <div className={Styles.p1regular}>좋아요한 식당</div>
             <div className={Styles.p1regular}>나만의 맛플리</div>
             <div className={Styles.p1regular}>친구들과 공유해보세요!</div>
           </StyledTextDiv>
+          <StyledImage src="/logo.png" alt="" />
         </ContentContainer>
       </Container>
       <Container backGround="#FFFDF5">
@@ -168,8 +197,8 @@ function IntroPage() {
               <img src="/logo.png" alt="logo" style={{ width: '12.5rem', height: '5rem' }} />
             </StyledLogoDiv>
             <StyledTextDiv alignItems="center">
-              <div className={Styles.h3}>지금 니맛내맛에서</div>
-              <div className={Styles.h3}>내 취향 맛집을 추천받아보세요</div>
+              <div className={className}>지금 니맛내맛에서</div>
+              <div className={className}>내 취향 맛집을 추천받아보세요</div>
             </StyledTextDiv>
             <StyledButtonDiv>
               <StyledButton
