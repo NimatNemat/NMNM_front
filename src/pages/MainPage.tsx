@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledTag from '../components/StyledTag';
@@ -84,6 +85,30 @@ function MainPage() {
   const [modalData, setModalData] = useState<number>(0);
   const [blur, setBlur] = useState<boolean>(false);
   const [selected, setSelected] = useState<string>('reco1');
+  interface Restaurant {
+    restaurantId: number;
+    name: string;
+    cuisineType: string;
+    tags: [[string]];
+    img: string;
+  }
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const fetchData = async () => {
+    setIsLoaded(false);
+    try {
+      const response = await axios.get(`http://3.39.232.5:8080/api/restaurant/all`);
+      setRestaurants(response.data);
+      setIsLoaded(true);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching data', error);
+      setIsLoaded(false);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleModalData = (data: number) => {
     setModalData(data);
@@ -103,114 +128,22 @@ function MainPage() {
   const showFirstRecoBox = () => {
     return (
       <GridContainer>
-        <StyledCard
-          imgSrc="/img.png"
-          likes="12개"
-          name="마리모"
-          category="돈까스, 우동"
-          hashtag="#일식 가정식 #혼밥 #제로페이"
-          setModalData={handleModalData}
-          openModal={openModal}
-        />
-        <StyledCard
-          imgSrc="/img.png"
-          likes="12개"
-          name="마리모"
-          category="돈까스, 우동"
-          hashtag="#일식 가정식 #혼밥 #제로페이"
-          setModalData={handleModalData}
-          openModal={openModal}
-        />
-        <StyledCard
-          imgSrc="/img.png"
-          likes="12개"
-          name="마리모"
-          category="돈까스, 우동"
-          hashtag="#일식 가정식 #혼밥 #제로페이"
-          setModalData={handleModalData}
-          openModal={openModal}
-        />
-        <StyledCard
-          imgSrc="/img.png"
-          likes="12개"
-          name="마리모"
-          category="돈까스, 우동"
-          hashtag="#일식 가정식 #혼밥 #제로페이"
-          setModalData={handleModalData}
-          openModal={openModal}
-        />
-        <StyledCard
-          imgSrc="/img.png"
-          likes="12개"
-          name="마리모"
-          category="돈까스, 우동"
-          hashtag="#일식 가정식 #혼밥 #제로페이"
-          setModalData={handleModalData}
-          openModal={openModal}
-        />
-        <StyledCard
-          imgSrc="/img.png"
-          likes="12개"
-          name="마리모"
-          category="돈까스, 우동"
-          hashtag="#일식 가정식 #혼밥 #제로페이"
-          setModalData={handleModalData}
-          openModal={openModal}
-        />
-        <StyledCard
-          imgSrc="/img.png"
-          likes="12개"
-          name="마리모"
-          category="돈까스, 우동"
-          hashtag="#일식 가정식 #혼밥 #제로페이"
-          setModalData={handleModalData}
-          openModal={openModal}
-        />
-        <StyledCard
-          imgSrc="/img.png"
-          likes="12개"
-          name="마리모"
-          category="돈까스, 우동"
-          hashtag="#일식 가정식 #혼밥 #제로페이"
-          setModalData={handleModalData}
-          openModal={openModal}
-        />
-        <StyledCard
-          imgSrc="/img.png"
-          likes="12개"
-          name="마리모"
-          category="돈까스, 우동"
-          hashtag="#일식 가정식 #혼밥 #제로페이"
-          setModalData={handleModalData}
-          openModal={openModal}
-        />
-        <StyledCard
-          imgSrc="/img.png"
-          likes="12개"
-          name="마리모"
-          category="돈까스, 우동"
-          hashtag="#일식 가정식 #혼밥 #제로페이"
-          setModalData={handleModalData}
-          openModal={openModal}
-        />
-        <StyledCard
-          imgSrc="/img.png"
-          likes="12개"
-          name="마리모"
-          category="돈까스, 우동"
-          hashtag="#일식 가정식 #혼밥 #제로페이"
-          setModalData={handleModalData}
-          openModal={openModal}
-        />
-        <StyledCard
-          imgSrc="/img.png"
-          likes="12개"
-          name="마리모"
-          category="돈까스, 우동"
-          hashtag="#일식 가정식 #혼밥 #제로페이"
-          setModalData={handleModalData}
-          openModal={openModal}
-        />
+        {isLoaded ? (
+          restaurants.map((restaurant) => (
+            <StyledCard
+              key={restaurant.restaurantId}
+              imgSrc={`http://3.39.232.5:8080/api/restaurant/all${restaurant.img}.jpg`}
+              likes="12개"
+              name={restaurant.name}
+              category={restaurant.cuisineType}
+              hashtag={restaurant.tags ? restaurant.tags.map((tagGroup) => tagGroup.join(' ')).join(' ') : ''}
+              setModalData={handleModalData}
+              openModal={openModal}
+            />
+          ))
+        ) : (
+          <h1>로딩중입니다.</h1>
+        )}
       </GridContainer>
     );
   };
