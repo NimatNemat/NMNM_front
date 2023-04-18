@@ -5,6 +5,7 @@ import Styles from '../config/globalFontStyle.module.css';
 import StyledTag from '../components/StyledTag';
 import StyledCard from '../components/StyledCard';
 import StyledModal from '../components/StyledModal';
+import Pagination from '../components/Pagination';
 
 const MainPageContainer = styled.div`
   display: flex;
@@ -85,6 +86,9 @@ function MainPage() {
   const [modalData, setModalData] = useState<number>(0);
   const [blur, setBlur] = useState<boolean>(false);
   const [selected, setSelected] = useState<string>('reco1');
+  const [postsPerPage, setPostsPerPage] = useState<number>(12);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentRestaurant, setCurrentRestaurant] = useState<Restaurant[]>([]);
   interface Restaurant {
     restaurantId: number;
     name: string;
@@ -110,6 +114,17 @@ function MainPage() {
     fetchData();
   }, []);
 
+  const indexOfLast = currentPage * postsPerPage;
+  const indexOfFirst = indexOfLast - postsPerPage;
+  const currentPosts = (restaurants: Restaurant[]) => {
+    let currentPosts: Restaurant[] = [];
+    currentPosts = restaurants.slice(indexOfFirst, indexOfLast);
+    return currentPosts;
+  };
+  useEffect(() => {
+    setCurrentRestaurant(currentPosts(restaurants));
+  }, [currentPage]);
+
   const handleModalData = (data: number) => {
     setModalData(data);
   };
@@ -127,24 +142,31 @@ function MainPage() {
   };
   const showFirstRecoBox = () => {
     return (
-      <GridContainer>
-        {isLoaded ? (
-          restaurants.map((restaurant) => (
-            <StyledCard
-              key={restaurant.restaurantId}
-              imgSrc={`http://3.39.232.5:8080/api/restaurant/all${restaurant.img}.jpg`}
-              likes="12개"
-              name={restaurant.name}
-              category={restaurant.cuisineType}
-              hashtag={restaurant.tags ? restaurant.tags.map((tagGroup) => tagGroup.join(' ')).join(' ') : ''}
-              setModalData={handleModalData}
-              openModal={openModal}
-            />
-          ))
-        ) : (
-          <h1>로딩중입니다.</h1>
-        )}
-      </GridContainer>
+      <>
+        <GridContainer>
+          {isLoaded ? (
+            currentRestaurant.map((restaurant) => (
+              <StyledCard
+                key={restaurant.restaurantId}
+                imgSrc={`http://3.39.232.5:8080/api/restaurant/all${restaurant.img}.jpg`}
+                likes="12개"
+                name={restaurant.name}
+                category={restaurant.cuisineType}
+                hashtag={restaurant.tags ? restaurant.tags.map((tagGroup) => tagGroup.join(' ')).join(' ') : ''}
+                setModalData={handleModalData}
+                openModal={openModal}
+              />
+            ))
+          ) : (
+            <h1>로딩중입니다.</h1>
+          )}
+        </GridContainer>
+        <Pagination
+          postsPerPage={postsPerPage}
+          totalPosts={restaurants.length}
+          paginate={(pageNumber: number) => setCurrentPage(pageNumber)}
+        />
+      </>
     );
   };
 
