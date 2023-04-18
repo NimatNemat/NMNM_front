@@ -123,7 +123,7 @@ function MainPage() {
   };
   useEffect(() => {
     setCurrentRestaurant(currentPosts(restaurants));
-  }, [currentPage]);
+  }, [currentPage, restaurants]);
 
   const handleModalData = (data: number) => {
     setModalData(data);
@@ -148,11 +148,18 @@ function MainPage() {
             currentRestaurant.map((restaurant) => (
               <StyledCard
                 key={restaurant.restaurantId}
-                imgSrc={`http://3.39.232.5:8080/api/restaurant/all${restaurant.img}.jpg`}
+                imgSrc="/logo.png"
                 likes="12개"
                 name={restaurant.name}
                 category={restaurant.cuisineType}
-                hashtag={restaurant.tags ? restaurant.tags.map((tagGroup) => tagGroup.join(' ')).join(' ') : ''}
+                hashtag={
+                  restaurant.tags
+                    ? restaurant.tags
+                        .slice(0, 3)
+                        .map((tagGroup) => tagGroup.join(' '))
+                        .join(' ')
+                    : ''
+                }
                 setModalData={handleModalData}
                 openModal={openModal}
               />

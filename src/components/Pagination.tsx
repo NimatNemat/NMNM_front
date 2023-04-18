@@ -36,7 +36,7 @@ const PageLi = styled.li`
   }
 `;
 
-const PageSpan = styled.span`
+const PageSpan = styled.button`
   &:hover::after,
   &:focus::after {
     border-radius: 100%;
@@ -56,9 +56,7 @@ function Pagination(props: pageProps) {
       <nav>
         <PageUl>
           {pageNumbers.map((number) => (
-            <PageLi key={number}>
-              <PageSpan onClick={() => paginate(number)}>{number}</PageSpan>
-            </PageLi>
+            <PageSpan onClick={() => paginate(number)}>{number}</PageSpan>
           ))}
         </PageUl>
       </nav>

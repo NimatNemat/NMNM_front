@@ -55,7 +55,7 @@ const StyledTextDiv = styled.div<{ alignItems: string }>`
   justify-content: center;
   align-items: ${({ alignItems }) => alignItems};
   gap: 0.8rem;
-  width: 50%;
+  width: 100%;
 `;
 const StyledButtonDiv = styled.div`
   display: flex;
@@ -111,7 +111,6 @@ function IntroPage() {
 
     updateClassName();
     window.addEventListener('resize', updateClassName);
-
     return () => {
       window.removeEventListener('resize', updateClassName);
     };
