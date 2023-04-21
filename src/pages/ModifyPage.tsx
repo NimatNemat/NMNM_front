@@ -102,7 +102,6 @@ const Row = styled.div`
   flex-direction: row;
   justify-content: end;
   align-items: center;
-  width: 50%;
   gap: 1.2rem;
 `;
 const EndBox = styled.div`

@@ -11,9 +11,10 @@ function Map(props: Props) {
   const { x, y, name } = props;
   // const X = y;
   // const Y = x;
+  console.log(x, y);
   const X = 37.5463365886719;
   const Y = 127.075735440582;
-  console.log(X, Y);
+
   useEffect(() => {
     const container = document.getElementById('map');
     const options = {

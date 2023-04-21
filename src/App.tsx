@@ -30,7 +30,7 @@ function App() {
           <Route path="/preference/*" element={<PreferencePage />} />
           <Route path="/register/*" element={<RegisterPage />} />
           <Route path="/registerdetail/*" element={<RegisterDetailPage />} />
-          <Route path="/detail/*" element={<DetailPage />} />
+          <Route path="/detail/:id" element={<DetailPage />} />
           <Route path="/privacy/*" element={<PrivacyPage />} />
         </Routes>
       </div>
