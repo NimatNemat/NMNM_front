@@ -160,6 +160,7 @@ function MainPage() {
                         .join(' ')
                     : ''
                 }
+                id={restaurant.restaurantId}
                 setModalData={handleModalData}
                 openModal={openModal}
               />

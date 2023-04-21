@@ -107,6 +107,7 @@ function PreferencePage() {
     name: '가츠시',
     category: '일식',
     hashtag: '돈까스, 우동',
+    id: 1,
   };
   const [selected, setSelected] = useState(true);
   const [selected2, setSelected2] = useState(false);
@@ -186,6 +187,7 @@ function PreferencePage() {
               category={data.category}
               hashtag={data.hashtag}
               showIconBox={false}
+              id={data.id}
             />
             <StyledCard
               imgSrc={data.imgSrc}
@@ -194,6 +196,7 @@ function PreferencePage() {
               category={data.category}
               hashtag={data.hashtag}
               showIconBox={false}
+              id={data.id}
             />
             <StyledCard
               imgSrc={data.imgSrc}
@@ -201,6 +204,7 @@ function PreferencePage() {
               name={data.name}
               category={data.category}
               hashtag={data.hashtag}
+              id={data.id}
               showIconBox={false}
             />
           </StaylistSlider>
