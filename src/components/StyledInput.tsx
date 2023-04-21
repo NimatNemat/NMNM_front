@@ -18,7 +18,6 @@ const Input = styled.input<StyledInputProps>`
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: ${(props) => (props.width === '60rem' ? '60rem' : props.width)};
   border: ${(props) => (props.border === '1px solid #dfdfdf' ? '1px solid #dfdfdf' : props.border)}; // border 적용
   border-bottom: ${(props) => props.borderBottom}; // borderBottom 적용
   background: ${(props) => (props.background === '#FFFDF5' ? '#FFFDF5' : props.background)}; // background 적용

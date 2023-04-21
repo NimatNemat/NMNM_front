@@ -38,7 +38,7 @@ const Content = styled.div`
   gap: 2rem;
   width: 80%;
   padding: 4vw;
-  background: white;
+  background-color: white;
   box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.1);
   border-radius: 30px;
   margin: 3vw 24rem;

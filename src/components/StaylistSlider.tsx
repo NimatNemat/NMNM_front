@@ -48,6 +48,9 @@ const StyledSlider = styled(Slider)`
     z-index: 9999;
     width: 30px !important;
     opacity: 0;
+    @media (max-width: 700px) {
+      opacity: 1;
+    }
   }
 
   .slick-prev {
@@ -72,6 +75,7 @@ const StyledSlider = styled(Slider)`
     color: white;
   }
   .slick-dots {
+    bottom: 0px;
     li button:before {
       color: #000000;
       border-radius: 0px;
