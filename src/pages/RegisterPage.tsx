@@ -156,7 +156,7 @@ function RegisterPage() {
     formData.append('userId', id);
     formData.append('password', password);
     formData.append('email', email);
-    formData.append('age', '23');
+    formData.append('birthdate', '2023-04-21T01:48:49.012Z');
     formData.append('gender', gender.toString());
     formData.append('nickName', nickname);
     formData.append('profileImage', 'null');
@@ -164,13 +164,17 @@ function RegisterPage() {
   };
   const regisgterUser = async (formData: FormData) => {
     try {
-      const response = await axios.post('http://3.39.232.5:8080/api/users/register', formData, {
+      const resposne = await axios.post('http://3.39.232.5:8080/api/users/register', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      window.location.href = '/main';
-      console.log(response.data);
+      if (resposne.status === 200) {
+        alert('회원가입이 완료되었습니다.');
+        window.location.href = '/main';
+      } else {
+        alert('회원가입에 실패하였습니다.');
+      }
     } catch (error) {
       alert('빈칸을 올바르게 입력하세요.');
     }

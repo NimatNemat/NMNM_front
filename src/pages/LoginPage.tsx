@@ -38,9 +38,14 @@ function LoginPage() {
   const loginUser = async (formData: FormData) => {
     try {
       const response = await axios.post('http://3.39.232.5:8080/api/users/login', formData);
-      window.location.href = '/main';
-
-      console.log(response.data);
+      if (response.status === 200) {
+        alert('로그인에 성공하였습니다.');
+        window.location.href = '/main';
+        // accessToken 설정
+        axios.defaults.headers.common.Authorization = `Bearer ${response.data}`;
+      } else {
+        alert('아이디, 비밀번호를 다시 한번 확인하세요.');
+      }
     } catch (error) {
       alert('아이디, 비밀번호를 다시 한번 확인하세요.');
     }
@@ -57,7 +62,7 @@ function LoginPage() {
       return;
     }
 
-    formData.append('email', idValue);
+    formData.append('userId', idValue);
     formData.append('password', passwordValue);
 
     loginUser(formData);
