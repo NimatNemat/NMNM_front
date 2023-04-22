@@ -164,7 +164,7 @@ function RegisterPage() {
     formData.append('password', password);
     formData.append('email', email);
     formData.append('birthdate', '2023-04-21T01:48:49.012Z');
-    formData.append('gender', '0');
+    formData.append('gender', gender.toString());
     formData.append('nickName', nickname);
     const jsonObject = formDataToJson(formData);
     registerUser(jsonObject);
