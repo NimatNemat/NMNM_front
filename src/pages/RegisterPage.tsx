@@ -87,7 +87,7 @@ function RegisterPage() {
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
   const [email, setEmail] = useState('');
-  const [gender, setGender] = useState(1);
+  const [gender, setGender] = useState(0);
   const [nickname, setNickname] = useState('');
   const [privacy1, setPrivacy1] = useState(false);
   const [privacy2, setPrivacy2] = useState(false);
@@ -125,6 +125,7 @@ function RegisterPage() {
   const handleNicknameEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(event.target.value);
   };
+
   const Submit = () => {
     const formData = new FormData();
     if (
@@ -157,9 +158,8 @@ function RegisterPage() {
     formData.append('password', password);
     formData.append('email', email);
     formData.append('birthdate', '2023-04-21T01:48:49.012Z');
-    formData.append('gender', gender.toString());
+    formData.append('gender', '0');
     formData.append('nickName', nickname);
-    formData.append('profileImage', 'null');
     regisgterUser(formData);
   };
   const regisgterUser = async (formData: FormData) => {
@@ -169,7 +169,7 @@ function RegisterPage() {
           'Content-Type': 'application/json',
         },
       });
-      if (resposne.status === 200) {
+      if (resposne.status === 200 || resposne.status === 201) {
         alert('회원가입이 완료되었습니다.');
         window.location.href = '/main';
       } else {
@@ -229,8 +229,8 @@ function RegisterPage() {
           <Linebox>
             <SubTitle className={Styles.p1bold}>성별</SubTitle>
             <Styeldselect className={Styles.p1regular} value={gender} onChange={handleGenderEvent}>
-              <option value={1}>남자</option>
-              <option value={2}>여자</option>
+              <option value={0}>남자</option>
+              <option value={1}>여자</option>
             </Styeldselect>
           </Linebox>
           <Linebox>
