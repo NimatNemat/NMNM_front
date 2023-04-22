@@ -5,6 +5,7 @@ import axios from 'axios';
 import StyledInput from '../components/StyledInput';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledButton from '../components/StyledButton';
+import ImageUpload from '../components/ImageUpload';
 
 function ModifyPage() {
   const [nicknameValue, setNicknameValue] = useState('');
@@ -49,6 +50,7 @@ function ModifyPage() {
     <ModifyPageContainer>
       <Container>
         <span className={Styles.h3}>회원 정보 수정</span>
+        <ImageUpload />
         <span className={Styles.p1bold}>닉네임</span>
         <StyledInput
           value={nicknameValue}

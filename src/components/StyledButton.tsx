@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 interface StyledButtonProps {
   color?: string;
-  onClick: () => void;
+  onClick: (event: any) => void;
   children: React.ReactNode;
   fontsize?: string;
   padding?: string;
