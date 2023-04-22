@@ -125,7 +125,13 @@ function RegisterPage() {
   const handleNicknameEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(event.target.value);
   };
-
+  const formDataToJson = (formData: FormData): Record<string, any> => {
+    const jsonObject: Record<string, any> = {};
+    formData.forEach((value, key) => {
+      jsonObject[key] = value;
+    });
+    return jsonObject;
+  };
   const Submit = () => {
     const formData = new FormData();
     if (
@@ -160,9 +166,10 @@ function RegisterPage() {
     formData.append('birthdate', '2023-04-21T01:48:49.012Z');
     formData.append('gender', '0');
     formData.append('nickName', nickname);
-    regisgterUser(formData);
+    const jsonObject = formDataToJson(formData);
+    registerUser(jsonObject);
   };
-  const regisgterUser = async (formData: FormData) => {
+  const registerUser = async (formData: Record<string, any>) => {
     try {
       const resposne = await axios.post('http://3.39.232.5:8080/api/users/register', formData, {
         headers: {
