@@ -63,7 +63,7 @@ function ModifyPage() {
         <StyledInput value={data} type="text" placeholder="입맛변경" width="100%" onChange={handledataEvent} />
         <span className={Styles.p1bold}>세부 사항</span>
         <Div>
-          <DetailArea value={detailValue} onChange={handleDetailEvent} />
+          <DetailArea value={detailValue} onChange={handleDetailEvent} placeholder="세부 사항을 적어주세요." />
         </Div>
         <EndBox>
           <Row>
@@ -98,6 +98,9 @@ const Container = styled.div`
   }
   gap: 2.4rem;
   width: 50%;
+  @media (max-width: 768px) {
+    width: 80%;
+  }
 `;
 const Row = styled.div`
   display: flex;

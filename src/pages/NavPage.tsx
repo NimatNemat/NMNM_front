@@ -50,6 +50,17 @@ function NavPage() {
           detail
         </Link>
       </div>
+      <div>
+        <button
+          type="button"
+          onClick={() => {
+            sessionStorage.setItem('isAuthenticated', 'false');
+            alert('로그아웃 되었습니다.');
+          }}
+        >
+          로그아웃
+        </button>
+      </div>
     </div>
   );
 }

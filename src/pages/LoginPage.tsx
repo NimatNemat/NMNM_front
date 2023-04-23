@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import StyledInput from '../components/StyledInput';
@@ -24,6 +24,7 @@ const Container = styled.div`
 `;
 
 function LoginPage() {
+  const navigate = useNavigate();
   const [idValue, setIdValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
 
@@ -40,9 +41,10 @@ function LoginPage() {
       const response = await axios.post('http://3.39.232.5:8080/api/users/login', formData);
       if (response.status === 200) {
         alert('로그인에 성공하였습니다.');
-        window.location.href = '/main';
+        navigate('/main/', { replace: true });
         // accessToken 설정
         axios.defaults.headers.common.Authorization = `Bearer ${response.data}`;
+        sessionStorage.setItem('isAuthenticated', 'true');
       } else {
         alert('아이디, 비밀번호를 다시 한번 확인하세요.');
       }
