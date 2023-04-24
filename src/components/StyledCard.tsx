@@ -6,7 +6,7 @@ import Styles from '../config/globalFontStyle.module.css';
 
 interface StyledCardProps {
   imgSrc: string;
-  likes: string;
+  likes: number;
   name: string;
   category: string;
   hashtag: string;

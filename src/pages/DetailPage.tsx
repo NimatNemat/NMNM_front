@@ -138,7 +138,7 @@ function DetailPage() {
 
   const data = {
     imgSrc: '/img.png',
-    likes: '5',
+    likes: 5,
     name: '가츠시',
     category: '일식',
     hashtag: '돈까스, 우동',

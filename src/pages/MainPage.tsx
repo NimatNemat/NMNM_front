@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Select from 'react-select';
 import axios from 'axios';
 import styled from 'styled-components';
 import Styles from '../config/globalFontStyle.module.css';
@@ -63,23 +64,57 @@ const GridHeaderContainer = styled.div`
   width: 100%;
 `;
 
-const Nav = styled.nav`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  gap: 10vw;
-`;
-
-const NavItem = styled.div<{ active?: boolean }>`
-  color: ${({ active }) => (active ? 'black' : 'white')};
-  background: ${({ active }) => (active ? '#FFFDF5' : 'rgba(0, 0, 0, 0.6)')};
-  height: 5rem;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
 const icons = require.context('../assets/icons', true);
+
+const options = [
+  { value: 'reco1', label: '진정한 한국인의 추천리스트' },
+  { value: 'reco2', label: '당신만을 위한 추천리스트' },
+];
+
+const customStyles = {
+  container: (provided: any) => ({
+    ...provided,
+    width: '20%',
+  }),
+  control: (provided: any) => ({
+    ...provided,
+    backgroundColor: '#FFFDF5',
+    borderColor: '#0.1rem solid rgba(128, 128, 128, 0.3)',
+    // minHeight: '38px',
+    height: '3.8rem',
+    boxShadow: 'none',
+  }),
+  valueContainer: (provided: any) => ({
+    ...provided,
+    height: '3.8rem',
+    padding: '0 1rem',
+  }),
+  indicatorsContainer: (provided: any) => ({
+    ...provided,
+    height: '3.8rem',
+  }),
+  option: (provided: any, state: any) => ({
+    ...provided,
+    // color: state.isSelected ? 'white' : 'black',
+    color: '#000000',
+    backgroundColor: state.isSelected ? 'rgba(128, 128, 128, 0.3)' : '#FFFDF5',
+    cursor: 'pointer',
+    fontSize: '1.6rem',
+    fontWeight: 'bold',
+    lineHeight: '2',
+  }),
+  menu: (provided: any) => ({
+    ...provided,
+    boxShadow: 'none',
+    borderRadius: '0.2rem',
+  }),
+  singleValue: (provided: any) => ({
+    ...provided,
+    fontSize: '2.4rem',
+    fontWeight: 'bold',
+    color: '#000000',
+  }),
+};
 
 function MainPage() {
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -89,12 +124,14 @@ function MainPage() {
   const [postsPerPage, setPostsPerPage] = useState<number>(12);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [currentRestaurant, setCurrentRestaurant] = useState<Restaurant[]>([]);
+  const [selectedLabel, setSelectedLabel] = useState<string>('진정한 한국인의 추천리스트');
   interface Restaurant {
     restaurantId: number;
     name: string;
     cuisineType: string;
     tags: [[string]];
     img: string;
+    likeCount: number;
   }
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
@@ -149,7 +186,7 @@ function MainPage() {
               <StyledCard
                 key={restaurant.restaurantId}
                 imgSrc="/logo.png"
-                likes="12개"
+                likes={restaurant.likeCount}
                 name={restaurant.name}
                 category={restaurant.cuisineType}
                 hashtag={
@@ -211,14 +248,16 @@ function MainPage() {
               </TagListContainer>
             </TagContainer>
             <GridHeaderContainer>
-              <Nav>
-                <NavItem className={Styles.h3} active={selected === 'reco1'} onClick={() => setSelected('reco1')}>
-                  진정한 한국인의 추천리스트
-                </NavItem>
-                <NavItem className={Styles.h3} active={selected === 'reco2'} onClick={() => setSelected('reco2')}>
-                  당신만을 위한 추천리스트
-                </NavItem>
-              </Nav>
+              <Select
+                isSearchable={false}
+                styles={customStyles}
+                options={options}
+                value={options.find((option) => option.value === selected)}
+                onChange={(option: any) => {
+                  setSelected(option.value);
+                  setSelectedLabel(option.label);
+                }}
+              />
             </GridHeaderContainer>
             {selected === 'reco1' ? showFirstRecoBox() : null}
           </ListContainer>

@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from 'react';
-import { ReactElement } from 'react';
+import React, { useEffect, useRef, ReactElement } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 interface PrivateRouteProps {
