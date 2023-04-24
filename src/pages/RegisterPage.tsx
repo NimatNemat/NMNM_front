@@ -83,6 +83,7 @@ const Styeldselect = styled.select`
 `;
 
 function RegisterPage() {
+  const [checkIcon, setCheckIcon] = useState('');
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
@@ -110,6 +111,28 @@ function RegisterPage() {
     setGender(Number(event.target.value));
   };
 
+  const Idcheck = async () => {
+    if (id.length < 6) {
+      setCheckIcon('/bad.png');
+      return false;
+    }
+    try {
+      const res = await axios.get(`http://3.39.232.5:8080/api/users/user/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (res.status === 200) {
+        setCheckIcon('/bad.png');
+        return false;
+      }
+      setCheckIcon('/good.png');
+      return true;
+    } catch (error) {
+      setCheckIcon('/good.png');
+      return false;
+    }
+  };
   const handleIdEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
     setId(event.target.value);
   };
@@ -199,8 +222,15 @@ function RegisterPage() {
               value={id}
               type="text"
               placeholder="아이디를 입력하세요."
-              width="100%"
+              style={{
+                width: '100%',
+                backgroundImage: `url(${process.env.PUBLIC_URL}${checkIcon})`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 10px center',
+                backgroundSize: 'auto 50%',
+              }}
               onChange={handleIdEvent}
+              onBlur={Idcheck}
             />
           </Linebox>
           <Linebox>
@@ -209,7 +239,7 @@ function RegisterPage() {
               value={password}
               type="password"
               placeholder="비밀번호를 입력하세요."
-              width="100%"
+              style={{ width: '100%' }}
               onChange={handlePasswordEvent}
             />
           </Linebox>
@@ -219,7 +249,7 @@ function RegisterPage() {
               value={password2}
               type="password"
               placeholder="비밀번호를 입력하세요."
-              width="100%"
+              style={{ width: '100%' }}
               onChange={handlePassword2Event}
             />
           </Linebox>
@@ -229,7 +259,7 @@ function RegisterPage() {
               value={email}
               type="email"
               placeholder="이메일을 입력하세요."
-              width="100%"
+              style={{ width: '100%' }}
               onChange={handleEmailEvent}
             />
           </Linebox>
@@ -246,7 +276,7 @@ function RegisterPage() {
               value={nickname}
               type="text"
               placeholder="닉네임을 입력하세요."
-              width="100%"
+              style={{ width: '100%' }}
               onChange={handleNicknameEvent}
             />
           </Linebox>

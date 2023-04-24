@@ -56,14 +56,20 @@ function ModifyPage() {
           value={nicknameValue}
           type="text"
           placeholder="변경할 닉네임을 입력해주세요."
-          width="100%"
+          style={{ width: '100%' }}
           onChange={handleNicknameEvent}
         />
         <span className={Styles.p1bold}>입맛</span>
-        <StyledInput value={data} type="text" placeholder="입맛변경" width="100%" onChange={handledataEvent} />
+        <StyledInput
+          value={data}
+          type="text"
+          placeholder="입맛변경"
+          style={{ width: '100%' }}
+          onChange={handledataEvent}
+        />
         <span className={Styles.p1bold}>세부 사항</span>
         <Div>
-          <DetailArea value={detailValue} onChange={handleDetailEvent} />
+          <DetailArea value={detailValue} onChange={handleDetailEvent} placeholder="세부 사항을 적어주세요." />
         </Div>
         <EndBox>
           <Row>
@@ -98,6 +104,9 @@ const Container = styled.div`
   }
   gap: 2.4rem;
   width: 50%;
+  @media (max-width: 768px) {
+    width: 80%;
+  }
 `;
 const Row = styled.div`
   display: flex;
