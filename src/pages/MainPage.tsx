@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledTag from '../components/StyledTag';
 import StyledCard from '../components/StyledCard';
 import StyledModal from '../components/StyledModal';
+import Pagination from '../components/Pagination';
 
 const MainPageContainer = styled.div`
   display: flex;
@@ -54,13 +56,76 @@ const GridContainer = styled.div`
   width: 100%;
 `;
 
+const GridHeaderContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  width: 100%;
+`;
+
+const Nav = styled.nav`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 10vw;
+`;
+
+const NavItem = styled.div<{ active?: boolean }>`
+  color: ${({ active }) => (active ? 'black' : 'white')};
+  background: ${({ active }) => (active ? '#FFFDF5' : 'rgba(0, 0, 0, 0.6)')};
+  height: 5rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
 const icons = require.context('../assets/icons', true);
 
 function MainPage() {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [modal, setModalData] = useState<number>(0);
+  const [modalData, setModalData] = useState<number>(0);
   const [blur, setBlur] = useState<boolean>(false);
-  const modaldata = (data: number) => {
+  const [selected, setSelected] = useState<string>('reco1');
+  const [postsPerPage, setPostsPerPage] = useState<number>(12);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentRestaurant, setCurrentRestaurant] = useState<Restaurant[]>([]);
+  interface Restaurant {
+    restaurantId: number;
+    name: string;
+    cuisineType: string;
+    tags: [[string]];
+    img: string;
+  }
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const fetchData = async () => {
+    setIsLoaded(false);
+    try {
+      const response = await axios.get(`http://3.39.232.5:8080/api/restaurant/all`);
+      setRestaurants(response.data);
+      setIsLoaded(true);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching data', error);
+      setIsLoaded(false);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const indexOfLast = currentPage * postsPerPage;
+  const indexOfFirst = indexOfLast - postsPerPage;
+  const currentPosts = (restaurants: Restaurant[]) => {
+    let currentPosts: Restaurant[] = [];
+    currentPosts = restaurants.slice(indexOfFirst, indexOfLast);
+    return currentPosts;
+  };
+  useEffect(() => {
+    setCurrentRestaurant(currentPosts(restaurants));
+  }, [currentPage, restaurants]);
+
+  const handleModalData = (data: number) => {
     setModalData(data);
   };
   const openModal = () => {
@@ -74,6 +139,43 @@ function MainPage() {
   const blurStyle = {
     opacity: blur ? '0.5' : '1',
     PointerEvents: blur ? 'none' : 'auto',
+  };
+  const showFirstRecoBox = () => {
+    return (
+      <>
+        <GridContainer>
+          {isLoaded ? (
+            currentRestaurant.map((restaurant) => (
+              <StyledCard
+                key={restaurant.restaurantId}
+                imgSrc="/logo.png"
+                likes="12개"
+                name={restaurant.name}
+                category={restaurant.cuisineType}
+                hashtag={
+                  restaurant.tags
+                    ? restaurant.tags
+                        .slice(0, 3)
+                        .map((tagGroup) => tagGroup.join(' '))
+                        .join(' ')
+                    : ''
+                }
+                id={restaurant.restaurantId}
+                setModalData={handleModalData}
+                openModal={openModal}
+              />
+            ))
+          ) : (
+            <h1>로딩중입니다.</h1>
+          )}
+        </GridContainer>
+        <Pagination
+          postsPerPage={postsPerPage}
+          totalPosts={restaurants.length}
+          paginate={(pageNumber: number) => setCurrentPage(pageNumber)}
+        />
+      </>
+    );
   };
 
   return (
@@ -108,26 +210,21 @@ function MainPage() {
                 <StyledTag text="+" />
               </TagListContainer>
             </TagContainer>
-            <div className={Styles.h3} style={{ width: '100%', textAlign: 'left' }}>
-              진정한 한국인의 추천리스트
-            </div>
-            <GridContainer>
-              <StyledCard
-                imgSrc="/img.png"
-                likes="12개"
-                name="마리모"
-                category="돈까스, 우동"
-                hashtag="#일식 가정식 #혼밥 #제로페이"
-                showModal={showModal}
-                modaldata={modaldata}
-                openModal={openModal}
-                closeModal={closeModal}
-              />
-            </GridContainer>
+            <GridHeaderContainer>
+              <Nav>
+                <NavItem className={Styles.h3} active={selected === 'reco1'} onClick={() => setSelected('reco1')}>
+                  진정한 한국인의 추천리스트
+                </NavItem>
+                <NavItem className={Styles.h3} active={selected === 'reco2'} onClick={() => setSelected('reco2')}>
+                  당신만을 위한 추천리스트
+                </NavItem>
+              </Nav>
+            </GridHeaderContainer>
+            {selected === 'reco1' ? showFirstRecoBox() : null}
           </ListContainer>
         </Container>
       </MainPageContainer>
-      {showModal ? <StyledModal show={showModal} onClose={closeModal} data={modal} /> : null}
+      {showModal ? <StyledModal show={showModal} onClose={closeModal} data={modalData} /> : null}
     </>
   );
 }

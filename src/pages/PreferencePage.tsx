@@ -4,6 +4,7 @@ import Styles from '../config/globalFontStyle.module.css';
 import StyledButton from '../components/StyledButton';
 import StyledCard from '../components/StyledCard';
 import Choicebtn from '../components/ChoiceBtn';
+import StaylistSlider from '../components/StaylistSlider';
 
 const PreferencePageContainer = styled.div`
   display: flex;
@@ -36,8 +37,8 @@ const Content = styled.div`
   align-items: center;
   gap: 2rem;
   width: 80%;
-  padding: 3vh 3vw;
-  background: white;
+  padding: 4vw;
+  background-color: white;
   box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.1);
   border-radius: 30px;
   margin: 3vw 24rem;
@@ -106,6 +107,7 @@ function PreferencePage() {
     name: '가츠시',
     category: '일식',
     hashtag: '돈까스, 우동',
+    id: 1,
   };
   const [selected, setSelected] = useState(true);
   const [selected2, setSelected2] = useState(false);
@@ -175,88 +177,37 @@ function PreferencePage() {
             <SubTitle className={Styles.p1bold}>초딩입맛</SubTitle>
           </Choicebtn>
         </Menu>
+
         <Content>
-          <StyledCard
-            imgSrc={data.imgSrc}
-            likes={data.likes}
-            name={data.name}
-            category={data.category}
-            hashtag={data.hashtag}
-            showIconBox={false}
-            width="25rem"
-          />
-          <StyledCard
-            imgSrc={data.imgSrc}
-            likes={data.likes}
-            name={data.name}
-            category={data.category}
-            hashtag={data.hashtag}
-            showIconBox={false}
-            width="25rem"
-          />
-          <StyledCard
-            imgSrc={data.imgSrc}
-            likes={data.likes}
-            name={data.name}
-            category={data.category}
-            hashtag={data.hashtag}
-            showIconBox={false}
-            width="25rem"
-          />
-          <StyledCard
-            imgSrc={data.imgSrc}
-            likes={data.likes}
-            name={data.name}
-            category={data.category}
-            hashtag={data.hashtag}
-            showIconBox={false}
-            width="25rem"
-          />
-          <StyledCard
-            imgSrc={data.imgSrc}
-            likes={data.likes}
-            name={data.name}
-            category={data.category}
-            hashtag={data.hashtag}
-            showIconBox={false}
-            width="25rem"
-          />
-          <StyledCard
-            imgSrc={data.imgSrc}
-            likes={data.likes}
-            name={data.name}
-            category={data.category}
-            hashtag={data.hashtag}
-            showIconBox={false}
-            width="25rem"
-          />
-          <StyledCard
-            imgSrc={data.imgSrc}
-            likes={data.likes}
-            name={data.name}
-            category={data.category}
-            hashtag={data.hashtag}
-            showIconBox={false}
-            width="25rem"
-          />
-          <StyledCard
-            imgSrc={data.imgSrc}
-            likes={data.likes}
-            name={data.name}
-            category={data.category}
-            hashtag={data.hashtag}
-            showIconBox={false}
-            width="25rem"
-          />
-          <StyledCard
-            imgSrc={data.imgSrc}
-            likes={data.likes}
-            name={data.name}
-            category={data.category}
-            hashtag={data.hashtag}
-            showIconBox={false}
-            width="25rem"
-          />
+          <StaylistSlider>
+            <StyledCard
+              imgSrc={data.imgSrc}
+              likes={data.likes}
+              name={data.name}
+              category={data.category}
+              hashtag={data.hashtag}
+              showIconBox={false}
+              id={data.id}
+            />
+            <StyledCard
+              imgSrc={data.imgSrc}
+              likes={data.likes}
+              name={data.name}
+              category={data.category}
+              hashtag={data.hashtag}
+              showIconBox={false}
+              id={data.id}
+            />
+            <StyledCard
+              imgSrc={data.imgSrc}
+              likes={data.likes}
+              name={data.name}
+              category={data.category}
+              hashtag={data.hashtag}
+              id={data.id}
+              showIconBox={false}
+            />
+          </StaylistSlider>
         </Content>
         <BtnContainer>
           <StyledButton

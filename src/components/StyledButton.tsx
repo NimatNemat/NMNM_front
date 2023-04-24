@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import Styles from '../config/globalFontStyle.module.css';
 
 interface StyledButtonProps {
   color?: string;
-  onClick: () => void;
+  onClick: (event: any) => void;
   children: React.ReactNode;
   fontsize?: string;
+  padding?: string;
+  borderRadius?: string;
 }
 
 const Btn = styled.button<StyledButtonProps>`
@@ -17,7 +18,8 @@ const Btn = styled.button<StyledButtonProps>`
   font-size: ${(props) => (props.fontsize === '24px' ? '24px' : props.fontsize)};
   font-weight: 700;
   border: 0px;
-  padding: 16px 32px;
+  border-radius: ${(props) => (props.borderRadius ? props.borderRadius : '0rem')};
+  padding: ${(props) => (props.padding === '1.6rem 3.2rem' ? '1.6rem 3.2rem' : props.padding)};
   background-color: ${(props) => (props.color === 'rgba(255, 137, 35, 0.6)' ? 'rgba(255, 137, 35, 0.6)' : props.color)};
   display: flex;
   align-items: center;
@@ -28,9 +30,9 @@ const Btn = styled.button<StyledButtonProps>`
 `;
 
 function StyledButton(props: StyledButtonProps) {
-  const { color, onClick, children, fontsize } = props;
+  const { color, onClick, children, fontsize, padding, borderRadius } = props;
   return (
-    <Btn color={color} onClick={onClick} fontsize={fontsize}>
+    <Btn color={color} onClick={onClick} fontsize={fontsize} padding={padding} borderRadius={borderRadius}>
       {children}
     </Btn>
   );
@@ -39,5 +41,7 @@ function StyledButton(props: StyledButtonProps) {
 StyledButton.defaultProps = {
   color: 'rgba(255, 137, 35, 0.6)',
   fontsize: '24px',
+  padding: '1.6rem 3.2rem',
+  borderRadius: '0rem',
 };
 export default StyledButton;

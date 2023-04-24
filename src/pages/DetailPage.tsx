@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
+
 import {
   AiOutlineShareAlt,
   AiOutlineHeart,
@@ -13,6 +15,7 @@ import {
 import Map from '../components/Map';
 import StyledCard from '../components/StyledCard';
 import Styles from '../config/globalFontStyle.module.css';
+import ReviewComponent from '../components/ReviewComponent';
 
 const DetailPageContainer = styled.div`
   display: flex;
@@ -112,14 +115,9 @@ const Flexbox = styled.div`
   overflow: auto;
   padding: 1vh 0 2vh 0;
 `;
+
 function DetailPage() {
-  const data = {
-    imgSrc: '/img.png',
-    likes: '5',
-    name: '가츠시',
-    category: '일식',
-    hashtag: '돈까스, 우동',
-  };
+  const { id } = useParams<{ id: string }>();
 
   interface Restaurant {
     restaurantId: number;
@@ -137,12 +135,21 @@ function DetailPage() {
     menu: [[string, string]];
   }
   const [restaurant, setRestaurant] = useState<Restaurant>({} as Restaurant);
+
+  const data = {
+    imgSrc: '/img.png',
+    likes: '5',
+    name: '가츠시',
+    category: '일식',
+    hashtag: '돈까스, 우동',
+    id: 1,
+  };
+
   const fetchData = async () => {
     setIsLoaded(false);
-    const response = await axios.get(`http://3.39.232.5:8080/api/restaurant/all`);
-    setRestaurant(response.data[5]);
+    const response = await axios.get(`http://3.39.232.5:8080/api/restaurant/${id}`);
+    setRestaurant(response.data);
     setIsLoaded(true);
-    console.log(response.data);
   };
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -246,14 +253,7 @@ function DetailPage() {
                 <Text className={Styles.h4}>리뷰</Text>
               </Title>
               <Box>
-                <Rowbox>
-                  <Text className={Styles.p1regular}>평점</Text>
-                  <Text className={Styles.p1regular}>리뷰</Text>
-                </Rowbox>
-                <Rowbox>
-                  <Text className={Styles.p1regular}>평점</Text>
-                  <Text className={Styles.p1regular}>리뷰</Text>
-                </Rowbox>
+                <ReviewComponent />
               </Box>
             </Content>
           </Section>
@@ -271,6 +271,7 @@ function DetailPage() {
                     category={data.category}
                     hashtag={data.hashtag}
                     showIconBox={false}
+                    id={data.id}
                   />
                   <StyledCard
                     imgSrc={data.imgSrc}
@@ -279,6 +280,7 @@ function DetailPage() {
                     category={data.category}
                     hashtag={data.hashtag}
                     showIconBox={false}
+                    id={data.id}
                   />
                   <StyledCard
                     imgSrc={data.imgSrc}
@@ -287,6 +289,7 @@ function DetailPage() {
                     category={data.category}
                     hashtag={data.hashtag}
                     showIconBox={false}
+                    id={data.id}
                   />
                   <StyledCard
                     imgSrc={data.imgSrc}
@@ -295,6 +298,7 @@ function DetailPage() {
                     category={data.category}
                     hashtag={data.hashtag}
                     showIconBox={false}
+                    id={data.id}
                   />
                 </Flexbox>
               </Box>

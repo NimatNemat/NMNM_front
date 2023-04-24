@@ -83,11 +83,12 @@ const Styeldselect = styled.select`
 `;
 
 function RegisterPage() {
+  const [checkIcon, setCheckIcon] = useState('');
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
   const [email, setEmail] = useState('');
-  const [gender, setGender] = useState(1);
+  const [gender, setGender] = useState(0);
   const [nickname, setNickname] = useState('');
   const [privacy1, setPrivacy1] = useState(false);
   const [privacy2, setPrivacy2] = useState(false);
@@ -110,6 +111,28 @@ function RegisterPage() {
     setGender(Number(event.target.value));
   };
 
+  const Idcheck = async () => {
+    if (id.length < 6) {
+      setCheckIcon('/bad.png');
+      return false;
+    }
+    try {
+      const res = await axios.get(`http://3.39.232.5:8080/api/users/user/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (res.status === 200) {
+        setCheckIcon('/bad.png');
+        return false;
+      }
+      setCheckIcon('/good.png');
+      return true;
+    } catch (error) {
+      setCheckIcon('/good.png');
+      return false;
+    }
+  };
   const handleIdEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
     setId(event.target.value);
   };
@@ -124,6 +147,13 @@ function RegisterPage() {
   };
   const handleNicknameEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(event.target.value);
+  };
+  const formDataToJson = (formData: FormData): Record<string, any> => {
+    const jsonObject: Record<string, any> = {};
+    formData.forEach((value, key) => {
+      jsonObject[key] = value;
+    });
+    return jsonObject;
   };
   const Submit = () => {
     const formData = new FormData();
@@ -156,21 +186,25 @@ function RegisterPage() {
     formData.append('userId', id);
     formData.append('password', password);
     formData.append('email', email);
-    formData.append('age', '23');
+    formData.append('birthdate', '2023-04-21T01:48:49.012Z');
     formData.append('gender', gender.toString());
     formData.append('nickName', nickname);
-    formData.append('profileImage', 'null');
-    regisgterUser(formData);
+    const jsonObject = formDataToJson(formData);
+    registerUser(jsonObject);
   };
-  const regisgterUser = async (formData: FormData) => {
+  const registerUser = async (formData: Record<string, any>) => {
     try {
-      const response = await axios.post('http://3.39.232.5:8080/api/users/register', formData, {
+      const resposne = await axios.post('http://3.39.232.5:8080/api/users/register', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      window.location.href = '/main';
-      console.log(response.data);
+      if (resposne.status === 200 || resposne.status === 201) {
+        alert('회원가입이 완료되었습니다.');
+        window.location.href = '/main';
+      } else {
+        alert('회원가입에 실패하였습니다.');
+      }
     } catch (error) {
       alert('빈칸을 올바르게 입력하세요.');
     }
@@ -188,8 +222,15 @@ function RegisterPage() {
               value={id}
               type="text"
               placeholder="아이디를 입력하세요."
-              width="100%"
+              style={{
+                width: '100%',
+                backgroundImage: `url(${process.env.PUBLIC_URL}${checkIcon})`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 10px center',
+                backgroundSize: 'auto 50%',
+              }}
               onChange={handleIdEvent}
+              onBlur={Idcheck}
             />
           </Linebox>
           <Linebox>
@@ -198,7 +239,7 @@ function RegisterPage() {
               value={password}
               type="password"
               placeholder="비밀번호를 입력하세요."
-              width="100%"
+              style={{ width: '100%' }}
               onChange={handlePasswordEvent}
             />
           </Linebox>
@@ -208,7 +249,7 @@ function RegisterPage() {
               value={password2}
               type="password"
               placeholder="비밀번호를 입력하세요."
-              width="100%"
+              style={{ width: '100%' }}
               onChange={handlePassword2Event}
             />
           </Linebox>
@@ -218,15 +259,15 @@ function RegisterPage() {
               value={email}
               type="email"
               placeholder="이메일을 입력하세요."
-              width="100%"
+              style={{ width: '100%' }}
               onChange={handleEmailEvent}
             />
           </Linebox>
           <Linebox>
             <SubTitle className={Styles.p1bold}>성별</SubTitle>
             <Styeldselect className={Styles.p1regular} value={gender} onChange={handleGenderEvent}>
-              <option value={1}>남자</option>
-              <option value={2}>여자</option>
+              <option value={0}>남자</option>
+              <option value={1}>여자</option>
             </Styeldselect>
           </Linebox>
           <Linebox>
@@ -235,7 +276,7 @@ function RegisterPage() {
               value={nickname}
               type="text"
               placeholder="닉네임을 입력하세요."
-              width="100%"
+              style={{ width: '100%' }}
               onChange={handleNicknameEvent}
             />
           </Linebox>

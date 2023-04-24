@@ -45,3 +45,22 @@
 .gray {
   color: rgba(128, 128, 128, 1);
 }
+.fadeInOnScroll {
+  opacity: 0;
+  transition: opacity 1.5s ease-out;
+}
+.visible {
+  opacity: 1;
+}
+.mobileH3 {
+  font-size: 2.4rem;
+  font-weight: 700;
+}
+.tabletH3 {
+  font-size: 3.2rem;
+  font-weight: 700;
+}
+.desktopH3 {
+  font-size: 4rem;
+  font-weight: 700;
+}

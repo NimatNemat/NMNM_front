@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { BsBookmark, BsBookmarkFill, BsFillHeartFill, BsHeart } from 'react-icons/bs';
 import Styles from '../config/globalFontStyle.module.css';
-import StyledModal from './StyledModal';
 
 interface StyledCardProps {
   imgSrc: string;
@@ -13,10 +12,9 @@ interface StyledCardProps {
   hashtag: string;
   showIconBox?: boolean;
   width?: string;
-  showModal?: boolean;
+  id: number;
   openModal?: () => void;
-  closeModal?: () => void;
-  modaldata?: (data: number) => void;
+  setModalData?: (data: number) => void;
 }
 
 const Card = styled.div<{ width?: string }>`
@@ -66,8 +64,7 @@ const InfoBox = styled.div`
 `;
 
 function StyledCard(props: StyledCardProps) {
-  const { imgSrc, likes, name, category, hashtag, showIconBox, width, showModal, openModal, closeModal, modaldata } =
-    props;
+  const { imgSrc, likes, name, category, hashtag, showIconBox, width, id, openModal, setModalData } = props;
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
 
@@ -80,14 +77,14 @@ function StyledCard(props: StyledCardProps) {
     setBookmarked(!bookmarked);
     if (openModal) {
       openModal();
-      if (modaldata) {
-        modaldata(1);
+      if (setModalData) {
+        setModalData(1);
       }
     }
   };
 
   return (
-    <Link to="/detail/" style={{ textDecoration: 'none', color: 'black' }}>
+    <Link to={`/detail/${id}`} style={{ textDecoration: 'none', color: 'black' }}>
       <Card width={width}>
         <CardImage src={imgSrc} alt="" />
         <CardInfoBox>
@@ -122,10 +119,8 @@ function StyledCard(props: StyledCardProps) {
 StyledCard.defaultProps = {
   showIconBox: true,
   width: '100%',
-  showModal: false,
   openModal: () => null,
-  closeModal: () => null,
-  modaldata: () => null,
+  setModalData: () => null,
 };
 
 export default StyledCard;

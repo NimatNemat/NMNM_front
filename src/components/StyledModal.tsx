@@ -169,7 +169,7 @@ function StyledModal(props: ModalProps) {
             value={playListName}
             type="text"
             placeholder="맛플리 이름 입력"
-            width="100%"
+            style={{ width: '100%' }}
             onChange={handlePlayListNameEvent}
             border="none"
             borderBottom="1px solid #6E6E6E"

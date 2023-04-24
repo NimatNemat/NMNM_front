@@ -39,7 +39,7 @@ function IdFindComponent() {
         value={emailValue}
         type="email"
         placeholder="이메일을 입력해주세요"
-        width="100%"
+        style={{ width: '100%' }}
         onChange={handleEmailEvent}
       />
       <Btnbox>
@@ -51,7 +51,7 @@ function IdFindComponent() {
         value={confirmValue}
         type="number"
         placeholder="인증번호를 입력해주세요"
-        width="100%"
+        style={{ width: '100%' }}
         onChange={handleConfirmEvent}
       />
       <Btnbox>
