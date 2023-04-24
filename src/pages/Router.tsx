@@ -17,8 +17,6 @@ import PrivateRoute from './PrivateRoute';
 import Header from '../components/Header';
 
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
   padding: 2.4rem;
 `;
 const NopaddingContainer = styled.div`

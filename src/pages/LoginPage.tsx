@@ -41,7 +41,7 @@ function LoginPage() {
       const response = await axios.post('http://3.39.232.5:8080/api/users/login', formData);
       if (response.status === 200) {
         alert('로그인에 성공하였습니다.');
-        navigate('/main/', { replace: true });
+        navigate('/main/');
         // accessToken 설정
         axios.defaults.headers.common.Authorization = `Bearer ${response.data}`;
         sessionStorage.setItem('isAuthenticated', 'true');
@@ -78,14 +78,14 @@ function LoginPage() {
           value={idValue}
           type="text"
           placeholder="아이디를 입력하세요."
-          width="100%"
+          style={{ width: '100%' }}
           onChange={handleIdEvent}
         />
         <StyledInput
           value={passwordValue}
           type="password"
           placeholder="비밀번호를 입력하세요."
-          width="100%"
+          style={{ width: '100%' }}
           onChange={handlePasswordEvent}
           onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) => {
             if (event.key === 'Enter') {

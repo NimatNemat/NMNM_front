@@ -37,7 +37,7 @@ function PwFindComponent() {
         value={idValue}
         type="text"
         placeholder="아이디를 입력해주세요"
-        width="100%"
+        style={{ width: '100%' }}
         onChange={handleIdEvent}
       />
       <Btnbox>
@@ -49,7 +49,7 @@ function PwFindComponent() {
         value={confirmValue}
         type="number"
         placeholder="인증번호를 입력해주세요"
-        width="100%"
+        style={{ width: '100%' }}
         onChange={handleConfirmEvent}
       />
       <Btnbox>

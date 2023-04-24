@@ -6,13 +6,15 @@ interface StyledInputProps {
   value: string | number;
   type: string;
   placeholder: string;
-  width?: string;
+
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyPress?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   border?: string;
   borderBottom?: string;
   background?: string;
   padding?: string;
+  style?: React.CSSProperties;
 }
 const Input = styled.input<StyledInputProps>`
   display: flex;
@@ -34,13 +36,14 @@ const Div = styled.div`
   `}
 `;
 function StyledInput(props: StyledInputProps) {
-  const { value, type, placeholder, width, onChange, onKeyPress, border, borderBottom, background, padding } = props;
+  const { value, type, placeholder, onChange, onKeyPress, border, borderBottom, background, padding, onBlur, style } =
+    props;
   return (
     <Div className={Styles.p1bold}>
       <Input
         value={value}
         type={type}
-        style={{ width }}
+        style={style}
         placeholder={placeholder}
         onChange={onChange}
         onKeyPress={onKeyPress}
@@ -48,18 +51,20 @@ function StyledInput(props: StyledInputProps) {
         borderBottom={borderBottom}
         background={background}
         padding={padding}
+        onBlur={onBlur}
       />
     </Div>
   );
 }
 
 StyledInput.defaultProps = {
-  width: '60rem',
   onKeyPress: null,
   border: '1px solid #dfdfdf',
   borderBottom: '',
   background: '#FFFDF5',
   padding: '1.6rem 1.6rem',
+  onBlur: null,
+  style: { width: '60rem' },
 };
 
 export default StyledInput;
