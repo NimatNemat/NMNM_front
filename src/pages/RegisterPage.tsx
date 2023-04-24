@@ -5,6 +5,7 @@ import axios from 'axios';
 import StyledInput from '../components/StyledInput';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledButton from '../components/StyledButton';
+import Calendar from '../components/Calendar';
 
 const RegisterPageContainer = styled.div`
   display: flex;
@@ -81,7 +82,11 @@ const Styeldselect = styled.select`
   background: #fffdf5;
   padding: 1.4rem 1.4rem;
 `;
-
+interface Birthdate {
+  year: string;
+  month: string;
+  day: string;
+}
 function RegisterPage() {
   const [checkIcon, setCheckIcon] = useState('');
   const [id, setId] = useState('');
@@ -94,6 +99,18 @@ function RegisterPage() {
   const [privacy2, setPrivacy2] = useState(false);
   const [privacy3, setPrivacy3] = useState(false);
   const [check, setcheck] = useState(false);
+  const [birthdate, setBirthdate] = useState<Birthdate>({
+    year: '',
+    month: '',
+    day: '',
+  });
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setBirthdate({
+      ...birthdate,
+      [name]: value,
+    });
+  };
   const AllCheck = () => {
     if (check === true) {
       setPrivacy1(false);
@@ -269,6 +286,10 @@ function RegisterPage() {
               <option value={0}>남자</option>
               <option value={1}>여자</option>
             </Styeldselect>
+          </Linebox>
+          <Linebox>
+            <SubTitle className={Styles.p1bold}>생년월일</SubTitle>
+            <Calendar />
           </Linebox>
           <Linebox>
             <SubTitle className={Styles.p1bold}>닉네임</SubTitle>
