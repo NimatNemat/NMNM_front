@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Select from 'react-select';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -35,6 +35,10 @@ const TagListContainer = styled.div`
   align-items: flex-start;
   gap: 5px;
   width: 100%;
+  @media (max-width: 566px) {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
 `;
 
 const ListContainer = styled.div`
@@ -74,7 +78,6 @@ const options = [
 const customStyles = {
   container: (provided: any) => ({
     ...provided,
-    width: '20%',
   }),
   control: (provided: any) => ({
     ...provided,
@@ -125,11 +128,12 @@ function MainPage() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [currentRestaurant, setCurrentRestaurant] = useState<Restaurant[]>([]);
   const [selectedLabel, setSelectedLabel] = useState<string>('진정한 한국인의 추천리스트');
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   interface Restaurant {
     restaurantId: number;
     name: string;
     cuisineType: string;
-    tags: [[string]];
+    tags: string[];
     img: string;
     likeCount: number;
   }
@@ -138,7 +142,7 @@ function MainPage() {
   const fetchData = async () => {
     setIsLoaded(false);
     try {
-      const response = await axios.get(`http://3.39.232.5:8080/api/restaurant/all`);
+      const response = await axios.get(`/restaurant/all`);
       setRestaurants(response.data);
       setIsLoaded(true);
       console.log(response.data);
@@ -151,6 +155,7 @@ function MainPage() {
     fetchData();
   }, []);
 
+  // 페이지네이션 각 페이지 별로 Post할 갯수 정해서 페이지 나누기
   const indexOfLast = currentPage * postsPerPage;
   const indexOfFirst = indexOfLast - postsPerPage;
   const currentPosts = (restaurants: Restaurant[]) => {
@@ -158,10 +163,8 @@ function MainPage() {
     currentPosts = restaurants.slice(indexOfFirst, indexOfLast);
     return currentPosts;
   };
-  useEffect(() => {
-    setCurrentRestaurant(currentPosts(restaurants));
-  }, [currentPage, restaurants]);
 
+  // Modal 관련
   const handleModalData = (data: number) => {
     setModalData(data);
   };
@@ -177,6 +180,37 @@ function MainPage() {
     opacity: blur ? '0.5' : '1',
     PointerEvents: blur ? 'none' : 'auto',
   };
+
+  // 태그 관련
+  // 태그 선택 시 SelectedTags에 추가, 다시 클릭 시 삭제
+  const toggleTag = (tag: string) => {
+    if (selectedTags.includes(tag)) {
+      setSelectedTags(selectedTags.filter((t) => t !== tag));
+    } else {
+      setSelectedTags([...selectedTags, tag]);
+    }
+  };
+
+  // 선택한 태그와 Restaurant의 QuisinType을 비교하여 필터링
+  const filteredRestaurants = useMemo(() => {
+    if (!restaurants || selectedTags.length === 0) {
+      return restaurants;
+    }
+
+    return restaurants.filter((restaurant) => {
+      if (!restaurant.tags) {
+        return false;
+      }
+
+      return selectedTags.some((tag) => restaurant.cuisineType.includes(tag));
+    });
+  }, [restaurants, selectedTags]);
+
+  useEffect(() => {
+    setCurrentRestaurant(currentPosts(filteredRestaurants));
+  }, [currentPage, filteredRestaurants]);
+
+  // 추천 방식 1에 해당하는 레스토랑
   const showFirstRecoBox = () => {
     return (
       <>
@@ -189,14 +223,7 @@ function MainPage() {
                 likes={restaurant.likeCount}
                 name={restaurant.name}
                 category={restaurant.cuisineType}
-                hashtag={
-                  restaurant.tags
-                    ? restaurant.tags
-                        .slice(0, 3)
-                        .map((tagGroup) => tagGroup.join(' '))
-                        .join(' ')
-                    : ''
-                }
+                hashtag={restaurant.tags ? restaurant.tags.slice(0, 3).join(' ') : ''}
                 id={restaurant.restaurantId}
                 setModalData={handleModalData}
                 openModal={openModal}
@@ -208,7 +235,7 @@ function MainPage() {
         </GridContainer>
         <Pagination
           postsPerPage={postsPerPage}
-          totalPosts={restaurants.length}
+          totalPosts={filteredRestaurants.length}
           paginate={(pageNumber: number) => setCurrentPage(pageNumber)}
         />
       </>
@@ -225,10 +252,15 @@ function MainPage() {
                 종류
               </div>
               <TagListContainer>
-                <StyledTag imgSrc={icons('./korea.png')} text="한식" />
-                <StyledTag imgSrc={icons('./china.png')} text="중식" />
-                <StyledTag imgSrc={icons('./japan.png')} text="일식" />
-                <StyledTag imgSrc={icons('./us.png')} text="양식" />
+                <StyledTag imgSrc={icons('./korea.png')} text="한식" onClick={() => toggleTag('한식')} />
+                <StyledTag imgSrc={icons('./china.png')} text="중식" onClick={() => toggleTag('중식')} />
+                <StyledTag imgSrc={icons('./japan.png')} text="일식" onClick={() => toggleTag('일식')} />
+                <StyledTag imgSrc={icons('./us.png')} text="양식" onClick={() => toggleTag('양식')} />
+                <StyledTag imgSrc={icons('./us.png')} text="분식" onClick={() => toggleTag('분식')} />
+                <StyledTag imgSrc={icons('./us.png')} text="아시아음식" onClick={() => toggleTag('아시아음식')} />
+                <StyledTag imgSrc={icons('./us.png')} text="치킨" onClick={() => toggleTag('치킨')} />
+                <StyledTag imgSrc={icons('./us.png')} text="피자" onClick={() => toggleTag('피자')} />
+                <StyledTag imgSrc={icons('./us.png')} text="퓨전요리" onClick={() => toggleTag('퓨전요리')} />
               </TagListContainer>
               <div className={Styles.h3} style={{ width: '100%', textAlign: 'left' }}>
                 태그

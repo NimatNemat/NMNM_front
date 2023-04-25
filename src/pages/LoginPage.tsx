@@ -38,7 +38,7 @@ function LoginPage() {
 
   const loginUser = async (formData: FormData) => {
     try {
-      const response = await axios.post('http://3.39.232.5:8080/api/users/login', formData);
+      const response = await axios.post('/users/login', formData);
       if (response.status === 200) {
         alert('로그인에 성공하였습니다.');
         navigate('/main/');

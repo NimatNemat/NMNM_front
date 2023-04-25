@@ -5,6 +5,7 @@ import Styles from '../config/globalFontStyle.module.css';
 interface StyledTagProps {
   imgSrc?: string;
   text: string;
+  onClick?: () => void;
 }
 
 const Tag = styled.div<{ isActive: boolean }>`
@@ -31,11 +32,12 @@ const TagText = styled.span`
   color: rgba(128, 128, 128, 0.7);
 `;
 function StyledTag(props: StyledTagProps) {
-  const { imgSrc, text } = props;
+  const { imgSrc, text, onClick = () => null } = props;
   const [isActive, setIsActive] = useState(false);
 
   const handleClick = () => {
     setIsActive(!isActive);
+    onClick();
   };
 
   return (
@@ -48,5 +50,6 @@ function StyledTag(props: StyledTagProps) {
 
 StyledTag.defaultProps = {
   imgSrc: '',
+  onClick: () => null,
 };
 export default StyledTag;

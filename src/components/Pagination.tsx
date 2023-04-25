@@ -40,7 +40,7 @@ function Pagination(props: pageProps) {
   const { postsPerPage, totalPosts, paginate } = props;
   const [currentPageSet, setCurrentPageSet] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
-  const maxPageButtons = 10;
+  const maxPageButtons = 5;
   const totalPages = Math.ceil(totalPosts / postsPerPage);
   const pageNumbers = [];
   for (let i = 1; i <= totalPages; i += 1) {
