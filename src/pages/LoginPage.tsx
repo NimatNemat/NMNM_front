@@ -40,7 +40,6 @@ function LoginPage() {
     try {
       const response = await axios.post('/users/login', formData);
       if (response.status === 200) {
-        alert('로그인에 성공하였습니다.');
         navigate('/main/');
         // accessToken 설정
         axios.defaults.headers.common.Authorization = `Bearer ${response.data}`;

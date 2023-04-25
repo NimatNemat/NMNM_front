@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
 
 import {
   AiOutlineShareAlt,
@@ -74,13 +73,13 @@ const Rowcenterbox = styled.div`
   align-items: center;
   gap: 2vw;
 `;
-const Rowbox = styled.div`
+/* const Rowbox = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
   gap: 0.5vw;
   padding: 0.5vh;
-`;
+`; */
 const StyledImg = styled.img`
   width: 100%;
   height: 25vh;
@@ -147,7 +146,7 @@ function DetailPage() {
 
   const fetchData = async () => {
     setIsLoaded(false);
-    const response = await axios.get(`http://3.39.232.5:8080/api/restaurant/${id}`);
+    const response = await axios.get(`/restaurant/${id}`);
     setRestaurant(response.data);
     setIsLoaded(true);
   };

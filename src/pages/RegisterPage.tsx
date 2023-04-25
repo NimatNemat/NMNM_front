@@ -211,7 +211,7 @@ function RegisterPage() {
   };
   const registerUser = async (formData: Record<string, any>) => {
     try {
-      const resposne = await axios.post('http://3.39.232.5:8080/api/users/register', formData, {
+      const resposne = await axios.post('/users/register', formData, {
         headers: {
           'Content-Type': 'application/json',
         },

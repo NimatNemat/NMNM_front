@@ -76,7 +76,12 @@ const FooterContainer = styled.div`
 function IntroPage() {
   const [className, setClassName] = useState<string>('');
   const onClickFunction = () => {
-    window.location.href = '/login';
+    const isAuthenticated = sessionStorage.getItem('isAuthenticated');
+    if (isAuthenticated === 'true') {
+      window.location.href = '/main';
+    } else {
+      window.location.href = '/login';
+    }
   };
   const contentRefs = useRef<Array<React.RefObject<HTMLDivElement>>>([]);
   contentRefs.current = [0, 1, 2, 3, 4].map((_, i) => contentRefs.current[i] ?? React.createRef());

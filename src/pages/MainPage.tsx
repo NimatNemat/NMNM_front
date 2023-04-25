@@ -256,11 +256,11 @@ function MainPage() {
                 <StyledTag imgSrc={icons('./china.png')} text="중식" onClick={() => toggleTag('중식')} />
                 <StyledTag imgSrc={icons('./japan.png')} text="일식" onClick={() => toggleTag('일식')} />
                 <StyledTag imgSrc={icons('./us.png')} text="양식" onClick={() => toggleTag('양식')} />
-                <StyledTag imgSrc={icons('./us.png')} text="분식" onClick={() => toggleTag('분식')} />
-                <StyledTag imgSrc={icons('./us.png')} text="아시아음식" onClick={() => toggleTag('아시아음식')} />
-                <StyledTag imgSrc={icons('./us.png')} text="치킨" onClick={() => toggleTag('치킨')} />
-                <StyledTag imgSrc={icons('./us.png')} text="피자" onClick={() => toggleTag('피자')} />
-                <StyledTag imgSrc={icons('./us.png')} text="퓨전요리" onClick={() => toggleTag('퓨전요리')} />
+                <StyledTag imgSrc="" text="분식" onClick={() => toggleTag('분식')} />
+                <StyledTag imgSrc="" text="아시아음식" onClick={() => toggleTag('아시아음식')} />
+                <StyledTag imgSrc="" text="치킨" onClick={() => toggleTag('치킨')} />
+                <StyledTag imgSrc="" text="피자" onClick={() => toggleTag('피자')} />
+                <StyledTag imgSrc="" text="퓨전요리" onClick={() => toggleTag('퓨전요리')} />
               </TagListContainer>
               <div className={Styles.h3} style={{ width: '100%', textAlign: 'left' }}>
                 태그
