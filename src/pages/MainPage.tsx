@@ -198,7 +198,7 @@ function MainPage() {
     }
 
     return restaurants.filter((restaurant) => {
-      if (!restaurant.tags) {
+      if (!restaurant.cuisineType) {
         return false;
       }
 
