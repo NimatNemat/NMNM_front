@@ -23,5 +23,5 @@ export default function PrivateRoute({ authentication }: PrivateRouteProps): Rea
   }
 
   // 인증이 필요 없는 페이지
-  return isAuthenticated === null || isAuthenticated === 'false' ? <Outlet /> : <Navigate to="/" />;
+  return isAuthenticated === null || isAuthenticated === 'false' ? <Outlet /> : <Navigate to="/main" />;
 }
