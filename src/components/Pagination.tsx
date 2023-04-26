@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 interface pageProps {
@@ -52,17 +52,27 @@ function Pagination(props: pageProps) {
   const currentButtons = pageNumbers.slice(indexOfFirstButton, indexOfLastButton);
 
   const nextPage = () => {
-    if (currentPageSet < Math.ceil(totalPages / maxPageButtons)) {
-      setCurrentPageSet(currentPageSet + 1);
-      paginate(indexOfLastButton + 1);
-      setCurrentPage(indexOfLastButton + 1);
+    if (currentPage !== totalPages) {
+      if (currentPage < indexOfLastButton) {
+        setCurrentPage(currentPage + 1);
+        paginate(currentPage);
+      } else {
+        setCurrentPageSet(currentPageSet + 1);
+        paginate(indexOfLastButton + 1);
+        setCurrentPage(indexOfLastButton + 1);
+      }
     }
   };
   const prevPage = () => {
-    if (currentPageSet > 1) {
-      setCurrentPageSet(currentPageSet - 1);
-      paginate(indexOfFirstButton);
-      setCurrentPage(indexOfFirstButton);
+    if (currentPage !== 1) {
+      if (currentPage > indexOfFirstButton + 1) {
+        setCurrentPage(currentPage - 1);
+        paginate(currentPage);
+      } else {
+        setCurrentPageSet(currentPageSet - 1);
+        paginate(indexOfFirstButton);
+        setCurrentPage(indexOfFirstButton);
+      }
     }
   };
   const firstPage = () => {
@@ -75,6 +85,12 @@ function Pagination(props: pageProps) {
     paginate(totalPages);
     setCurrentPage(totalPages);
   };
+
+  // totalPosts가 변경될 때마다 currentPage를 1로 설정하고, currentPageSet도 1로 설정
+  useEffect(() => {
+    setCurrentPage(1);
+    setCurrentPageSet(1);
+  }, [totalPosts]);
 
   return (
     <StyledNav>

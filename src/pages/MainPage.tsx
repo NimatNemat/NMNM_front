@@ -83,14 +83,8 @@ const customStyles = {
     ...provided,
     backgroundColor: '#FFFDF5',
     borderColor: '#0.1rem solid rgba(128, 128, 128, 0.3)',
-    // minHeight: '38px',
     height: '3.8rem',
     boxShadow: 'none',
-  }),
-  valueContainer: (provided: any) => ({
-    ...provided,
-    height: '3.8rem',
-    padding: '0 1rem',
   }),
   indicatorsContainer: (provided: any) => ({
     ...provided,
@@ -98,18 +92,21 @@ const customStyles = {
   }),
   option: (provided: any, state: any) => ({
     ...provided,
-    // color: state.isSelected ? 'white' : 'black',
     color: '#000000',
     backgroundColor: state.isSelected ? 'rgba(128, 128, 128, 0.3)' : '#FFFDF5',
     cursor: 'pointer',
     fontSize: '1.6rem',
     fontWeight: 'bold',
     lineHeight: '2',
+    padding: '1rem 2rem',
   }),
   menu: (provided: any) => ({
     ...provided,
     boxShadow: 'none',
     borderRadius: '0.2rem',
+    border: '0.1rem solid black',
+    marginTop: 0,
+    marginBottom: 0,
   }),
   singleValue: (provided: any) => ({
     ...provided,
@@ -190,6 +187,11 @@ function MainPage() {
       setSelectedTags([...selectedTags, tag]);
     }
   };
+
+  // 태그 변경시마다 페이지를 1로 초기화
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedTags]);
 
   // 선택한 태그와 Restaurant의 QuisinType을 비교하여 필터링
   const filteredRestaurants = useMemo(() => {
