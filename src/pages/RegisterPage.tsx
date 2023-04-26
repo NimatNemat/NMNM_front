@@ -69,24 +69,32 @@ const PrivacyLink = styled(Link)`
     text-decoration: underline;
   }
 `;
+const Rightbox = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+`;
+
 const Styeldselect = styled.select`
   display: flex;
   flex-direction: row;
-  align-items: center;
-  text-align: right;
-  width: 100%;
-  height: calc(100%-3.2rem);
+  text-align: center;
+  color: white;
+  padding: 0.8rem;
+  background-color: rgba(255, 137, 35, 0.6);
   border: 1px solid #dfdfdf;
-  border-radius: 0%;
-  color: rgba(128, 128, 128);
-  background: #fffdf5;
-  padding: 1.4rem 1.4rem;
+  border-radius: 2rem;
 `;
-interface Birthdate {
-  year: string;
-  month: string;
-  day: string;
-}
+const OptionBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+`;
+
 function RegisterPage() {
   const [checkIcon, setCheckIcon] = useState('');
   const [id, setId] = useState('');
@@ -99,18 +107,11 @@ function RegisterPage() {
   const [privacy2, setPrivacy2] = useState(false);
   const [privacy3, setPrivacy3] = useState(false);
   const [check, setcheck] = useState(false);
-  const [birthdate, setBirthdate] = useState<Birthdate>({
-    year: '',
-    month: '',
-    day: '',
-  });
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setBirthdate({
-      ...birthdate,
-      [name]: value,
-    });
+  const [birthdate, setBirthdate] = useState<Date>(new Date('1990-01-01T00:00:00.000Z'));
+  const handleBirthdateEvent = (date: Date) => {
+    setBirthdate(date);
   };
+
   const AllCheck = () => {
     if (check === true) {
       setPrivacy1(false);
@@ -203,7 +204,7 @@ function RegisterPage() {
     formData.append('userId', id);
     formData.append('password', password);
     formData.append('email', email);
-    formData.append('birthdate', '2023-04-21T01:48:49.012Z');
+    formData.append('birthdate', birthdate.toISOString());
     formData.append('gender', gender.toString());
     formData.append('nickName', nickname);
     const jsonObject = formDataToJson(formData);
@@ -226,7 +227,6 @@ function RegisterPage() {
       alert('빈칸을 올바르게 입력하세요.');
     }
   };
-
   return (
     <RegisterPageContainer>
       <Container>
@@ -281,16 +281,21 @@ function RegisterPage() {
             />
           </Linebox>
           <Linebox>
-            <SubTitle className={Styles.p1bold}>성별</SubTitle>
-            <Styeldselect className={Styles.p1regular} value={gender} onChange={handleGenderEvent}>
-              <option value={0}>남자</option>
-              <option value={1}>여자</option>
-            </Styeldselect>
+            <SubTitle className={Styles.p1bold}>생년월일</SubTitle>
+            <OptionBox>
+              <Calendar date={birthdate} setDate={handleBirthdateEvent} />
+            </OptionBox>
           </Linebox>
           <Linebox>
-            <SubTitle className={Styles.p1bold}>생년월일</SubTitle>
-            <Calendar />
+            <SubTitle className={Styles.p1bold}>성별</SubTitle>
+            <Rightbox>
+              <Styeldselect className={Styles.p1regular} value={gender} onChange={handleGenderEvent}>
+                <option value={0}>남자</option>
+                <option value={1}>여자</option>
+              </Styeldselect>
+            </Rightbox>
           </Linebox>
+
           <Linebox>
             <SubTitle className={Styles.p1bold}>닉네임</SubTitle>
             <StyledInput

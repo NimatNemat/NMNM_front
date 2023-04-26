@@ -41,6 +41,7 @@ function StyledInput(props: StyledInputProps) {
   return (
     <Div className={Styles.p1bold}>
       <Input
+        className={Styles.p1regular}
         value={value}
         type={type}
         style={style}
