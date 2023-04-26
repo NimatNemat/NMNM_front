@@ -202,7 +202,7 @@ function StyledModal(props: ModalProps) {
           <AiOutlineClose size="2.4rem" onClick={handleClose} />
         </ModalHeader>
         {rows.map((row) => (
-          <ModalRow>
+          <ModalRow key={row.playListName}>
             <IconBox>
               {row.locked ? (
                 <AiOutlineLock size="4rem" color="#6E6E6E" />
