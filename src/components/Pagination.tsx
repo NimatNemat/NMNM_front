@@ -22,7 +22,7 @@ const PageUl = styled.ul`
 `;
 
 const PageSpan = styled.button<{ active?: boolean }>`
-  border: ${({ active }) => (active ? '2px solid #000' : 'none')};
+  border: ${({ active }) => (active ? '2px solid rgba(255, 137, 35, 0.6)' : 'none')};
   cursor: pointer;
   height: 4rem;
   width: 4rem;
@@ -32,7 +32,7 @@ const PageSpan = styled.button<{ active?: boolean }>`
   background: ${({ active }) => (active ? '#FFFFFF' : '#FFFDF5')};
 
   &:hover {
-    border: 2px solid #000;
+    border: 2px solid rgba(255, 137, 35, 0.6);
   }
 `;
 

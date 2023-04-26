@@ -269,15 +269,6 @@ function MainPage() {
                 <StyledTag imgSrc="" text="퓨전요리" onClick={() => toggleTag('퓨전요리')} />
               </TagListContainer>
               <div className={Styles.h3} style={{ width: '100%', textAlign: 'left' }}>
-                태그
-              </div>
-              <TagListContainer>
-                <StyledTag imgSrc={icons('./korea.png')} text="한식" />
-                <StyledTag imgSrc={icons('./china.png')} text="중식" />
-                <StyledTag imgSrc={icons('./japan.png')} text="일식" />
-                <StyledTag imgSrc={icons('./us.png')} text="양식" />
-              </TagListContainer>
-              <div className={Styles.h3} style={{ width: '100%', textAlign: 'left' }}>
                 함께먹기
               </div>
               <TagListContainer>
