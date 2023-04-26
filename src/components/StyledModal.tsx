@@ -8,6 +8,7 @@ interface ModalProps {
   onClose?: () => void;
   show: boolean;
   data: number;
+  modalRef: React.ForwardedRef<HTMLDivElement>;
 }
 
 interface ModalRowProps {
@@ -120,7 +121,7 @@ const Styeldselect = styled.select`
 `;
 
 function StyledModal(props: ModalProps) {
-  const { onClose = () => null, show, data } = props;
+  const { onClose = () => null, show, data, modalRef } = props;
   const [inputVisible, setInputVisible] = useState<boolean>(false);
   const [playListName, setPlayListName] = useState<string>('');
   const [lock, setLock] = useState<number>(1);
@@ -195,7 +196,7 @@ function StyledModal(props: ModalProps) {
     );
   };
   return (
-    <ModalWrapper show={show}>
+    <ModalWrapper show={show} ref={modalRef}>
       <ModalContent onClick={(event) => event.stopPropagation()}>
         <ModalHeader>
           <span className={Styles.h3}>그룹선택</span>

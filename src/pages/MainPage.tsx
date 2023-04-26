@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Select from 'react-select';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -166,6 +166,13 @@ function MainPage() {
   };
 
   // Modal 관련
+  const modalRef = useRef<HTMLDivElement>(null);
+  const modalOutSideClick = (e: any) => {
+    if (modalRef.current === e.target) {
+      setShowModal(false);
+      setBlur(false);
+    }
+  };
   const handleModalData = (data: number) => {
     setModalData(data);
   };
@@ -181,6 +188,18 @@ function MainPage() {
     opacity: blur ? '0.5' : '1',
     PointerEvents: blur ? 'none' : 'auto',
   };
+  useEffect(() => {
+    const handleDocumentClick = (e: MouseEvent) => {
+      if (!modalRef.current?.contains(e.target as Node)) {
+        closeModal();
+      }
+    };
+
+    document.addEventListener('mousedown', handleDocumentClick);
+    return () => {
+      document.removeEventListener('mousedown', handleDocumentClick);
+    };
+  }, []);
 
   // 태그 관련
   // 태그 선택 시 SelectedTags에 추가, 다시 클릭 시 삭제
@@ -292,7 +311,7 @@ function MainPage() {
           </ListContainer>
         </Container>
       </MainPageContainer>
-      {showModal ? <StyledModal show={showModal} onClose={closeModal} data={modalData} /> : null}
+      {showModal ? <StyledModal show={showModal} onClose={closeModal} data={modalData} modalRef={modalRef} /> : null}
     </>
   );
 }
