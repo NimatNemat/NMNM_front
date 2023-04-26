@@ -43,7 +43,7 @@ function LoginPage() {
         navigate('/main/');
         // accessToken 설정
         axios.defaults.headers.common.Authorization = `Bearer ${response.data}`;
-        sessionStorage.setItem('isAuthenticated', 'true');
+        sessionStorage.setItem('isAuthenticated', '');
       } else {
         alert('아이디, 비밀번호를 다시 한번 확인하세요.');
       }

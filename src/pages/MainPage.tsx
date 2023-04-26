@@ -20,6 +20,7 @@ const Container = styled.div`
   align-items: center;
   gap: 4vh;
   width: 100%;
+  max-width: 1440px;
 `;
 const TagContainer = styled.div`
   display: flex;
@@ -82,7 +83,7 @@ const customStyles = {
   control: (provided: any) => ({
     ...provided,
     backgroundColor: '#FFFDF5',
-    borderColor: '#0.1rem solid rgba(128, 128, 128, 0.3)',
+    border: '#0.1rem solid rgba(128, 128, 128, 0.3)',
     height: '3.8rem',
     boxShadow: 'none',
   }),
@@ -92,25 +93,28 @@ const customStyles = {
   }),
   option: (provided: any, state: any) => ({
     ...provided,
-    color: '#000000',
-    backgroundColor: state.isSelected ? 'rgba(128, 128, 128, 0.3)' : '#FFFDF5',
+    color: state.isSelected ? 'white' : 'black',
+    backgroundColor: state.isSelected ? 'rgba(255, 137, 35, 0.6)' : '#FFFDF5',
     cursor: 'pointer',
     fontSize: '1.6rem',
     fontWeight: 'bold',
     lineHeight: '2',
     padding: '1rem 2rem',
   }),
+  menuList: (provided: any) => ({
+    ...provided,
+    padding: '0',
+  }),
+
   menu: (provided: any) => ({
     ...provided,
     boxShadow: 'none',
     borderRadius: '0.2rem',
-    border: '0.1rem solid black',
-    marginTop: 0,
-    marginBottom: 0,
+    border: '0.1rem solid rgba(128, 128, 128, 0.3)',
   }),
   singleValue: (provided: any) => ({
     ...provided,
-    fontSize: '2.4rem',
+    fontSize: '1.6rem',
     fontWeight: 'bold',
     color: '#000000',
   }),

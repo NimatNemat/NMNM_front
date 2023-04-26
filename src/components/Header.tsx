@@ -14,7 +14,10 @@ const Usericon = styled.div`
   width: 5rem;
   height: 5rem;
   border-radius: 50%;
-  background-color: #a5a5a5;
+
+  background-image: url('http://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-Image.png');
+  background-size: cover;
+  background-position: center;
 `;
 const StyledLink = styled(Link)`
   text-decoration: none;

@@ -28,8 +28,8 @@ const ImgIcon = styled.img`
   height: 1.2rem;
 `;
 
-const TagText = styled.span`
-  color: rgba(128, 128, 128, 0.7);
+const TagText = styled.span<{ isAcitve: boolean }>`
+  color: ${(props) => (props.isAcitve ? 'white' : 'rgba(128, 128, 128, 0.7);')};
 `;
 function StyledTag(props: StyledTagProps) {
   const { imgSrc, text, onClick = () => null } = props;
@@ -43,7 +43,9 @@ function StyledTag(props: StyledTagProps) {
   return (
     <Tag isActive={isActive} onClick={handleClick}>
       {imgSrc && <ImgIcon src={imgSrc} alt="" />}
-      <TagText className={Styles.p1bold}>{text}</TagText>
+      <TagText className={Styles.p1bold} isAcitve={isActive}>
+        {text}
+      </TagText>
     </Tag>
   );
 }
