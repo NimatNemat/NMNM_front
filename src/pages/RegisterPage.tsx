@@ -220,6 +220,7 @@ function RegisterPage() {
       if (resposne.status === 200 || resposne.status === 201) {
         alert('회원가입이 완료되었습니다.');
         window.location.href = '/main';
+        sessionStorage.setItem('isAuthenticated', 'true');
       } else {
         alert('회원가입에 실패하였습니다.');
       }

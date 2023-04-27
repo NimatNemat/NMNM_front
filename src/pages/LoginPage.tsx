@@ -43,7 +43,7 @@ function LoginPage() {
         navigate('/main/');
         // accessToken 설정
         axios.defaults.headers.common.Authorization = `Bearer ${response.data}`;
-        sessionStorage.setItem('isAuthenticated', '');
+        sessionStorage.setItem('isAuthenticated', 'true');
       } else {
         alert('아이디, 비밀번호를 다시 한번 확인하세요.');
       }
@@ -103,7 +103,7 @@ function LoginPage() {
           <span className={Styles.p1bold}>Login</span>
         </StyledButton>
         <Link
-          to="/register/"
+          to="/preference/"
           className={Styles.p1bold}
           style={{ alignSelf: 'center', textDecoration: 'none', color: 'black' }}
         >

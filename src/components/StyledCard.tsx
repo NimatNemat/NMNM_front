@@ -30,7 +30,6 @@ const Card = styled.div<{ width?: string }>`
 const CardImage = styled.img`
   width: 100%;
   height: 220px;
-  object-fit: cover;
 `;
 
 const CardInfoBox = styled.div`
@@ -83,11 +82,16 @@ function StyledCard(props: StyledCardProps) {
       }
     }
   };
-
+  console.log(imgSrc);
   return (
     <Link to={`/detail/${id}`} style={{ textDecoration: 'none', color: 'black' }}>
       <Card width={width}>
-        <CardImage src={imgSrc} alt="" />
+        {imgSrc === 'http://3.39.232.5:8080null' ? (
+          <CardImage src="/logo.png" alt="" />
+        ) : (
+          <CardImage src={imgSrc} alt="" />
+        )}
+
         <CardInfoBox>
           {showIconBox && (
             <LikeBox>

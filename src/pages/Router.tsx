@@ -29,7 +29,7 @@ export default function Router() {
       <Container>
         <Routes>
           {/* 인증 여부 상관 없이 접속 가능한 페이지 정의 */}
-          <Route path="/" element={<NavPage />} />
+          {/* <Route path="/" element={<NavPage />} /> */}
           <Route path="/preference/*" element={<PreferencePage />} />
           <Route path="/privacy/*" element={<PrivacyPage />} />
 
@@ -52,7 +52,7 @@ export default function Router() {
       </Container>
       <NopaddingContainer>
         <Routes>
-          <Route path="/intro/*" element={<IntroPage />} />
+          <Route path="/" element={<IntroPage />} />
         </Routes>
       </NopaddingContainer>
     </BrowserRouter>

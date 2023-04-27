@@ -63,7 +63,8 @@ const Box = styled.div`
   gap: 1vh;
 `;
 
-const Text = styled.span`
+const Text = styled.div`
+  display: flex;
   align-items: center;
   gap: 0.5vw;
 `;
@@ -148,20 +149,22 @@ function DetailPage() {
     const response = await axios.get(`/restaurant/${id}`);
     setRestaurant(response.data);
     setIsLoaded(true);
-    console.log(response.data);
   };
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     fetchData();
   }, []);
-
   return (
     <DetailPageContainer>
       {isLoaded ? (
         <Container>
           <Section>
-            <StyledImg src={`http://3.39.232.5:8080${restaurant.imageUrl}`} alt="logo" />
+            {restaurant.imageUrl === null ? (
+              <StyledImg src="/logo.png" alt="" />
+            ) : (
+              <StyledImg src={`http://3.39.232.5:8080${restaurant.imageUrl}`} alt="" />
+            )}
             <Content>
               <Rowcenterbox>
                 <Text className={Styles.h2}>{restaurant.name}</Text>

@@ -212,7 +212,7 @@ function PreferencePage() {
         <BtnContainer>
           <StyledButton
             onClick={() => {
-              console.log('click');
+              window.location.href = '/register';
             }}
           >
             <div className={Styles.p1bold}>다음</div>
