@@ -38,7 +38,7 @@ const Content = styled.div`
   gap: 2rem;
   width: 80%;
   padding: 4vw;
-  background-color: whtie;
+  background-color: rgba(255, 137, 35, 0.1);
   box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.1);
   border-radius: 30px;
   margin: 3vw 24rem;
@@ -106,7 +106,7 @@ function PreferencePage() {
     likes: 5,
     name: '가츠시',
     category: '일식',
-    hashtag: '돈까스, 우동',
+    hashtag: ['돈까스', '우동'],
     id: 1,
   };
   const [selected, setSelected] = useState(true);
@@ -185,7 +185,7 @@ function PreferencePage() {
               likes={data.likes}
               name={data.name}
               category={data.category}
-              hashtag={data.hashtag}
+              hashtag={data.hashtag ? data.hashtag.slice(0, 3).join(' ') : ''}
               showIconBox={false}
               id={data.id}
             />
@@ -194,7 +194,7 @@ function PreferencePage() {
               likes={data.likes}
               name={data.name}
               category={data.category}
-              hashtag={data.hashtag}
+              hashtag={data.hashtag ? data.hashtag.slice(0, 3).join(' ') : ''}
               showIconBox={false}
               id={data.id}
             />
@@ -203,7 +203,7 @@ function PreferencePage() {
               likes={data.likes}
               name={data.name}
               category={data.category}
-              hashtag={data.hashtag}
+              hashtag={data.hashtag ? data.hashtag.slice(0, 3).join(' ') : ''}
               id={data.id}
               showIconBox={false}
             />

@@ -9,23 +9,18 @@ interface Props {
 const { kakao } = window as any;
 function Map(props: Props) {
   const { x, y, name } = props;
-  // const X = y;
-  // const Y = x;
-  console.log(x, y);
-  const X = 37.5463365886719;
-  const Y = 127.075735440582;
 
   useEffect(() => {
     const container = document.getElementById('map');
     const options = {
-      center: new kakao.maps.LatLng(X, Y),
+      center: new kakao.maps.LatLng(x, y),
       level: 2,
       disableDoubleClickZoom: true,
       scrollwheel: false,
     };
     const map = new kakao.maps.Map(container, options);
     const marker = new kakao.maps.Marker({
-      position: new kakao.maps.LatLng(X, Y),
+      position: new kakao.maps.LatLng(x, y),
     });
     const zoomControl = new kakao.maps.ZoomControl();
     map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);

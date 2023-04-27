@@ -37,7 +37,7 @@ const StyledSlider = styled(Slider)`
   }
   .slick-slide img {
     width: 100%;
-    object-fit: scale-down;
+    /* object-fit: scale-down; */
   }
   .slick-list {
     width: 100%;
@@ -47,10 +47,7 @@ const StyledSlider = styled(Slider)`
   .slick-next {
     z-index: 9999;
     width: 30px !important;
-    opacity: 0;
-    @media (max-width: 700px) {
-      opacity: 1;
-    }
+    opacity: 1;
   }
 
   .slick-prev {
@@ -63,16 +60,18 @@ const StyledSlider = styled(Slider)`
   .slick-prev:before,
   .slick-next:before {
     font-size: 3rem;
+    color: white;
   }
 
   .slick-prev:hover,
   .slick-next:hover {
     opacity: 1;
+    color: white;
   }
 
   .slick-prev:hover:before,
   .slick-next:hover:before {
-    color: white;
+    color: #7b7777;
   }
   .slick-dots {
     bottom: 0px;
