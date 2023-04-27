@@ -135,7 +135,7 @@ function MainPage() {
     name: string;
     cuisineType: string;
     tags: string[];
-    img: string;
+    imageUrl: string;
     likeCount: number;
   }
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
@@ -244,7 +244,7 @@ function MainPage() {
             currentRestaurant.map((restaurant) => (
               <StyledCard
                 key={restaurant.restaurantId}
-                imgSrc="/logo.png"
+                imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
                 likes={restaurant.likeCount}
                 name={restaurant.name}
                 category={restaurant.cuisineType}

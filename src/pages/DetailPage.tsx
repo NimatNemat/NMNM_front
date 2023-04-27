@@ -15,6 +15,7 @@ import Map from '../components/Map';
 import StyledCard from '../components/StyledCard';
 import Styles from '../config/globalFontStyle.module.css';
 import ReviewComponent from '../components/ReviewComponent';
+import StaylistSlider from '../components/StaylistSlider';
 
 const DetailPageContainer = styled.div`
   display: flex;
@@ -62,8 +63,7 @@ const Box = styled.div`
   gap: 1vh;
 `;
 
-const Text = styled.div`
-  display: flex;
+const Text = styled.span`
   align-items: center;
   gap: 0.5vw;
 `;
@@ -121,22 +121,21 @@ function DetailPage() {
   interface Restaurant {
     restaurantId: number;
     name: string;
-    xPosition: number;
-    yPosition: number;
+    xposition: number;
+    yposition: number;
     cuisineType: string;
     avgPreference: number;
     address: string;
     roadAddress: string;
     number: string;
     businessHours: string;
-    tags: string;
-    img: string;
+    tags: [string];
+    imageUrl: string;
     menu: [[string, string]];
   }
   const [restaurant, setRestaurant] = useState<Restaurant>({} as Restaurant);
 
   const data = {
-    imgSrc: '/img.png',
     likes: 5,
     name: '가츠시',
     category: '일식',
@@ -149,6 +148,7 @@ function DetailPage() {
     const response = await axios.get(`/restaurant/${id}`);
     setRestaurant(response.data);
     setIsLoaded(true);
+    console.log(response.data);
   };
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -161,7 +161,7 @@ function DetailPage() {
       {isLoaded ? (
         <Container>
           <Section>
-            <StyledImg src={data.imgSrc} alt="logo" />
+            <StyledImg src={`http://3.39.232.5:8080${restaurant.imageUrl}`} alt="logo" />
             <Content>
               <Rowcenterbox>
                 <Text className={Styles.h2}>{restaurant.name}</Text>
@@ -169,8 +169,12 @@ function DetailPage() {
                   {restaurant.avgPreference.toFixed(1)}
                 </Text>
               </Rowcenterbox>
-              <Rowcenterbox>
-                <Text className={Styles.h5}>{restaurant.tags}</Text>
+              <Rowcenterbox style={{ gap: '5px' }}>
+                {restaurant.tags?.map((tag) => (
+                  <Text className={Styles.p2bold} key={tag}>
+                    {tag}
+                  </Text>
+                ))}
               </Rowcenterbox>
               <Rowcenterbox>
                 <Text className={Styles.h5}>
@@ -221,7 +225,7 @@ function DetailPage() {
                 <Text className={Styles.h4}>지도</Text>
               </Title>
               <div style={{ width: '100%', height: '50vw' }}>
-                <Map x={restaurant.xPosition} y={restaurant.yPosition} name={restaurant.name} />
+                <Map x={restaurant.xposition} y={restaurant.yposition} name={restaurant.name} />
               </div>
             </Content>
           </Section>
@@ -263,42 +267,38 @@ function DetailPage() {
               </Title>
               <Box>
                 <Flexbox>
-                  <StyledCard
-                    imgSrc={data.imgSrc}
-                    likes={data.likes}
-                    name={data.name}
-                    category={data.category}
-                    hashtag={data.hashtag}
-                    showIconBox={false}
-                    id={data.id}
-                  />
-                  <StyledCard
-                    imgSrc={data.imgSrc}
-                    likes={data.likes}
-                    name={data.name}
-                    category={data.category}
-                    hashtag={data.hashtag}
-                    showIconBox={false}
-                    id={data.id}
-                  />
-                  <StyledCard
-                    imgSrc={data.imgSrc}
-                    likes={data.likes}
-                    name={data.name}
-                    category={data.category}
-                    hashtag={data.hashtag}
-                    showIconBox={false}
-                    id={data.id}
-                  />
-                  <StyledCard
-                    imgSrc={data.imgSrc}
-                    likes={data.likes}
-                    name={data.name}
-                    category={data.category}
-                    hashtag={data.hashtag}
-                    showIconBox={false}
-                    id={data.id}
-                  />
+                  <StaylistSlider>
+                    <StyledCard
+                      imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
+                      likes={data.likes}
+                      name={data.name}
+                      category={data.category}
+                      hashtag={data.hashtag}
+                      showIconBox={false}
+                      id={data.id}
+                      width="100%"
+                    />
+                    <StyledCard
+                      imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
+                      likes={data.likes}
+                      name={data.name}
+                      category={data.category}
+                      hashtag={data.hashtag}
+                      showIconBox={false}
+                      id={data.id}
+                      width="100%"
+                    />
+                    <StyledCard
+                      imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
+                      likes={data.likes}
+                      name={data.name}
+                      category={data.category}
+                      hashtag={data.hashtag}
+                      showIconBox={false}
+                      id={data.id}
+                      width="100%"
+                    />
+                  </StaylistSlider>
                 </Flexbox>
               </Box>
             </Content>
