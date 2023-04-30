@@ -146,7 +146,6 @@ function MainPage() {
       const response = await axios.get(`/restaurant/all`);
       setRestaurants(response.data);
       setIsLoaded(true);
-      console.log(response.data);
     } catch (error) {
       console.error('Error fetching data', error);
       setIsLoaded(false);
