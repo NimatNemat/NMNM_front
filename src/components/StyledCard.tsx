@@ -6,15 +6,16 @@ import Styles from '../config/globalFontStyle.module.css';
 
 interface StyledCardProps {
   imgSrc: string;
-  likes: number;
+  likes?: number;
   name: string;
-  category: string;
-  hashtag: string;
+  category?: string;
+  hashtag?: string;
   showIconBox?: boolean;
   width?: string;
   id: number;
   openModal?: () => void;
   setModalData?: (data: number) => void;
+  icon?: React.ReactNode;
 }
 
 const Card = styled.div<{ width?: string }>`
@@ -63,8 +64,16 @@ const InfoBox = styled.div`
   width: 100%;
 `;
 
+const InfoName = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;
+
 function StyledCard(props: StyledCardProps) {
-  const { imgSrc, likes, name, category, hashtag, showIconBox, width, id, openModal, setModalData } = props;
+  const { imgSrc, likes, name, category, hashtag, showIconBox, width, id, openModal, setModalData, icon } = props;
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
 
@@ -111,7 +120,10 @@ function StyledCard(props: StyledCardProps) {
             </LikeBox>
           )}
           <InfoBox>
-            <span className={Styles.p1bold}>{name}</span>
+            <InfoName>
+              <span className={Styles.p1bold}>{name}</span>
+              {icon && <div>{icon}</div>}
+            </InfoName>
             <span className={Styles.p2medium}>{category}</span>
             <span className={Styles.p2medium}>{hashtag}</span>
           </InfoBox>
@@ -126,6 +138,10 @@ StyledCard.defaultProps = {
   width: '100%',
   openModal: () => null,
   setModalData: () => null,
+  hashtag: '',
+  category: '',
+  likes: 0,
+  icon: null,
 };
 
 export default StyledCard;

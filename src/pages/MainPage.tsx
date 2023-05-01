@@ -2,10 +2,12 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Select from 'react-select';
 import axios from 'axios';
 import styled from 'styled-components';
+import { AiOutlineSearch } from 'react-icons/ai';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledTag from '../components/StyledTag';
 import StyledCard from '../components/StyledCard';
 import StyledModal from '../components/StyledModal';
+import StyledInput from '../components/StyledInput';
 import Pagination from '../components/Pagination';
 
 const MainPageContainer = styled.div`
@@ -130,6 +132,7 @@ function MainPage() {
   const [currentRestaurant, setCurrentRestaurant] = useState<Restaurant[]>([]);
   const [selectedLabel, setSelectedLabel] = useState<string>('진정한 한국인의 추천리스트');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [searchName, setSearchName] = useState<string>('');
   interface Restaurant {
     restaurantId: number;
     name: string;
@@ -155,6 +158,9 @@ function MainPage() {
     fetchData();
   }, []);
 
+  const handleSearchName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchName(event.target.value);
+  };
   // 페이지네이션 각 페이지 별로 Post할 갯수 정해서 페이지 나누기
   const indexOfLast = currentPage * postsPerPage;
   const indexOfFirst = indexOfLast - postsPerPage;
@@ -271,6 +277,18 @@ function MainPage() {
       <MainPageContainer className="MainPage" style={blurStyle}>
         <Container>
           <ListContainer>
+            <StyledInput
+              value={searchName}
+              type="text"
+              placeholder="검색어를 입력하세요."
+              style={{ width: '66%' }}
+              onChange={handleSearchName}
+              background="#FFFFFF"
+              border="0.1rem solid rgba(128, 128, 128, 0.3)"
+              borderRadius="5rem"
+              padding="1.6rem 4.8rem"
+              icon={<AiOutlineSearch />}
+            />
             <TagContainer>
               <div className={Styles.h3} style={{ width: '100%', textAlign: 'left' }}>
                 종류
