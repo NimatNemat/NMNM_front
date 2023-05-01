@@ -10,11 +10,10 @@ import ModifyPage from './ModifyPage';
 import Mypage from './MyPage';
 import PreferencePage from './PreferencePage';
 import RegisterPage from './RegisterPage';
-import RegisterDetailPage from './RegisterDetailPage';
 import PrivacyPage from './PrivacyPage';
-import NavPage from './NavPage';
 import PrivateRoute from './PrivateRoute';
 import Header from '../components/Header';
+import PlayListPage from './PlayListPage';
 
 const Container = styled.div`
   padding: 2.4rem;
@@ -43,7 +42,7 @@ export default function Router() {
           {/* 인증을 반드시 해야지만 접속 가능한 페이지 정의 */}
           <Route element={<PrivateRoute authentication />}>
             <Route path="/main/*" element={<Main />} />
-            <Route path="/registerdetail/*" element={<RegisterDetailPage />} />
+            <Route path="/playlistpage/*" element={<PlayListPage />} />
             <Route path="/detail/:id" element={<DetailPage />} />
             <Route path="/mypage/*" element={<Mypage />} />
             <Route path="/modify/*" element={<ModifyPage />} />
