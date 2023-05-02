@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { AiOutlineClose, AiOutlineArrowsAlt } from 'react-icons/ai';
 import StyledButton from './StyledButton';
 import Styles from '../config/globalFontStyle.module.css';
 
@@ -15,13 +16,6 @@ const Row = styled.div`
   width: 100%;
 `;
 
-const ImgContainer = styled.div`
-  position: relative;
-  width: 100%;
-  height: 8.8rem;
-  background-color: #fffdf5;
-  border: 1px solid #dfdfdf;
-`;
 const ProfileImg = styled.img`
   width: 100%;
   height: 100%;
@@ -33,9 +27,22 @@ const ProfileImg = styled.img`
 `;
 
 const IconContainer = styled.div`
-  position: absolute;
+  position: relative;
   display: flex;
   width: 100%;
+  opacity: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  transition: opacity 0.2s ease;
+`;
+const ImgContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 8.8rem;
+  background-color: #fffdf5;
+  border: 1px solid #dfdfdf;
+  &:hover ${IconContainer} {
+    opacity: 1;
+  }
 `;
 
 const RemoveIcon = styled.div`
@@ -44,7 +51,7 @@ const RemoveIcon = styled.div`
   color: white;
   font-size: 1.6rem;
   position: absolute;
-  top: 0;
+  bottom: 0;
   right: 0;
 `;
 
@@ -58,11 +65,17 @@ const EnlargeIcon = styled.div`
   left: 0;
 `;
 
-function ReviewImageUpload() {
+interface ReviewImageUploadProps {
+  onUpload: () => void;
+  onDelete: () => void;
+}
+
+function ReviewImageUpload({ onUpload, onDelete }: ReviewImageUploadProps) {
   const [fileURL, setFileURL] = useState<string>('/plus.png');
   const [file, setFile] = useState<FileList | null>(null);
   const [key, setKey] = useState<number>(0);
   const imgUploadInput = useRef<HTMLInputElement | null>(null);
+  const [firstUpload, setFirstUpload] = useState<boolean>(true);
 
   const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
@@ -70,14 +83,20 @@ function ReviewImageUpload() {
       setFile(files);
       const newFileURL = URL.createObjectURL(files[0]);
       setFileURL(newFileURL);
+      if (firstUpload) {
+        onUpload();
+        setFirstUpload(false);
+      }
     }
     setKey((prevKey) => prevKey + 1);
   };
 
-  const onImageRemove = (): void => {
+  const onImageRemove = (event: React.MouseEvent): void => {
+    event.stopPropagation();
     URL.revokeObjectURL(fileURL);
     setFileURL('/plus.png'); // 렌더링 이미지 초기화
     setFile(null);
+    onDelete();
   };
 
   const onImageEnlarge = (): void => {
@@ -98,8 +117,12 @@ function ReviewImageUpload() {
           <ProfileImg src={fileURL} alt="plus" />
           {fileURL !== '/plus.png' && (
             <IconContainer>
-              <RemoveIcon onClick={onImageRemove}>x</RemoveIcon>
-              <EnlargeIcon onClick={onImageEnlarge}>🔍</EnlargeIcon>
+              <RemoveIcon onClick={(event) => onImageRemove(event)}>
+                <AiOutlineClose />
+              </RemoveIcon>
+              <EnlargeIcon onClick={onImageEnlarge}>
+                <AiOutlineArrowsAlt />
+              </EnlargeIcon>
             </IconContainer>
           )}
         </ImgContainer>

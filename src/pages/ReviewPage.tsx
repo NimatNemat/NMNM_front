@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AiOutlineFrown, AiOutlineSmile, AiOutlineMeh, AiOutlineStar, AiFillStar } from 'react-icons/ai';
 import Styles from '../config/globalFontStyle.module.css';
-import ReviewImageUpload from '../components/RevewImageUpload';
+import ReviewImageUpload from '../components/ReviewImageUpload';
 
 const ReviewPageContainer = styled.div`
   display: flex;
@@ -91,7 +91,7 @@ function ReviewPage() {
   const [selectedEvaluation, setSelectedEvaluation] = useState<string>('맛있다'); // 간단평가항목 선택
   const [reviewTextValue, setReviewTextValue] = useState<string>(''); // 리뷰텍스트
   const [starClicked, setStarClicked] = useState<boolean[]>([false, false, false, false, false]);
-  const [uploadedImages, setUploadedImages] = useState<{ id: string; file: File }[]>([]);
+  const [uploadComponents, setUploadComponents] = useState<number[]>([0]);
 
   const handleEvaluationClickEvent = (evaluation: string) => {
     setSelectedEvaluation(evaluation);
@@ -99,6 +99,14 @@ function ReviewPage() {
 
   const handleReviewTextChangeEvent = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setReviewTextValue(event.target.value);
+  };
+
+  // Date.now()를 이용하여 현재 시간의 밀리초 단위로 표현된 고유한 숫자 값을 키값으로 사용
+  const handleImageUpload = () => {
+    setUploadComponents((prevState) => [...prevState, Date.now()]);
+  };
+  const handleImageDelete = (uniqueKey: number) => {
+    setUploadComponents((prevState) => prevState.filter((key) => key !== uniqueKey));
   };
 
   const starArray = [0, 1, 2, 3, 4];
@@ -170,7 +178,13 @@ function ReviewPage() {
           />
         </Content>
         <GridContainer>
-          <ReviewImageUpload />
+          {uploadComponents.map((uniqueKey) => (
+            <ReviewImageUpload
+              key={uniqueKey}
+              onUpload={handleImageUpload}
+              onDelete={() => handleImageDelete(uniqueKey)}
+            />
+          ))}
         </GridContainer>
       </Container>
     </ReviewPageContainer>
