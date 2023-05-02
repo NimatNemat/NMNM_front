@@ -14,6 +14,7 @@ import PrivacyPage from './PrivacyPage';
 import PrivateRoute from './PrivateRoute';
 import Header from '../components/Header';
 import PlayListPage from './PlayListPage';
+import ReviewPage from './ReviewPage';
 
 const Container = styled.div`
   padding: 2.4rem;
@@ -46,6 +47,7 @@ export default function Router() {
             <Route path="/detail/:id" element={<DetailPage />} />
             <Route path="/mypage/*" element={<Mypage />} />
             <Route path="/modify/*" element={<ModifyPage />} />
+            <Route path="/review/*" element={<ReviewPage />} />
           </Route>
         </Routes>
       </Container>
