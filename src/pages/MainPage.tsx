@@ -219,22 +219,25 @@ function MainPage() {
   // 태그 변경시마다 페이지를 1로 초기화
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedTags]);
+  }, [selectedTags, searchName]);
 
   // 선택한 태그와 Restaurant의 QuisinType을 비교하여 필터링
   const filteredRestaurants = useMemo(() => {
-    if (!restaurants || selectedTags.length === 0) {
-      return restaurants;
+    let filtered = restaurants;
+
+    if (selectedTags.length > 0) {
+      filtered = filtered.filter((restaurant) => {
+        if (!restaurant.cuisineType) {
+          return false;
+        }
+        return selectedTags.some((tag) => restaurant.cuisineType.includes(tag));
+      });
     }
 
-    return restaurants.filter((restaurant) => {
-      if (!restaurant.cuisineType) {
-        return false;
-      }
+    filtered = filtered.filter((restaurant) => restaurant.name.includes(searchName));
 
-      return selectedTags.some((tag) => restaurant.cuisineType.includes(tag));
-    });
-  }, [restaurants, selectedTags]);
+    return filtered;
+  }, [restaurants, selectedTags, searchName]);
 
   useEffect(() => {
     setCurrentRestaurant(currentPosts(filteredRestaurants));
