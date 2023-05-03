@@ -179,7 +179,7 @@ function PreferencePage() {
         </Menu>
 
         <Content>
-          <StaylistSlider>
+          <StaylistSlider num={3}>
             <StyledCard
               imgSrc={data.imgSrc}
               likes={data.likes}

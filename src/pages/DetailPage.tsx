@@ -16,6 +16,7 @@ import StyledCard from '../components/StyledCard';
 import Styles from '../config/globalFontStyle.module.css';
 import ReviewComponent from '../components/ReviewComponent';
 import StaylistSlider from '../components/StaylistSlider';
+import StyledButton from '../components/StyledButton';
 
 const DetailPageContainer = styled.div`
   display: flex;
@@ -58,7 +59,7 @@ const Content = styled.div`
 const Box = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   width: 100%;
   gap: 1vh;
 `;
@@ -151,7 +152,7 @@ function DetailPage() {
     setIsLoaded(true);
   };
   const [isLoaded, setIsLoaded] = useState(false);
-
+  const [review, setReview] = useState<number>(3);
   useEffect(() => {
     fetchData();
   }, []);
@@ -181,20 +182,28 @@ function DetailPage() {
               </Rowcenterbox>
               <Rowcenterbox>
                 <Text className={Styles.h5}>
-                  <AiOutlineHeart />
-                  좋아요
-                </Text>
-                <Text className={Styles.h5}>
-                  <AiOutlineShareAlt />
-                  공유하기
+                  <AiOutlineStar />
+                  <Link to="/" style={{ textDecoration: 'none', color: 'black' }}>
+                    좋아요
+                  </Link>
                 </Text>
                 <Text className={Styles.h5}>
                   <AiOutlineStar />
-                  평가하기
+                  <Link to="/" style={{ textDecoration: 'none', color: 'black' }}>
+                    공유하기
+                  </Link>
                 </Text>
                 <Text className={Styles.h5}>
-                  <AiOutlineStop />
-                  안볼래요
+                  <AiOutlineStar />
+                  <Link to="/review" style={{ textDecoration: 'none', color: 'black' }}>
+                    평가하기
+                  </Link>
+                </Text>
+                <Text className={Styles.h5}>
+                  <AiOutlineStar />
+                  <Link to="/" style={{ textDecoration: 'none', color: 'black' }}>
+                    안볼래요
+                  </Link>
                 </Text>
               </Rowcenterbox>
             </Content>
@@ -227,7 +236,7 @@ function DetailPage() {
               <Title>
                 <Text className={Styles.h4}>지도</Text>
               </Title>
-              <div style={{ width: '100%', height: '50vw' }}>
+              <div style={{ width: '100%', height: '300px' }}>
                 <Map x={restaurant.xposition} y={restaurant.yposition} name={restaurant.name} />
               </div>
             </Content>
@@ -259,9 +268,21 @@ function DetailPage() {
                 <Text className={Styles.h4}>리뷰</Text>
               </Title>
               <Box>
-                <ReviewComponent />
+                {[...Array(review)].map((index, i) => (
+                  <ReviewComponent />
+                ))}
               </Box>
             </Content>
+            <StyledButton
+              color="white"
+              onClick={() => {
+                setReview((prev) => prev + 3);
+              }}
+              fontsize="1.2rem"
+              padding="0.5rem 0"
+            >
+              더보기
+            </StyledButton>
           </Section>
           <Section>
             <Content>
@@ -269,40 +290,68 @@ function DetailPage() {
                 <Text className={Styles.h4}>이런 가게는 어때요?</Text>
               </Title>
               <Box>
-                <Flexbox>
-                  <StaylistSlider>
-                    <StyledCard
-                      imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
-                      likes={data.likes}
-                      name={data.name}
-                      category={data.category}
-                      hashtag={data.hashtag}
-                      showIconBox={false}
-                      id={data.id}
-                      width="100%"
-                    />
-                    <StyledCard
-                      imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
-                      likes={data.likes}
-                      name={data.name}
-                      category={data.category}
-                      hashtag={data.hashtag}
-                      showIconBox={false}
-                      id={data.id}
-                      width="100%"
-                    />
-                    <StyledCard
-                      imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
-                      likes={data.likes}
-                      name={data.name}
-                      category={data.category}
-                      hashtag={data.hashtag}
-                      showIconBox={false}
-                      id={data.id}
-                      width="100%"
-                    />
-                  </StaylistSlider>
-                </Flexbox>
+                <StaylistSlider num={1}>
+                  <StyledCard
+                    imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
+                    likes={data.likes}
+                    name={data.name}
+                    category={data.category}
+                    hashtag={data.hashtag}
+                    showIconBox={false}
+                    id={data.id}
+                    width="100%"
+                  />
+                  <StyledCard
+                    imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
+                    likes={data.likes}
+                    name={data.name}
+                    category={data.category}
+                    hashtag={data.hashtag}
+                    showIconBox={false}
+                    id={data.id}
+                    width="100%"
+                  />
+                  <StyledCard
+                    imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
+                    likes={data.likes}
+                    name={data.name}
+                    category={data.category}
+                    hashtag={data.hashtag}
+                    showIconBox={false}
+                    id={data.id}
+                    width="100%"
+                  />
+                  <StyledCard
+                    imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
+                    likes={data.likes}
+                    name={data.name}
+                    category={data.category}
+                    hashtag={data.hashtag}
+                    showIconBox={false}
+                    id={data.id}
+                    width="100%"
+                  />
+                  <StyledCard
+                    imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
+                    likes={data.likes}
+                    name={data.name}
+                    category={data.category}
+                    hashtag={data.hashtag}
+                    showIconBox={false}
+                    id={data.id}
+                    width="100%"
+                  />
+                  <StyledCard
+                    imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
+                    likes={data.likes}
+                    name={data.name}
+                    category={data.category}
+                    hashtag={data.hashtag}
+                    showIconBox={false}
+                    id={data.id}
+                    width="100%"
+                  />
+                </StaylistSlider>
               </Box>
             </Content>
           </Section>

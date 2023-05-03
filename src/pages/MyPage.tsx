@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { FiMoreHorizontal } from 'react-icons/fi';
+import { AiFillPlusCircle } from 'react-icons/ai';
 import StyledButton from '../components/StyledButton';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledCard from '../components/StyledCard';
+import ReviewComponent from '../components/ReviewComponent';
 
 interface Restaurant {
   restaurantId: number;
@@ -78,7 +81,7 @@ const Line = styled.div`
 `;
 const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   column-gap: 4vh;
   row-gap: 4vh;
   width: 100%;
@@ -96,18 +99,45 @@ const Btn = styled.button<BtnProps>`
   }
 `;
 
+const Card = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 278px;
+  background: #ffffff;
+  box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+`;
+
+const CardContent = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 0.5rem;
+`;
+const PlusIcon = styled(AiFillPlusCircle)`
+  color: #9b9b9b;
+`;
+
 function Mypage() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [tab, setTab] = useState<number>(0);
+  const [renderCnt, setRenderCnt] = useState<number>(12);
   const ClickReview = () => {
     setTab(0);
+    setRenderCnt(12);
   };
   const ClickLike = () => {
     setTab(1);
+    setRenderCnt(12);
   };
   const ClickList = () => {
     setTab(2);
+    setRenderCnt(12);
   };
   const fetchData = async () => {
     setIsLoaded(false);
@@ -163,17 +193,43 @@ function Mypage() {
             작성한 리뷰
           </Btn>
           <Btn className={Styles.p1bold} onClick={ClickLike} clicked={tab === 1}>
-            맛플리 🎶
+            맛플리
           </Btn>
           <Btn className={Styles.p1bold} onClick={ClickList} clicked={tab === 2}>
             좋아요한 식당
           </Btn>
         </Row>
-        <GridContainer>
-          {isLoaded && tab === 0 ? <h1>작성한 리뷰</h1> : null}
-          {isLoaded && tab === 1 ? <h1>맛플리</h1> : null}
-          {isLoaded && tab === 2
-            ? restaurants.map((restaurant: any) => (
+
+        {isLoaded && tab === 0 ? (
+          <GridContainer>
+            {restaurants.map((restaurants: any, index) => (index < renderCnt ? <ReviewComponent /> : null))}
+          </GridContainer>
+        ) : null}
+        {isLoaded && tab === 1 ? (
+          <GridContainer>
+            <Card className={Styles.h3medium}>
+              <CardContent>
+                <PlusIcon />
+                <div style={{ color: '#9B9B9B' }}>맛집 추가하기</div>
+              </CardContent>
+            </Card>
+            {restaurants.map((restaurant: any, index) =>
+              index < renderCnt - 1 ? (
+                <StyledCard
+                  imgSrc=""
+                  name="가츠시"
+                  showIconBox={false}
+                  id={2}
+                  icon={<FiMoreHorizontal size="2.4rem" />}
+                />
+              ) : null
+            )}
+          </GridContainer>
+        ) : null}
+        {isLoaded && tab === 2 ? (
+          <GridContainer>
+            {restaurants.map((restaurant: any, index) =>
+              index < renderCnt ? (
                 <StyledCard
                   key={restaurant.restaurantId}
                   imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
@@ -183,9 +239,20 @@ function Mypage() {
                   hashtag={restaurant.tags ? restaurant.tags.slice(0, 3).join(' ') : ''}
                   id={restaurant.restaurantId}
                 />
-              ))
-            : null}
-        </GridContainer>
+              ) : null
+            )}
+          </GridContainer>
+        ) : null}
+        <StyledButton
+          color="#fffdf5"
+          onClick={() => {
+            setRenderCnt((prev) => prev + 12);
+          }}
+          fontsize="1.2rem"
+          padding="0.5rem 0"
+        >
+          더보기
+        </StyledButton>
       </Container>
     </MypageContainer>
   );
