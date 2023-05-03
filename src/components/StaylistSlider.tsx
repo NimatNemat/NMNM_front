@@ -6,15 +6,16 @@ import 'slick-carousel/slick/slick-theme.css';
 
 interface Props {
   children: React.ReactNode;
+  num: number;
 }
 function StaylistSlider(props: Props) {
-  const { children } = props;
+  const { children, num } = props;
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
+    slidesToShow: num,
+    slidesToScroll: num,
   };
   return (
     <div style={{ width: '100%' }}>
@@ -37,12 +38,7 @@ const StyledSlider = styled(Slider)`
   }
   .slick-slide img {
     width: 100%;
-    /* object-fit: scale-down; */
   }
-  .slick-list {
-    width: 100%;
-  }
-
   .slick-prev,
   .slick-next {
     z-index: 9999;
@@ -60,13 +56,13 @@ const StyledSlider = styled(Slider)`
   .slick-prev:before,
   .slick-next:before {
     font-size: 3rem;
-    color: white;
+    color: #7b7777;
   }
 
   .slick-prev:hover,
   .slick-next:hover {
     opacity: 1;
-    color: white;
+    color: #7b7777;
   }
 
   .slick-prev:hover:before,
