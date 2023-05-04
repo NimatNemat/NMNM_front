@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { AiOutlineFrown, AiOutlineSmile, AiOutlineMeh, AiOutlineStar, AiFillStar } from 'react-icons/ai';
 import Styles from '../config/globalFontStyle.module.css';
 import ReviewImageUpload from '../components/ReviewImageUpload';
+import StyledButton from '../components/StyledButton';
 
 const ReviewPageContainer = styled.div`
   display: flex;
@@ -55,7 +56,7 @@ const EvaluationButton = styled.button<{ selected: boolean }>`
   border: none;
   display: flex;
   align-items: center;
-  color: ${({ selected }) => (selected ? 'rgba(255, 137, 35)' : 'rgba(128, 128, 128, 0.3)')};
+  color: ${({ selected }) => (selected ? 'rgba(255, 137, 35, 0.6)' : 'rgba(128, 128, 128, 0.3)')};
   background-color: #fffdf5;
   gap: 0.5rem;
   padding: 0;
@@ -85,6 +86,14 @@ const GridContainer = styled.div`
   column-gap: 1vh;
   row-gap: 2vh;
   width: 100%;
+`;
+
+const BtnContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
 `;
 
 function ReviewPage() {
@@ -118,6 +127,10 @@ function ReviewPage() {
     setStarClicked(clickStates);
   };
 
+  const handleCancelButtonClick = () => {
+    console.log('버튼클릭');
+  };
+
   return (
     <ReviewPageContainer>
       <Container>
@@ -130,14 +143,14 @@ function ReviewPage() {
                   key={el}
                   onClick={() => handleStarClick(el)}
                   size="3.6rem"
-                  style={{ color: 'rgba(255, 137, 35)' }}
+                  style={{ color: 'rgba(255, 137, 35, 0.6)' }}
                 />
               ) : (
                 <AiOutlineStar
                   key={el}
                   onClick={() => handleStarClick(el)}
                   size="3.6rem"
-                  style={{ color: 'rgba(255, 137, 35)' }}
+                  style={{ color: 'rgba(255, 137, 35, 0.6)' }}
                 />
               )
             )}
@@ -186,6 +199,11 @@ function ReviewPage() {
             />
           ))}
         </GridContainer>
+        <BtnContainer>
+          <StyledButton color="rgba(255, 137, 35, 0.6)" onClick={handleCancelButtonClick}>
+            취소
+          </StyledButton>
+        </BtnContainer>
       </Container>
     </ReviewPageContainer>
   );

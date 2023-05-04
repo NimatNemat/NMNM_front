@@ -284,12 +284,12 @@ function MainPage() {
               value={searchName}
               type="text"
               placeholder="검색어를 입력하세요."
-              style={{ width: '66%' }}
+              style={{ width: '50%' }}
               onChange={handleSearchName}
               background="#FFFFFF"
               border="0.1rem solid rgba(128, 128, 128, 0.3)"
               borderRadius="5rem"
-              padding="1.6rem 4.8rem"
+              padding="0.8rem 3.2rem"
               icon={<AiOutlineSearch />}
             />
             <TagContainer>

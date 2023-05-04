@@ -19,6 +19,9 @@ interface StyledInputProps {
   icon?: React.ReactNode;
 }
 const Input = styled.input<StyledInputProps>`
+  ::placeholder {
+    font-size: 1.4rem;
+  }
   display: flex;
   flex-direction: row;
   align-items: center;
