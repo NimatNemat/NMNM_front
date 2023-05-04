@@ -172,12 +172,6 @@ function MainPage() {
 
   // Modal 관련
   const modalRef = useRef<HTMLDivElement>(null);
-  const modalOutSideClick = (e: any) => {
-    if (modalRef.current === e.target) {
-      setShowModal(false);
-      setBlur(false);
-    }
-  };
   const handleModalData = (data: number) => {
     setModalData(data);
   };

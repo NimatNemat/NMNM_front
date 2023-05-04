@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { AiOutlineFrown, AiOutlineSmile, AiOutlineMeh, AiOutlineStar, AiFillStar } from 'react-icons/ai';
 import Styles from '../config/globalFontStyle.module.css';
@@ -94,6 +95,12 @@ const BtnContainer = styled.div`
   width: 100%;
   justify-content: flex-end;
   align-items: center;
+  gap: 1rem;
+`;
+
+const Btn = styled.div`
+  display: flex;
+  width: 20%;
 `;
 
 function ReviewPage() {
@@ -102,6 +109,7 @@ function ReviewPage() {
   const [starClicked, setStarClicked] = useState<boolean[]>([false, false, false, false, false]);
   const [uploadComponents, setUploadComponents] = useState<number[]>([0]);
 
+  const { id } = useParams<{ id: string }>();
   const handleEvaluationClickEvent = (evaluation: string) => {
     setSelectedEvaluation(evaluation);
   };
@@ -127,8 +135,9 @@ function ReviewPage() {
     setStarClicked(clickStates);
   };
 
+  const navigate = useNavigate();
   const handleCancelButtonClick = () => {
-    console.log('버튼클릭');
+    navigate(`/detail/${id}`);
   };
 
   return (
@@ -200,9 +209,16 @@ function ReviewPage() {
           ))}
         </GridContainer>
         <BtnContainer>
-          <StyledButton color="rgba(255, 137, 35, 0.6)" onClick={handleCancelButtonClick}>
-            취소
-          </StyledButton>
+          <Btn>
+            <StyledButton borderRadius="2rem" fontsize="1.6rem" onClick={handleCancelButtonClick}>
+              취소
+            </StyledButton>
+          </Btn>
+          <Btn>
+            <StyledButton borderRadius="2rem" fontsize="1.6rem" onClick={handleCancelButtonClick}>
+              완료
+            </StyledButton>
+          </Btn>
         </BtnContainer>
       </Container>
     </ReviewPageContainer>

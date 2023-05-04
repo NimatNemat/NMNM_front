@@ -195,7 +195,7 @@ function DetailPage() {
                 </Text>
                 <Text className={Styles.h5}>
                   <AiOutlineStar />
-                  <Link to="/review" style={{ textDecoration: 'none', color: 'black' }}>
+                  <Link to={`/review/${restaurant.restaurantId}`} style={{ textDecoration: 'none', color: 'black' }}>
                     평가하기
                   </Link>
                 </Text>
