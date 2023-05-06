@@ -59,7 +59,7 @@ function Header() {
               window.location.href = '/mypage';
             }}
           >
-            정보수정페이지
+            마이페이지
           </button>
           <button
             type="button"

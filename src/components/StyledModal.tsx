@@ -69,6 +69,9 @@ const TextBox = styled.div`
   align-items: center;
   width: 100%;
   flex-grow: 1;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 const ButtonBox = styled.div`
   display: flex;

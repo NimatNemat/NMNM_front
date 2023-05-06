@@ -2,15 +2,14 @@ import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { AiOutlineClose, AiOutlineArrowsAlt } from 'react-icons/ai';
-import StyledButton from './StyledButton';
 import Styles from '../config/globalFontStyle.module.css';
 
 const Container = styled.div`
   width: 100%;
 `;
-const Row = styled.div`
+const Col = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -65,12 +64,21 @@ const EnlargeIcon = styled.div`
   left: 0;
 `;
 
+const ImageCountDiv = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+`;
+
 interface ReviewImageUploadProps {
+  index: number;
   onUpload: () => void;
   onDelete: () => void;
 }
 
-function ReviewImageUpload({ onUpload, onDelete }: ReviewImageUploadProps) {
+function ReviewImageUpload({ index, onUpload, onDelete }: ReviewImageUploadProps) {
   const [fileURL, setFileURL] = useState<string>('/plus.png');
   const [file, setFile] = useState<FileList | null>(null);
   const [key, setKey] = useState<number>(0);
@@ -105,7 +113,7 @@ function ReviewImageUpload({ onUpload, onDelete }: ReviewImageUploadProps) {
 
   return (
     <Container>
-      <Row>
+      <Col>
         <ImgContainer
           onClick={(event) => {
             event.preventDefault();
@@ -126,8 +134,9 @@ function ReviewImageUpload({ onUpload, onDelete }: ReviewImageUploadProps) {
             </IconContainer>
           )}
         </ImgContainer>
-      </Row>
-      <Row>
+        <ImageCountDiv>{index}/3</ImageCountDiv>
+      </Col>
+      <Col>
         <input
           type="file"
           id="img"
@@ -138,7 +147,7 @@ function ReviewImageUpload({ onUpload, onDelete }: ReviewImageUploadProps) {
           onChange={onImageChange}
           style={{ display: 'none' }}
         />
-      </Row>
+      </Col>
     </Container>
   );
 }

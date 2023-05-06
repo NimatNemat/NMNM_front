@@ -16,8 +16,19 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 40%;
   gap: 2.4vh;
+  @media (max-width: 500px) {
+    width: 100%;
+  }
+  @media (min-width: 500px) {
+    width: 70%;
+  }
+  @media (min-width: 768px) {
+    width: 60%;
+  }
+  @media (min-width: 1024px) {
+    width: 50%;
+  }
 `;
 
 const Header = styled.div`
@@ -100,8 +111,10 @@ const BtnContainer = styled.div`
 
 const Btn = styled.div`
   display: flex;
-  width: 20%;
+  width: 25%;
 `;
+
+const MAX_UPLOAD_COMPONENTS = 3;
 
 function ReviewPage() {
   const [selectedEvaluation, setSelectedEvaluation] = useState<string>('맛있다'); // 간단평가항목 선택
@@ -120,10 +133,15 @@ function ReviewPage() {
 
   // Date.now()를 이용하여 현재 시간의 밀리초 단위로 표현된 고유한 숫자 값을 키값으로 사용
   const handleImageUpload = () => {
-    setUploadComponents((prevState) => [...prevState, Date.now()]);
+    if (uploadComponents.length < MAX_UPLOAD_COMPONENTS) {
+      setUploadComponents((prevState) => [...prevState, Date.now()]);
+    }
   };
   const handleImageDelete = (uniqueKey: number) => {
     setUploadComponents((prevState) => prevState.filter((key) => key !== uniqueKey));
+    if (uploadComponents.length === 1) {
+      handleImageUpload();
+    }
   };
 
   const starArray = [0, 1, 2, 3, 4];
@@ -200,9 +218,10 @@ function ReviewPage() {
           />
         </Content>
         <GridContainer>
-          {uploadComponents.map((uniqueKey) => (
+          {uploadComponents.map((uniqueKey, index) => (
             <ReviewImageUpload
               key={uniqueKey}
+              index={index + 1}
               onUpload={handleImageUpload}
               onDelete={() => handleImageDelete(uniqueKey)}
             />
