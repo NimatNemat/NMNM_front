@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 import { BsBookmark, BsBookmarkFill, BsFillHeartFill, BsHeart } from 'react-icons/bs';
 import Styles from '../config/globalFontStyle.module.css';
 
@@ -76,9 +77,19 @@ function StyledCard(props: StyledCardProps) {
   const { imgSrc, likes, name, category, hashtag, showIconBox, width, id, openModal, setModalData, icon } = props;
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
-
+  const likefunction = async () => {
+    const formData = new FormData();
+    formData.append('restaurantId', id.toString());
+    try {
+      const response = await axios.post('/likes/like', formData);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleLikeClick: React.MouseEventHandler<SVGElement> = (event) => {
     event.preventDefault();
+    likefunction();
     setLiked(!liked);
   };
   const handleBookmarkClick: React.MouseEventHandler<SVGElement> = (event) => {
