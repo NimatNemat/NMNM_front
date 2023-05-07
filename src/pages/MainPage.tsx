@@ -336,7 +336,8 @@ function MainPage() {
                     onChange={searchUser}
                     borderRadius="0.4rem"
                     padding="0.8rem"
-                    style={{ width: '15%' }}
+                    style={{ width: '20%' }}
+                    divWidth="none"
                   />
                 ) : (
                   <StyledTag text="+" onClick={toggleSearchInput} />
