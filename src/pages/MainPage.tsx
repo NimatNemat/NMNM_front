@@ -30,12 +30,14 @@ const TagContainer = styled.div`
   gap: 1.6vh;
   width: 100%;
   align-items: flex-start;
+  justify-content: flex-start;
 `;
 
 const TagListContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+  justify-content: flex-start;
   gap: 5px;
   width: 100%;
   @media (max-width: 566px) {
@@ -133,6 +135,9 @@ function MainPage() {
   const [selectedLabel, setSelectedLabel] = useState<string>('진정한 한국인의 추천리스트');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [searchName, setSearchName] = useState<string>('');
+  const [searchUserID, setSearchUserID] = useState<string>('');
+  const [showSearchInput, setShowSearchInput] = useState<boolean>(false);
+
   interface Restaurant {
     restaurantId: number;
     name: string;
@@ -157,6 +162,22 @@ function MainPage() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  // 사용자 아이디를 검색하는 로직 (함께먹기 부분)
+  const toggleSearchInput = () => {
+    setShowSearchInput(!showSearchInput);
+  };
+
+  const searchUser = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchUserID(event.target.value);
+    // 사용자 아이디 검색하는 로직
+  };
+
+  const addUserTag = (userId: string) => {
+    // 사용자 아이디를 태그에 추가하는 로직
+    // 예: setSelectedTags([...selectedTags, userId]);
+    setShowSearchInput(false);
+  };
 
   const handleSearchName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchName(event.target.value);
@@ -305,8 +326,21 @@ function MainPage() {
                 함께먹기
               </div>
               <TagListContainer>
-                <StyledTag imgSrc={icons('./korea.png')} text="한식" />
-                <StyledTag text="+" />
+                {showSearchInput ? (
+                  <StyledInput
+                    value={searchUserID}
+                    type="text"
+                    placeholder="아이디를 검색하세요"
+                    background="#FFFBEF"
+                    border="0.1rem solid rgba(128, 128, 128, 0.3)"
+                    onChange={searchUser}
+                    borderRadius="0.4rem"
+                    padding="0.8rem"
+                    style={{ width: '15%' }}
+                  />
+                ) : (
+                  <StyledTag text="+" onClick={toggleSearchInput} />
+                )}
               </TagListContainer>
             </TagContainer>
             <GridHeaderContainer>

@@ -112,6 +112,7 @@ const Styeldselect = styled.select`
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding: 0.2rem 0;
   text-align: left;
   width: 100%;
   border: none;
@@ -178,7 +179,7 @@ function StyledModal(props: ModalProps) {
             border="none"
             borderBottom="1px solid #6E6E6E"
             background="#FFFFFF"
-            padding="0"
+            padding="0.2rem 0"
           />
         </RowDiv>
         <RowDiv>
