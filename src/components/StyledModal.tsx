@@ -17,24 +17,21 @@ interface ModalRowProps {
 }
 
 const ModalWrapper = styled.div<{ show: boolean }>`
-  display: ${(props) => (props.show ? 'flex' : 'none')};
   position: fixed;
-  z-index: 1;
-  left: 50%;
-  top: 50%;
-  width: 25%;
-  min-width: 36rem;
-  transform: translate(-50%, -50%);
-  overflow: auto;
-  background-color: #ffffff;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 4rem;
-  padding-bottom: 4rem;
 `;
 const ModalContent = styled.div`
   display: flex;
-  width: 80%;
+  width: 30%;
+  background-color: white;
+  padding: 4rem;
   justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
