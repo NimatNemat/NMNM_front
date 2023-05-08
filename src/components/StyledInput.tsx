@@ -17,7 +17,9 @@ interface StyledInputProps {
   style?: React.CSSProperties;
   borderRadius?: string;
   icon?: React.ReactNode;
+  divWidth?: string;
 }
+
 const Input = styled.input<StyledInputProps>`
   ::placeholder {
     font-size: 1.4rem;
@@ -31,8 +33,8 @@ const Input = styled.input<StyledInputProps>`
   padding: ${(props) => (props.padding === '1.6rem 1.6rem' ? '1.6rem 1.6rem' : props.padding)};
   border-radius: ${(props) => (props.borderRadius === '0' ? '0' : props.borderRadius)};
 `;
-const Div = styled.div`
-  width: 100%;
+const Div = styled.div<Pick<StyledInputProps, 'divWidth'>>`
+  width: ${(props) => (props.divWidth ? props.divWidth : '100%')};
   display: flex;
   justify-content: center;
   align-items: stretch;
@@ -71,9 +73,10 @@ function StyledInput(props: StyledInputProps) {
     style,
     borderRadius,
     icon,
+    divWidth,
   } = props;
   return (
-    <Div className={Styles.p1bold}>
+    <Div className={Styles.p1bold} divWidth={divWidth}>
       <InputWrapper>
         <Input
           className={Styles.p1regular}
@@ -106,6 +109,7 @@ StyledInput.defaultProps = {
   style: { width: '60rem' },
   borderRadius: 0,
   icon: null,
+  divWidth: '100%',
 };
 
 export default StyledInput;
