@@ -60,6 +60,62 @@ const PlusIcon = styled(AiFillPlusCircle)`
 `;
 
 function PlayListPage() {
+  interface Restaurant {
+    _id: {
+      timestamp: number;
+      date: string;
+    };
+    restaurantId: number;
+    name: string;
+    cuisineType: string;
+    avgPreference: number;
+    address: string;
+    roadAddress: string;
+    number: string;
+    businessHours: string;
+    tags: string[][];
+    imageFile: {
+      timestamp: number;
+      date: string;
+    };
+    menu: string[][];
+    peculiarTaste: null;
+    likeUserList: string[];
+    imageUrl: string;
+    xposition: number;
+    yposition: number;
+  }
+  const restaurant: Restaurant = {
+    _id: {
+      timestamp: 1627665600,
+      date: '2021-07-30T00:00:00.000Z',
+    },
+    restaurantId: 1,
+    name: '맛집1',
+    cuisineType: '한식',
+    avgPreference: 4.5,
+    address: '서울특별시 강남구 역삼동 123-45',
+    roadAddress: '서울특별시 강남구 테헤란로 123-45',
+    number: '02-123-4567',
+    businessHours: '10:00 ~ 22:00',
+    tags: [
+      ['#태그1', '#태그2', '#태그3'],
+      ['#태그4', '#태그5', '#태그6'],
+    ],
+    imageFile: {
+      timestamp: 1627665600,
+      date: '2021-07-30T00:00:00.000Z',
+    },
+    menu: [
+      ['메뉴1', '메뉴2', '메뉴3'],
+      ['메뉴4', '메뉴5', '메뉴6'],
+    ],
+    peculiarTaste: null,
+    likeUserList: ['user1', 'user2', 'user3'],
+    imageUrl: 'https://picsum.photos/200',
+    xposition: 37.123456,
+    yposition: 127.123456,
+  };
   return (
     <PlayListPageContainer>
       <Container>
@@ -71,9 +127,9 @@ function PlayListPage() {
               <div style={{ color: '#9B9B9B' }}>맛집 추가하기</div>
             </CardContent>
           </Card>
-          <StyledCard imgSrc="" name="가츠시" showIconBox={false} id={2} icon={<FiMoreHorizontal size="2.4rem" />} />
-          <StyledCard imgSrc="" name="가츠시" showIconBox={false} id={3} icon={<FiMoreHorizontal size="2.4rem" />} />
-          <StyledCard imgSrc="" name="가츠시" showIconBox={false} id={4} icon={<FiMoreHorizontal size="2.4rem" />} />
+          <StyledCard restaurant={restaurant} showIconBox={false} icon={<FiMoreHorizontal size="2.4rem" />} />
+          <StyledCard restaurant={restaurant} showIconBox={false} icon={<FiMoreHorizontal size="2.4rem" />} />
+          <StyledCard restaurant={restaurant} showIconBox={false} icon={<FiMoreHorizontal size="2.4rem" />} />
         </GridContainer>
       </Container>
     </PlayListPageContainer>
