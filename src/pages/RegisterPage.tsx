@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import StyledInput from '../components/StyledInput';
@@ -219,14 +219,47 @@ function RegisterPage() {
       });
       if (resposne.status === 200 || resposne.status === 201) {
         alert('회원가입이 완료되었습니다.');
-        window.location.href = '/main';
-        sessionStorage.setItem('isAuthenticated', 'true');
+        Loginfunction();
       } else {
         alert('회원가입에 실패하였습니다.');
       }
     } catch (error) {
       alert('빈칸을 올바르게 입력하세요.');
     }
+  };
+  const navigate = useNavigate();
+  const fetchuser = async () => {
+    try {
+      const response = await axios.get(`/users/userId`);
+      sessionStorage.setItem('userId', response.data.userId);
+    } catch (error) {
+      console.error('Error fetching data', error);
+    }
+  };
+  const loginUser = async (formData: FormData) => {
+    try {
+      const response = await axios.post('/users/login', formData);
+      if (response.status === 200) {
+        navigate('/main/');
+        // Token 설정
+        axios.defaults.headers.common.Authorization = `Bearer ${response.data}`;
+        sessionStorage.setItem('token', `Bearer ${response.data}`);
+        sessionStorage.setItem('isAuthenticated', 'true');
+        fetchuser();
+      } else {
+        alert('아이디, 비밀번호를 다시 한번 확인하세요.');
+      }
+    } catch (error) {
+      alert('아이디, 비밀번호를 다시 한번 확인하세요.');
+    }
+  };
+  const Loginfunction = () => {
+    const formData = new FormData();
+
+    formData.append('userId', id);
+    formData.append('password', password);
+
+    loginUser(formData);
   };
   return (
     <RegisterPageContainer>

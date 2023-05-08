@@ -9,12 +9,29 @@ import StyledCard from '../components/StyledCard';
 import ReviewComponent from '../components/ReviewComponent';
 
 interface Restaurant {
+  _id: {
+    timestamp: number;
+    date: string;
+  };
   restaurantId: number;
   name: string;
   cuisineType: string;
-  tags: string[];
+  avgPreference: number;
+  address: string;
+  roadAddress: string;
+  number: string;
+  businessHours: string;
+  tags: string[][];
+  imageFile: {
+    timestamp: number;
+    date: string;
+  };
+  menu: string[][];
+  peculiarTaste: null;
+  likeUserList: string[];
   imageUrl: string;
-  likeCount: number;
+  xposition: number;
+  yposition: number;
 }
 const MypageContainer = styled.div`
   display: flex;
@@ -156,6 +173,8 @@ function Mypage() {
     fetchData();
   }, []);
 
+  const userId = sessionStorage.getItem('userId');
+
   return (
     <MypageContainer>
       <Container>
@@ -222,8 +241,10 @@ function Mypage() {
         ) : null}
         {isLoaded && tab === 2 ? (
           <GridContainer>
-            {restaurants.map((restaurant: any, index) =>
-              index < renderCnt ? <StyledCard restaurant={restaurant} /> : null
+            {restaurants.map((restaurant: Restaurant, index) =>
+              index < renderCnt && userId && restaurant.likeUserList && restaurant.likeUserList.includes(userId) ? (
+                <StyledCard restaurant={restaurant} />
+              ) : null
             )}
           </GridContainer>
         ) : null}

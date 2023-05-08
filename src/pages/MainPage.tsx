@@ -78,6 +78,7 @@ const icons = require.context('../assets/icons', true);
 const options = [
   { value: 'reco1', label: '진정한 한국인의 추천리스트' },
   { value: 'reco2', label: '당신만을 위한 추천리스트' },
+  { value: 'all', label: '니맛내맛 전체 식당리스트' },
 ];
 
 const customStyles = {
@@ -128,7 +129,7 @@ function MainPage() {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalData, setModalData] = useState<number>(0);
   const [blur, setBlur] = useState<boolean>(false);
-  const [selected, setSelected] = useState<string>('reco1');
+  const [selected, setSelected] = useState<string>('all');
   const [postsPerPage, setPostsPerPage] = useState<number>(12);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [currentRestaurant, setCurrentRestaurant] = useState<Restaurant[]>([]);
@@ -169,8 +170,19 @@ function MainPage() {
   const fetchData = async () => {
     setIsLoaded(false);
     try {
-      const response = await axios.get(`/restaurant/all`);
+      let response;
+      if (selected === 'all') {
+        response = await axios.get(`/restaurant/all`);
+      } else if (selected === 'reco1') {
+        const userId = sessionStorage.getItem('userId');
+        response = await axios.get(`/recommended/${userId}/first`);
+        // setRestaurants(response.data);
+      } else {
+        response = await axios.get('/recommend/second');
+        // setRestaurants(response.data);
+      }
       setRestaurants(response.data);
+      console.log(response.data);
       setIsLoaded(true);
     } catch (error) {
       console.error('Error fetching data', error);
@@ -179,8 +191,12 @@ function MainPage() {
   };
 
   useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common.Authorization = token;
+    }
     fetchData();
-  }, []);
+  }, [selected]);
 
   // 사용자 아이디를 검색하는 로직 (함께먹기 부분)
   const toggleSearchInput = () => {
@@ -275,7 +291,7 @@ function MainPage() {
     setCurrentRestaurant(currentPosts(filteredRestaurants));
   }, [currentPage, filteredRestaurants]);
   // 추천 방식 1에 해당하는 레스토랑
-  const showFirstRecoBox = () => {
+  const showAllRestaurant = () => {
     return (
       <>
         <GridContainer>
@@ -347,8 +363,8 @@ function MainPage() {
                     onChange={searchUser}
                     borderRadius="0.4rem"
                     padding="0.8rem"
-                    style={{ width: '20%' }}
-                    divWidth="none"
+                    style={{ width: '100%' }}
+                    divWidth="9%"
                   />
                 ) : (
                   <StyledTag text="+" onClick={toggleSearchInput} />
@@ -367,7 +383,7 @@ function MainPage() {
                 }}
               />
             </GridHeaderContainer>
-            {selected === 'reco1' ? showFirstRecoBox() : null}
+            {selected === 'all' ? showAllRestaurant() : null}
           </ListContainer>
         </Container>
       </MainPageContainer>
