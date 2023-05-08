@@ -215,13 +215,7 @@ function Mypage() {
             </Card>
             {restaurants.map((restaurant: any, index) =>
               index < renderCnt - 1 ? (
-                <StyledCard
-                  imgSrc=""
-                  name="가츠시"
-                  showIconBox={false}
-                  id={2}
-                  icon={<FiMoreHorizontal size="2.4rem" />}
-                />
+                <StyledCard restaurant={restaurant} icon={<FiMoreHorizontal size="2.4rem" />} />
               ) : null
             )}
           </GridContainer>
@@ -229,17 +223,7 @@ function Mypage() {
         {isLoaded && tab === 2 ? (
           <GridContainer>
             {restaurants.map((restaurant: any, index) =>
-              index < renderCnt ? (
-                <StyledCard
-                  key={restaurant.restaurantId}
-                  imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
-                  likes={restaurant.likeCount}
-                  name={restaurant.name}
-                  category={restaurant.cuisineType}
-                  hashtag={restaurant.tags ? restaurant.tags.slice(0, 3).join(' ') : ''}
-                  id={restaurant.restaurantId}
-                />
-              ) : null
+              index < renderCnt ? <StyledCard restaurant={restaurant} /> : null
             )}
           </GridContainer>
         ) : null}

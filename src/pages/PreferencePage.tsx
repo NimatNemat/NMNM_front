@@ -180,7 +180,7 @@ function PreferencePage() {
 
         <Content>
           <StaylistSlider num={3}>
-            <StyledCard
+            {/* <StyledCard
               imgSrc={data.imgSrc}
               likes={data.likes}
               name={data.name}
@@ -199,6 +199,7 @@ function PreferencePage() {
               id={data.id}
             />
             <StyledCard
+
               imgSrc={data.imgSrc}
               likes={data.likes}
               name={data.name}
@@ -206,7 +207,7 @@ function PreferencePage() {
               hashtag={data.hashtag ? data.hashtag.slice(0, 3).join(' ') : ''}
               id={data.id}
               showIconBox={false}
-            />
+            /> */}
           </StaylistSlider>
         </Content>
         <BtnContainer>

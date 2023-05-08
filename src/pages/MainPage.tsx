@@ -139,15 +139,33 @@ function MainPage() {
   const [showSearchInput, setShowSearchInput] = useState<boolean>(false);
 
   interface Restaurant {
+    _id: {
+      timestamp: number;
+      date: string;
+    };
     restaurantId: number;
     name: string;
     cuisineType: string;
-    tags: string[];
+    avgPreference: number;
+    address: string;
+    roadAddress: string;
+    number: string;
+    businessHours: string;
+    tags: string[][];
+    imageFile: {
+      timestamp: number;
+      date: string;
+    };
+    menu: string[][];
+    peculiarTaste: null;
+    likeUserList: string[];
     imageUrl: string;
-    likeCount: number;
+    xposition: number;
+    yposition: number;
   }
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+
   const fetchData = async () => {
     setIsLoaded(false);
     try {
@@ -159,6 +177,7 @@ function MainPage() {
       setIsLoaded(false);
     }
   };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -230,7 +249,6 @@ function MainPage() {
       setSelectedTags([...selectedTags, tag]);
     }
   };
-
   // 태그 변경시마다 페이지를 1로 초기화
   useEffect(() => {
     setCurrentPage(1);
@@ -253,11 +271,9 @@ function MainPage() {
 
     return filtered;
   }, [restaurants, selectedTags, searchName]);
-
   useEffect(() => {
     setCurrentRestaurant(currentPosts(filteredRestaurants));
   }, [currentPage, filteredRestaurants]);
-
   // 추천 방식 1에 해당하는 레스토랑
   const showFirstRecoBox = () => {
     return (
@@ -266,15 +282,10 @@ function MainPage() {
           {isLoaded ? (
             currentRestaurant.map((restaurant) => (
               <StyledCard
-                key={restaurant.restaurantId}
-                imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
-                likes={restaurant.likeCount}
-                name={restaurant.name}
-                category={restaurant.cuisineType}
-                hashtag={restaurant.tags ? restaurant.tags.slice(0, 3).join(' ') : ''}
-                id={restaurant.restaurantId}
+                restaurant={restaurant}
                 setModalData={handleModalData}
                 openModal={openModal}
+                key={restaurant.restaurantId}
               />
             ))
           ) : (

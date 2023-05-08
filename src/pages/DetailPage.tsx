@@ -121,29 +121,31 @@ function DetailPage() {
   const { id } = useParams<{ id: string }>();
 
   interface Restaurant {
+    _id: {
+      timestamp: number;
+      date: string;
+    };
     restaurantId: number;
     name: string;
-    xposition: number;
-    yposition: number;
     cuisineType: string;
     avgPreference: number;
     address: string;
     roadAddress: string;
     number: string;
     businessHours: string;
-    tags: [string];
+    tags: string[][];
+    imageFile: {
+      timestamp: number;
+      date: string;
+    };
+    menu: string[][];
+    peculiarTaste: null;
+    likeUserList: string[];
     imageUrl: string;
-    menu: [[string, string]];
+    xposition: number;
+    yposition: number;
   }
   const [restaurant, setRestaurant] = useState<Restaurant>({} as Restaurant);
-
-  const data = {
-    likes: 5,
-    name: '가츠시',
-    category: '일식',
-    hashtag: '돈까스, 우동',
-    id: 1,
-  };
 
   const fetchData = async () => {
     setIsLoaded(false);
@@ -174,8 +176,8 @@ function DetailPage() {
                 </Text>
               </Rowcenterbox>
               <Rowcenterbox style={{ gap: '5px' }}>
-                {restaurant.tags?.map((tag) => (
-                  <Text className={Styles.p2bold} key={tag}>
+                {restaurant.tags?.map((tag, index) => (
+                  <Text className={Styles.p2bold} key={tag.toString()}>
                     {tag}
                   </Text>
                 ))}
@@ -291,66 +293,12 @@ function DetailPage() {
               </Title>
               <Box>
                 <StaylistSlider num={1}>
-                  <StyledCard
-                    imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
-                    likes={data.likes}
-                    name={data.name}
-                    category={data.category}
-                    hashtag={data.hashtag}
-                    showIconBox={false}
-                    id={data.id}
-                    width="100%"
-                  />
-                  <StyledCard
-                    imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
-                    likes={data.likes}
-                    name={data.name}
-                    category={data.category}
-                    hashtag={data.hashtag}
-                    showIconBox={false}
-                    id={data.id}
-                    width="100%"
-                  />
-                  <StyledCard
-                    imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
-                    likes={data.likes}
-                    name={data.name}
-                    category={data.category}
-                    hashtag={data.hashtag}
-                    showIconBox={false}
-                    id={data.id}
-                    width="100%"
-                  />
-                  <StyledCard
-                    imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
-                    likes={data.likes}
-                    name={data.name}
-                    category={data.category}
-                    hashtag={data.hashtag}
-                    showIconBox={false}
-                    id={data.id}
-                    width="100%"
-                  />
-                  <StyledCard
-                    imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
-                    likes={data.likes}
-                    name={data.name}
-                    category={data.category}
-                    hashtag={data.hashtag}
-                    showIconBox={false}
-                    id={data.id}
-                    width="100%"
-                  />
-                  <StyledCard
-                    imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
-                    likes={data.likes}
-                    name={data.name}
-                    category={data.category}
-                    hashtag={data.hashtag}
-                    showIconBox={false}
-                    id={data.id}
-                    width="100%"
-                  />
+                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
+                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
+                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
+                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
+                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
+                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
                 </StaylistSlider>
               </Box>
             </Content>
