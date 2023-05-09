@@ -364,7 +364,7 @@ function MainPage() {
                     borderRadius="0.4rem"
                     padding="0.8rem"
                     style={{ width: '100%' }}
-                    divWidth="9%"
+                    divWidth="13rem"
                   />
                 ) : (
                   <StyledTag text="+" onClick={toggleSearchInput} />
