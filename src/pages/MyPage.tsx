@@ -145,6 +145,7 @@ function Mypage() {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [tab, setTab] = useState<number>(0);
   const [renderCnt, setRenderCnt] = useState<number>(12);
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
 
   const { id } = useParams<{ id: string }>();
   const userId = sessionStorage.getItem('userId');
@@ -178,6 +179,38 @@ function Mypage() {
     fetchData();
   }, []);
 
+  const toggleIsFollowing = () => {
+    setIsFollowing(!isFollowing);
+  };
+
+  let button;
+
+  if (userId === id) {
+    button = (
+      <StyledButton
+        padding="0.8rem"
+        borderRadius="0.4rem"
+        onClick={() => {
+          window.location.href = '/modify';
+        }}
+      >
+        <div className={Styles.p2bold}>프로필 편집</div>
+      </StyledButton>
+    );
+  } else if (isFollowing) {
+    button = (
+      <StyledButton padding="0.8rem" borderRadius="0.4rem" onClick={toggleIsFollowing}>
+        <div className={Styles.p2bold}>팔로잉</div>
+      </StyledButton>
+    );
+  } else {
+    button = (
+      <StyledButton padding="0.8rem" borderRadius="0.4rem" onClick={toggleIsFollowing}>
+        <div className={Styles.p2bold}>팔로우</div>
+      </StyledButton>
+    );
+  }
+
   return (
     <MypageContainer>
       <Container>
@@ -188,18 +221,7 @@ function Mypage() {
           <Infocontent>
             <Row>
               <div className={Styles.p1bold}>s__smin0515</div>
-              {userId === id ? (
-                <div>
-                  <StyledButton
-                    padding="0.8rem"
-                    onClick={() => {
-                      window.location.href = '/modify';
-                    }}
-                  >
-                    <div className={Styles.p2bold}>프로필 편집</div>
-                  </StyledButton>
-                </div>
-              ) : null}
+              {button}
             </Row>
             <Row>
               <div className={Styles.p2bold}>작성한 리뷰 9</div>

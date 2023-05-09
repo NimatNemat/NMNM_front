@@ -182,6 +182,7 @@ function StyledCard(props: StyledCardProps) {
               <span className={Styles.p1bold}>{restaurant?.name}</span>
               {icon && <div>{icon}</div>}
             </InfoName>
+            <span className={Styles.p2medium}>{restaurant?.cuisineType}</span>
             <span className={Styles.p2medium}>
               {restaurant.tags
                 ? restaurant?.tags
