@@ -45,7 +45,7 @@ export default function Router() {
             <Route path="/main/*" element={<Main />} />
             <Route path="/playlistpage/*" element={<PlayListPage />} />
             <Route path="/detail/:id" element={<DetailPage />} />
-            <Route path="/mypage/*" element={<Mypage />} />
+            <Route path="/mypage/:id" element={<Mypage />} />
             <Route path="/modify/*" element={<ModifyPage />} />
             <Route path="/review/:id" element={<ReviewPage />} />
           </Route>

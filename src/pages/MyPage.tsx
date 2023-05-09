@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { FiMoreHorizontal } from 'react-icons/fi';
 import { AiFillPlusCircle } from 'react-icons/ai';
@@ -144,6 +145,10 @@ function Mypage() {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [tab, setTab] = useState<number>(0);
   const [renderCnt, setRenderCnt] = useState<number>(12);
+
+  const { id } = useParams<{ id: string }>();
+  const userId = sessionStorage.getItem('userId');
+
   const ClickReview = () => {
     setTab(0);
     setRenderCnt(12);
@@ -173,8 +178,6 @@ function Mypage() {
     fetchData();
   }, []);
 
-  const userId = sessionStorage.getItem('userId');
-
   return (
     <MypageContainer>
       <Container>
@@ -185,16 +188,18 @@ function Mypage() {
           <Infocontent>
             <Row>
               <div className={Styles.p1bold}>s__smin0515</div>
-              <div>
-                <StyledButton
-                  padding="0.8rem"
-                  onClick={() => {
-                    window.location.href = '/modify';
-                  }}
-                >
-                  <div className={Styles.p2bold}>프로필 편집</div>
-                </StyledButton>
-              </div>
+              {userId === id ? (
+                <div>
+                  <StyledButton
+                    padding="0.8rem"
+                    onClick={() => {
+                      window.location.href = '/modify';
+                    }}
+                  >
+                    <div className={Styles.p2bold}>프로필 편집</div>
+                  </StyledButton>
+                </div>
+              ) : null}
             </Row>
             <Row>
               <div className={Styles.p2bold}>작성한 리뷰 9</div>

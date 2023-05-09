@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Styles from '../config/globalFontStyle.module.css';
 
@@ -29,6 +29,7 @@ const StyledImg = styled.img`
 
 function Header() {
   const location = useLocation();
+  const navigate = useNavigate();
   const isAuthenticated = sessionStorage.getItem('isAuthenticated');
   if (location.pathname === '/') return null;
   return (
@@ -56,7 +57,8 @@ function Header() {
               cursor: 'pointer',
             }}
             onClick={() => {
-              window.location.href = '/mypage';
+              const id = sessionStorage.getItem('userId');
+              navigate(`/mypage/${id}`);
             }}
           >
             마이페이지
@@ -71,6 +73,7 @@ function Header() {
               cursor: 'pointer',
             }}
             onClick={() => {
+              sessionStorage.clear();
               sessionStorage.setItem('isAuthenticated', 'false');
               alert('로그아웃 되었습니다.');
               window.location.href = '/';
