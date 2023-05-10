@@ -3,8 +3,9 @@ import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 
-import { AiOutlineShareAlt, AiOutlineHeart, AiOutlineStar, AiOutlineBulb, AiOutlineClockCircle } from 'react-icons/ai';
+import { AiOutlineShareAlt, AiOutlineStar, AiOutlineBulb, AiOutlineClockCircle, AiFillSignal } from 'react-icons/ai';
 import { BsBookmark, BsBookmarkFill, BsFillHeartFill, BsHeart } from 'react-icons/bs';
+import { FiSlash } from 'react-icons/fi';
 import Map from '../components/Map';
 import StyledCard from '../components/StyledCard';
 import Styles from '../config/globalFontStyle.module.css';
@@ -228,30 +229,30 @@ function DetailPage() {
                       <div>좋아요</div>
                     </Icon>
                   ) : (
-                    <Icon onClick={likefunction}>
+                    <Icon onClick={likefunction} className={Styles.h5}>
                       <BsHeart />
                       <div>좋아요</div>
                     </Icon>
                   )}
                 </Text>
-                <Text className={Styles.h5}>
-                  <AiOutlineStar />
+                <Icon className={Styles.h5}>
+                  <AiOutlineShareAlt />
                   <Link to="/" style={{ textDecoration: 'none', color: 'black' }}>
                     공유하기
                   </Link>
-                </Text>
-                <Text className={Styles.h5}>
+                </Icon>
+                <Icon className={Styles.h5}>
                   <AiOutlineStar />
                   <Link to={`/review/${restaurant.restaurantId}`} style={{ textDecoration: 'none', color: 'black' }}>
                     평가하기
                   </Link>
-                </Text>
-                <Text className={Styles.h5}>
-                  <AiOutlineStar />
+                </Icon>
+                <Icon className={Styles.h5}>
+                  <FiSlash />
                   <Link to="/" style={{ textDecoration: 'none', color: 'black' }}>
                     안볼래요
                   </Link>
-                </Text>
+                </Icon>
               </Rowcenterbox>
             </Content>
           </Section>
