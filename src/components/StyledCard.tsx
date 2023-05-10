@@ -88,9 +88,15 @@ const InfoBox = styled.div`
 const InfoName = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
+`;
+
+const InfoHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 const StyledLink = styled(Link)`
   text-decoration: none;
@@ -191,14 +197,14 @@ function StyledCard(props: StyledCardProps) {
               <IconBox>
                 <Icon>
                   {liked ? (
-                    <BsFillHeartFill size="2.4rem" color="red" onClick={unlikefunction} />
+                    <BsFillHeartFill size="2.4rem" color="#FF7B69" onClick={unlikefunction} />
                   ) : (
                     <BsHeart size="2.4rem" onClick={likefunction} />
                   )}
                 </Icon>
                 <Icon>
                   {bookmarked ? (
-                    <BsBookmarkFill size="2.4rem" color="#FF7B69" onClick={handleBookmarkClick} />
+                    <BsBookmarkFill size="2.4rem" color="rgba(255, 137, 35, 0.8)" onClick={handleBookmarkClick} />
                   ) : (
                     <BsBookmark size="2.4rem" onClick={handleBookmarkClick} />
                   )}
@@ -208,7 +214,14 @@ function StyledCard(props: StyledCardProps) {
           )}
           <InfoBox>
             <InfoName>
-              <span className={Styles.p1bold}>{restaurant?.name}</span>
+              <InfoHeader>
+                <span className={Styles.p1bold}>{restaurant?.name}&nbsp;&nbsp;</span>
+                {restaurant?.avgPreference !== 0 ? (
+                  <span className={Styles.h4} style={{ color: 'rgba(255, 137, 35, 0.8)' }}>
+                    {restaurant?.avgPreference.toFixed(1)}
+                  </span>
+                ) : null}
+              </InfoHeader>
               {icon && <div>{icon}</div>}
             </InfoName>
             <span className={Styles.p2medium}>{restaurant?.cuisineType}</span>

@@ -178,7 +178,7 @@ function MainPage() {
         response = await axios.get(`/recommended/${userId}/first`);
         // setRestaurants(response.data);
       } else {
-        response = await axios.get('/recommend/second');
+        response = await axios.get('/recommended/second');
         // setRestaurants(response.data);
       }
       setRestaurants(response.data);
