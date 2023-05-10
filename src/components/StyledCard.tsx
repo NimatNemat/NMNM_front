@@ -46,7 +46,6 @@ const Card = styled.div<{ width?: string }>`
   width: ${({ width }) => (width === '100%' ? '100%' : width)};
   height: 100%;
   background: #ffffff;
-  box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
 `;
 
 const CardImage = styled.img`
@@ -91,6 +90,28 @@ const InfoName = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+`;
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: black;
+  transition: transform 0.3s ease;
+  box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+  :hover {
+    cursor: pointer;
+    transform: translateY(-5px);
+    box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.3);
+  }
+`;
+const Icon = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  transition: transform 0.3s ease;
+  :hover {
+    cursor: pointer;
+    transform: translateY(-3px);
+  }
 `;
 
 function StyledCard(props: StyledCardProps) {
@@ -152,7 +173,7 @@ function StyledCard(props: StyledCardProps) {
   const [likeCount, setLikeCount] = useState<number>(restaurant.likeUserList ? restaurant.likeUserList.length : 0);
 
   return (
-    <Link to={`/detail/${restaurant.restaurantId}`} style={{ textDecoration: 'none', color: 'black' }}>
+    <StyledLink to={`/detail/${restaurant.restaurantId}`} style={{ textDecoration: 'none', color: 'black' }}>
       <Card width={width}>
         {restaurant.imageUrl === null ? (
           <CardImage src="/logo.png" alt="" />
@@ -164,16 +185,20 @@ function StyledCard(props: StyledCardProps) {
             <LikeBox>
               <span className={Styles.p2bold}>좋아요 {likeCount}</span>
               <IconBox>
-                {liked ? (
-                  <BsFillHeartFill size="2.4rem" color="red" onClick={unlikefunction} />
-                ) : (
-                  <BsHeart size="2.4rem" onClick={likefunction} />
-                )}
-                {bookmarked ? (
-                  <BsBookmarkFill size="2.4rem" color="#FF7B69" onClick={handleBookmarkClick} />
-                ) : (
-                  <BsBookmark size="2.4rem" onClick={handleBookmarkClick} />
-                )}
+                <Icon>
+                  {liked ? (
+                    <BsFillHeartFill size="2.4rem" color="red" onClick={unlikefunction} />
+                  ) : (
+                    <BsHeart size="2.4rem" onClick={likefunction} />
+                  )}
+                </Icon>
+                <Icon>
+                  {bookmarked ? (
+                    <BsBookmarkFill size="2.4rem" color="#FF7B69" onClick={handleBookmarkClick} />
+                  ) : (
+                    <BsBookmark size="2.4rem" onClick={handleBookmarkClick} />
+                  )}
+                </Icon>
               </IconBox>
             </LikeBox>
           )}
@@ -193,7 +218,7 @@ function StyledCard(props: StyledCardProps) {
           </InfoBox>
         </CardInfoBox>
       </Card>
-    </Link>
+    </StyledLink>
   );
 }
 

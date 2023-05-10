@@ -56,23 +56,23 @@ const StyledSlider = styled(Slider)`
   .slick-prev:before,
   .slick-next:before {
     font-size: 3rem;
-    color: #7b7777;
+    color: rgba(255, 137, 35, 0.6);
   }
 
   .slick-prev:hover,
   .slick-next:hover {
     opacity: 1;
-    color: #7b7777;
+    color: rgba(255, 137, 35, 0.6);
   }
 
   .slick-prev:hover:before,
   .slick-next:hover:before {
-    color: #7b7777;
+    color: rgba(255, 137, 35);
   }
   .slick-dots {
     bottom: 0px;
     li button:before {
-      color: #000000;
+      color: rgba(255, 137, 35);
       border-radius: 0px;
     }
   }

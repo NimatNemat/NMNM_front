@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -8,6 +8,7 @@ import StyledButton from '../components/StyledButton';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledCard from '../components/StyledCard';
 import ReviewComponent from '../components/ReviewComponent';
+import StyledModal from '../components/StyledModal';
 
 interface Restaurant {
   _id: {
@@ -141,6 +142,18 @@ const PlusIcon = styled(AiFillPlusCircle)`
 `;
 
 function Mypage() {
+  const modalRef = useRef<HTMLDivElement>(null);
+  const [modalData, setModalData] = useState<number>(0);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const handleModalData = (data: number) => {
+    setModalData(data);
+  };
+  const openModal = () => {
+    setShowModal(true);
+  };
+  const closeModal = () => {
+    setShowModal(false);
+  };
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [tab, setTab] = useState<number>(0);
@@ -179,92 +192,100 @@ function Mypage() {
   }, []);
 
   return (
-    <MypageContainer>
-      <Container>
-        <InfoContainer>
-          <Imgbox>
-            <Img src="/logo.png" />
-          </Imgbox>
-          <Infocontent>
-            <Row>
-              <div className={Styles.p1bold}>s__smin0515</div>
-              {userId === id ? (
-                <div>
-                  <StyledButton
-                    padding="0.8rem"
-                    onClick={() => {
-                      window.location.href = '/modify';
-                    }}
-                  >
-                    <div className={Styles.p2bold}>프로필 편집</div>
-                  </StyledButton>
-                </div>
-              ) : null}
-            </Row>
-            <Row>
-              <div className={Styles.p2bold}>작성한 리뷰 9</div>
-              <div className={Styles.p2bold}>팔로워 10</div>
-              <div className={Styles.p2bold}>팔로우 20</div>
-            </Row>
-            <Info>
-              <div className={Styles.p2regular}>안녕하세요. 저는 손성민 입니다.</div>
-            </Info>
-          </Infocontent>
-        </InfoContainer>
-        <Line />
-        <Row>
-          <Btn className={Styles.p1bold} onClick={ClickReview} clicked={tab === 0}>
-            작성한 리뷰
-          </Btn>
-          <Btn className={Styles.p1bold} onClick={ClickLike} clicked={tab === 1}>
-            맛플리
-          </Btn>
-          <Btn className={Styles.p1bold} onClick={ClickList} clicked={tab === 2}>
-            좋아요한 식당
-          </Btn>
-        </Row>
+    <>
+      <MypageContainer>
+        <Container>
+          <InfoContainer>
+            <Imgbox>
+              <Img src="/logo.png" />
+            </Imgbox>
+            <Infocontent>
+              <Row>
+                <div className={Styles.p1bold}>s__smin0515</div>
+                {userId === id ? (
+                  <div>
+                    <StyledButton
+                      padding="0.8rem"
+                      onClick={() => {
+                        window.location.href = '/modify';
+                      }}
+                    >
+                      <div className={Styles.p2bold}>프로필 편집</div>
+                    </StyledButton>
+                  </div>
+                ) : null}
+              </Row>
+              <Row>
+                <div className={Styles.p2bold}>작성한 리뷰 9</div>
+                <div className={Styles.p2bold}>팔로워 10</div>
+                <div className={Styles.p2bold}>팔로우 20</div>
+              </Row>
+              <Info>
+                <div className={Styles.p2regular}>안녕하세요. 저는 손성민 입니다.</div>
+              </Info>
+            </Infocontent>
+          </InfoContainer>
+          <Line />
+          <Row>
+            <Btn className={Styles.p1bold} onClick={ClickReview} clicked={tab === 0}>
+              작성한 리뷰
+            </Btn>
+            <Btn className={Styles.p1bold} onClick={ClickLike} clicked={tab === 1}>
+              맛플리
+            </Btn>
+            <Btn className={Styles.p1bold} onClick={ClickList} clicked={tab === 2}>
+              좋아요한 식당
+            </Btn>
+          </Row>
 
-        {isLoaded && tab === 0 ? (
-          <GridContainer>
-            {restaurants.map((restaurants: any, index) => (index < renderCnt ? <ReviewComponent /> : null))}
-          </GridContainer>
-        ) : null}
-        {isLoaded && tab === 1 ? (
-          <GridContainer>
-            <Card className={Styles.h3medium}>
-              <CardContent>
-                <PlusIcon />
-                <div style={{ color: '#9B9B9B' }}>맛집 추가하기</div>
-              </CardContent>
-            </Card>
-            {restaurants.map((restaurant: any, index) =>
-              index < renderCnt - 1 ? (
-                <StyledCard restaurant={restaurant} icon={<FiMoreHorizontal size="2.4rem" />} />
-              ) : null
-            )}
-          </GridContainer>
-        ) : null}
-        {isLoaded && tab === 2 ? (
-          <GridContainer>
-            {restaurants.map((restaurant: Restaurant, index) =>
-              index < renderCnt && userId && restaurant.likeUserList && restaurant.likeUserList.includes(userId) ? (
-                <StyledCard restaurant={restaurant} />
-              ) : null
-            )}
-          </GridContainer>
-        ) : null}
-        <StyledButton
-          color="#fffdf5"
-          onClick={() => {
-            setRenderCnt((prev) => prev + 12);
-          }}
-          fontsize="1.2rem"
-          padding="0.5rem 0"
-        >
-          더보기
-        </StyledButton>
-      </Container>
-    </MypageContainer>
+          {isLoaded && tab === 0 ? (
+            <GridContainer>
+              {restaurants.map((restaurants: any, index) => (index < renderCnt ? <ReviewComponent /> : null))}
+            </GridContainer>
+          ) : null}
+          {isLoaded && tab === 1 ? (
+            <GridContainer>
+              <Card className={Styles.h3medium}>
+                <CardContent>
+                  <PlusIcon />
+                  <div style={{ color: '#9B9B9B' }}>맛집 추가하기</div>
+                </CardContent>
+              </Card>
+              {restaurants.map((restaurant: any, index) =>
+                index < renderCnt - 1 ? (
+                  <StyledCard restaurant={restaurant} icon={<FiMoreHorizontal size="2.4rem" />} />
+                ) : null
+              )}
+            </GridContainer>
+          ) : null}
+          {isLoaded && tab === 2 ? (
+            <GridContainer>
+              {restaurants.map((restaurant: Restaurant, index) =>
+                index < renderCnt && userId && restaurant.likeUserList && restaurant.likeUserList.includes(userId) ? (
+                  <StyledCard
+                    restaurant={restaurant}
+                    setModalData={handleModalData}
+                    openModal={openModal}
+                    key={restaurant.restaurantId}
+                  />
+                ) : null
+              )}
+            </GridContainer>
+          ) : null}
+          <StyledButton
+            color="#fffdf5"
+            onClick={() => {
+              setRenderCnt((prev) => prev + 12);
+            }}
+            fontsize="1.2rem"
+            padding="0.5rem 0"
+          >
+            더보기
+          </StyledButton>
+        </Container>
+      </MypageContainer>
+      {showModal ? <StyledModal show={showModal} onClose={closeModal} data={modalData} modalRef={modalRef} /> : null}
+    </>
   );
 }
 

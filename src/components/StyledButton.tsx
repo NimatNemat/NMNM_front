@@ -26,6 +26,7 @@ const Btn = styled.button<StyledButtonProps>`
   justify-content: center;
   &:hover {
     cursor: pointer;
+    background-color: rgba(255, 137, 35, 0.8);
   }
 `;
 
