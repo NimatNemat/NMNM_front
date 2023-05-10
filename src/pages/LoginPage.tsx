@@ -72,7 +72,14 @@ function LoginPage() {
       alert('비밀번호를 입력해주세요.');
       return;
     }
-
+    if (idValue.length < 6) {
+      alert('아이디는 6자 이상이어야 합니다.');
+      return;
+    }
+    if (passwordValue.length < 8) {
+      alert('비밀번호는 8자 이상이어야 합니다.');
+      return;
+    }
     formData.append('userId', idValue);
     formData.append('password', passwordValue);
 

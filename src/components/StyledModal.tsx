@@ -209,7 +209,7 @@ function StyledModal(props: ModalProps) {
     );
   };
   return (
-    <ModalWrapper show={show} ref={modalRef}>
+    <ModalWrapper show={show} ref={modalRef} onClick={onClose}>
       <ModalContent onClick={(event) => event.stopPropagation()}>
         <ModalHeader>
           <span className={Styles.h3}>그룹선택</span>

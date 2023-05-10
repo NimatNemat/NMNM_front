@@ -13,10 +13,14 @@ const StyledDatePicker = styled(DatePicker)`
   padding: 0.8rem;
   background-color: rgba(255, 137, 35, 0.6);
   border: 1px solid #dfdfdf;
-  border-radius: 2rem;
+  border-radius: 1rem;
   color: white;
   &::placeholder {
     color: white;
+  }
+  :hover {
+    cursor: pointer;
+    background-color: rgba(255, 137, 35, 0.8);
   }
 `;
 

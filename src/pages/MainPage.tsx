@@ -233,19 +233,14 @@ function MainPage() {
   };
   const openModal = () => {
     setShowModal(true);
-    setBlur(true);
   };
   const closeModal = () => {
     setShowModal(false);
-    setBlur(false);
   };
-  const blurStyle = {
-    opacity: blur ? '0.5' : '1',
-    PointerEvents: blur ? 'none' : 'auto',
-  };
+
   useEffect(() => {
     const handleDocumentClick = (e: MouseEvent) => {
-      if (!modalRef.current?.contains(e.target as Node)) {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         closeModal();
       }
     };
@@ -319,7 +314,7 @@ function MainPage() {
 
   return (
     <>
-      <MainPageContainer className="MainPage" style={blurStyle}>
+      <MainPageContainer className="MainPage">
         <Container>
           <ListContainer>
             <StyledInput

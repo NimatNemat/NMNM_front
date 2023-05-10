@@ -37,7 +37,7 @@ export default function Router() {
           <Route element={<PrivateRoute authentication={false} />}>
             <Route path="/login/*" element={<LoginPage />} />
             <Route path="/idsearch/*" element={<IdsearchPage />} />
-            <Route path="/register/*" element={<RegisterPage />} />
+            <Route path="/register/:id" element={<RegisterPage />} />
           </Route>
 
           {/* 인증을 반드시 해야지만 접속 가능한 페이지 정의 */}

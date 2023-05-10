@@ -3,14 +3,8 @@ import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 
-import {
-  AiOutlineShareAlt,
-  AiOutlineHeart,
-  AiOutlineStar,
-  AiOutlineStop,
-  AiOutlineBulb,
-  AiOutlineClockCircle,
-} from 'react-icons/ai';
+import { AiOutlineShareAlt, AiOutlineHeart, AiOutlineStar, AiOutlineBulb, AiOutlineClockCircle } from 'react-icons/ai';
+import { BsBookmark, BsBookmarkFill, BsFillHeartFill, BsHeart } from 'react-icons/bs';
 import Map from '../components/Map';
 import StyledCard from '../components/StyledCard';
 import Styles from '../config/globalFontStyle.module.css';
@@ -75,13 +69,7 @@ const Rowcenterbox = styled.div`
   align-items: center;
   gap: 2vw;
 `;
-/* const Rowbox = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 0.5vw;
-  padding: 0.5vh;
-`; */
+
 const StyledImg = styled.img`
   width: 100%;
   height: 25vh;
@@ -116,6 +104,20 @@ const Flexbox = styled.div`
   overflow: auto;
   padding: 1vh 0 2vh 0;
 `;
+const Icon = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.3s ease;
+  gap: 0.5vw;
+  border: none;
+  background-color: white;
+  &:hover {
+    cursor: pointer;
+    transform: translateY(-3px);
+  }
+`;
 
 function DetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -146,16 +148,52 @@ function DetailPage() {
     yposition: number;
   }
   const [restaurant, setRestaurant] = useState<Restaurant>({} as Restaurant);
-
+  const [liked, setLiked] = useState<boolean>(false);
   const fetchData = async () => {
     setIsLoaded(false);
     const response = await axios.get(`/restaurant/${id}`);
     setRestaurant(response.data);
+    if (response.data.likeUserList) {
+      response.data.likeUserList.forEach((user: string) => {
+        if (user === sessionStorage.getItem('userId')) {
+          setLiked(true);
+        }
+      });
+    }
     setIsLoaded(true);
   };
   const [isLoaded, setIsLoaded] = useState(false);
   const [review, setReview] = useState<number>(3);
+  const likefunction: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append('restaurantId', restaurant?.restaurantId.toString() as never);
+    try {
+      const response = await axios.post('/likes/like', formData).then((res) => {
+        setLiked(true);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const unlikefunction: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append('restaurantId', restaurant.restaurantId.toString() as never);
+    try {
+      const response = await axios.post('/likes/unlike', formData);
+      setLiked(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common.Authorization = token;
+    }
     fetchData();
   }, []);
   return (
@@ -184,10 +222,17 @@ function DetailPage() {
               </Rowcenterbox>
               <Rowcenterbox>
                 <Text className={Styles.h5}>
-                  <AiOutlineStar />
-                  <Link to="/" style={{ textDecoration: 'none', color: 'black' }}>
-                    좋아요
-                  </Link>
+                  {liked ? (
+                    <Icon type="button" onClick={unlikefunction} className={Styles.h5}>
+                      <BsFillHeartFill color="red" />
+                      <div>좋아요</div>
+                    </Icon>
+                  ) : (
+                    <Icon onClick={likefunction}>
+                      <BsHeart />
+                      <div>좋아요</div>
+                    </Icon>
+                  )}
                 </Text>
                 <Text className={Styles.h5}>
                   <AiOutlineStar />
