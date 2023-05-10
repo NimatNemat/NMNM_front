@@ -36,6 +36,7 @@ interface StyledCardProps {
   width?: string;
   openModal?: () => void;
   setModalData?: (data: number) => void;
+  updateLikedRestaurant?: () => void;
   icon?: React.ReactNode;
 }
 
@@ -115,7 +116,7 @@ const Icon = styled.div`
 `;
 
 function StyledCard(props: StyledCardProps) {
-  const { restaurant, showIconBox, width, openModal, setModalData, icon } = props;
+  const { restaurant, showIconBox, width, openModal, setModalData, icon, updateLikedRestaurant } = props;
   const [bookmarked, setBookmarked] = useState(false);
   const [liked, setLiked] = useState<boolean>(false);
 
@@ -141,6 +142,9 @@ function StyledCard(props: StyledCardProps) {
       const response = await axios.post('/likes/unlike', formData);
       setLiked(false);
       setLikeCount((prev) => prev - 1);
+      if (updateLikedRestaurant) {
+        updateLikedRestaurant();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -228,6 +232,7 @@ StyledCard.defaultProps = {
   width: '100%',
   openModal: () => null,
   setModalData: () => null,
+  updateLikedRestaurant: () => null,
   icon: null,
   // restaurant: {
   //   _id: {

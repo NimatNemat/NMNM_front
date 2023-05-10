@@ -159,9 +159,11 @@ function Mypage() {
   const [tab, setTab] = useState<number>(0);
   const [renderCnt, setRenderCnt] = useState<number>(12);
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const [likedRestaurants, setLikedRestaurants] = useState<Restaurant[]>([]);
 
   const { id } = useParams<{ id: string }>();
   const userId = sessionStorage.getItem('userId');
+  let likedCount = 0;
 
   const ClickReview = () => {
     setTab(0);
@@ -182,6 +184,11 @@ function Mypage() {
       setRestaurants(response.data);
       setIsLoaded(true);
       console.log(response.data);
+
+      const liked = response.data.filter((restaurant: Restaurant) => {
+        return userId && restaurant.likeUserList && restaurant.likeUserList.includes(userId);
+      });
+      setLikedRestaurants(liked);
     } catch (error) {
       console.error('Error fetching data', error);
       setIsLoaded(false);
@@ -282,18 +289,31 @@ function Mypage() {
           ) : null}
           {isLoaded && tab === 2 ? (
             <GridContainer>
-              {restaurants.map((restaurant: Restaurant, index) =>
-                index < renderCnt && userId && restaurant.likeUserList && restaurant.likeUserList.includes(userId) ? (
-                  <StyledCard
-                    restaurant={restaurant}
-                    setModalData={handleModalData}
-                    openModal={openModal}
-                    key={restaurant.restaurantId}
-                  />
-                ) : null
-              )}
+              {(() => {
+                return likedRestaurants.map((restaurant: Restaurant) => {
+                  if (likedCount < renderCnt) {
+                    likedCount += 1;
+                    return (
+                      <StyledCard
+                        restaurant={restaurant}
+                        setModalData={handleModalData}
+                        openModal={openModal}
+                        key={restaurant.restaurantId}
+                        updateLikedRestaurant={() => {
+                          const updatedLikedRestaurants = likedRestaurants.filter(
+                            (likedRestaurant: Restaurant) => likedRestaurant.restaurantId !== restaurant.restaurantId
+                          );
+                          setLikedRestaurants(updatedLikedRestaurants);
+                        }}
+                      />
+                    );
+                  }
+                  return null;
+                });
+              })()}
             </GridContainer>
           ) : null}
+
           <StyledButton
             color="#fffdf5"
             onClick={() => {
