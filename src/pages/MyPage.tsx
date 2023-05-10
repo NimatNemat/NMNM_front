@@ -158,6 +158,7 @@ function Mypage() {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [tab, setTab] = useState<number>(0);
   const [renderCnt, setRenderCnt] = useState<number>(12);
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
 
   const { id } = useParams<{ id: string }>();
   const userId = sessionStorage.getItem('userId');
@@ -191,52 +192,72 @@ function Mypage() {
     fetchData();
   }, []);
 
+  const toggleIsFollowing = () => {
+    setIsFollowing(!isFollowing);
+  };
+
+  let button;
+
+  if (userId === id) {
+    button = (
+      <StyledButton
+        padding="0.8rem"
+        borderRadius="0.4rem"
+        onClick={() => {
+          window.location.href = '/modify';
+        }}
+      >
+        <div className={Styles.p2bold}>프로필 편집</div>
+      </StyledButton>
+    );
+  } else if (isFollowing) {
+    button = (
+      <StyledButton padding="0.8rem" borderRadius="0.4rem" onClick={toggleIsFollowing}>
+        <div className={Styles.p2bold}>팔로잉</div>
+      </StyledButton>
+    );
+  } else {
+    button = (
+      <StyledButton padding="0.8rem" borderRadius="0.4rem" onClick={toggleIsFollowing}>
+        <div className={Styles.p2bold}>팔로우</div>
+      </StyledButton>
+    );
+  }
+
   return (
-    <>
-      <MypageContainer>
-        <Container>
-          <InfoContainer>
-            <Imgbox>
-              <Img src="/logo.png" />
-            </Imgbox>
-            <Infocontent>
-              <Row>
-                <div className={Styles.p1bold}>s__smin0515</div>
-                {userId === id ? (
-                  <div>
-                    <StyledButton
-                      padding="0.8rem"
-                      onClick={() => {
-                        window.location.href = '/modify';
-                      }}
-                    >
-                      <div className={Styles.p2bold}>프로필 편집</div>
-                    </StyledButton>
-                  </div>
-                ) : null}
-              </Row>
-              <Row>
-                <div className={Styles.p2bold}>작성한 리뷰 9</div>
-                <div className={Styles.p2bold}>팔로워 10</div>
-                <div className={Styles.p2bold}>팔로우 20</div>
-              </Row>
-              <Info>
-                <div className={Styles.p2regular}>안녕하세요. 저는 손성민 입니다.</div>
-              </Info>
-            </Infocontent>
-          </InfoContainer>
-          <Line />
-          <Row>
-            <Btn className={Styles.p1bold} onClick={ClickReview} clicked={tab === 0}>
-              작성한 리뷰
-            </Btn>
-            <Btn className={Styles.p1bold} onClick={ClickLike} clicked={tab === 1}>
-              맛플리
-            </Btn>
-            <Btn className={Styles.p1bold} onClick={ClickList} clicked={tab === 2}>
-              좋아요한 식당
-            </Btn>
-          </Row>
+    <MypageContainer>
+      <Container>
+        <InfoContainer>
+          <Imgbox>
+            <Img src="/logo.png" />
+          </Imgbox>
+          <Infocontent>
+            <Row>
+              <div className={Styles.p1bold}>s__smin0515</div>
+              {button}
+            </Row>
+            <Row>
+              <div className={Styles.p2bold}>작성한 리뷰 9</div>
+              <div className={Styles.p2bold}>팔로워 10</div>
+              <div className={Styles.p2bold}>팔로우 20</div>
+            </Row>
+            <Info>
+              <div className={Styles.p2regular}>안녕하세요. 저는 손성민 입니다.</div>
+            </Info>
+          </Infocontent>
+        </InfoContainer>
+        <Line />
+        <Row>
+          <Btn className={Styles.p1bold} onClick={ClickReview} clicked={tab === 0}>
+            작성한 리뷰
+          </Btn>
+          <Btn className={Styles.p1bold} onClick={ClickLike} clicked={tab === 1}>
+            맛플리
+          </Btn>
+          <Btn className={Styles.p1bold} onClick={ClickList} clicked={tab === 2}>
+            좋아요한 식당
+          </Btn>
+        </Row>
 
           {isLoaded && tab === 0 ? (
             <GridContainer>
