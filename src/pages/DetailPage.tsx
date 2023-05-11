@@ -209,17 +209,23 @@ function DetailPage() {
             )}
             <Content>
               <Rowcenterbox>
+                <Text className={Styles.h4}>{restaurant.cuisineType}</Text>
+              </Rowcenterbox>
+              <Rowcenterbox>
                 <Text className={Styles.h2}>{restaurant.name}</Text>
-                <Text className={Styles.h2} style={{ color: '#808080' }}>
+                <Text className={Styles.h2} style={{ color: 'rgba(255, 137, 35, 0.8)' }}>
                   {restaurant.avgPreference.toFixed(1)}
                 </Text>
               </Rowcenterbox>
               <Rowcenterbox style={{ gap: '5px' }}>
-                {restaurant.tags?.map((tag, index) => (
-                  <Text className={Styles.p2bold} key={tag.toString()}>
-                    {tag}
-                  </Text>
-                ))}
+                {restaurant.tags?.map(
+                  (tag, index) =>
+                    index < 3 && (
+                      <Text className={Styles.p2bold} key={tag.toString()}>
+                        {tag}
+                      </Text>
+                    )
+                )}
               </Rowcenterbox>
               <Rowcenterbox>
                 <Text className={Styles.h4}>
@@ -322,7 +328,6 @@ function DetailPage() {
               </Box>
             </Content>
             <StyledButton
-              color="white"
               onClick={() => {
                 setReview((prev) => prev + 3);
               }}
