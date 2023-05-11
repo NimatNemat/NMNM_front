@@ -180,6 +180,7 @@ function MainPage() {
       } else {
         response = await axios.get('/recommended/second');
         // setRestaurants(response.data);
+        console.log(response.data);
       }
       setRestaurants(response.data);
       console.log(response.data);

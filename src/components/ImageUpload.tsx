@@ -113,7 +113,7 @@ function ImageUpload() {
           </StyledButton>
         </Btnbox>
         <Btnbox>
-          <StyledButton onClick={onImageRemove} color="F2F4F6" padding="0.8rem">
+          <StyledButton onClick={onImageRemove} color="#F2F4F6" padding="0.8rem">
             <span className={Styles.p2bold}>삭제</span>
           </StyledButton>
         </Btnbox>

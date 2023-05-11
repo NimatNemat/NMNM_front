@@ -124,7 +124,6 @@ const Card = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 278px;
   background: #ffffff;
   box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
 `;
@@ -136,6 +135,7 @@ const CardContent = styled.div`
   justify-content: center;
   width: 100%;
   gap: 0.5rem;
+  padding: 1.2rem;
 `;
 const PlusIcon = styled(AiFillPlusCircle)`
   color: #9b9b9b;
@@ -282,7 +282,7 @@ function Mypage() {
               </Card>
               {restaurants.map((restaurant: any, index) =>
                 index < renderCnt - 1 ? (
-                  <StyledCard restaurant={restaurant} icon={<FiMoreHorizontal size="2.4rem" />} />
+                  <StyledCard restaurant={restaurant} icon={<FiMoreHorizontal size="2.4rem" />} showIconBox={false} />
                 ) : null
               )}
             </GridContainer>
@@ -315,7 +315,6 @@ function Mypage() {
           ) : null}
 
           <StyledButton
-            color="#fffdf5"
             onClick={() => {
               setRenderCnt((prev) => prev + 12);
             }}

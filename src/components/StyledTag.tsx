@@ -20,6 +20,7 @@ const Tag = styled.div<{ isActive: boolean }>`
   border-radius: 0.4rem;
   border: 0.1rem solid rgba(128, 128, 128, 0.3);
   background: ${(props) => (props.isActive ? 'rgba(255, 137, 35, 0.6)' : '#FFFBEF')};
+  cursor: pointer;
 `;
 
 const ImgIcon = styled.img`

@@ -37,7 +37,6 @@ const PageSpan = styled.button<{ active?: boolean }>`
   border-radius: 1rem;
   &:hover {
     color: white;
-    /* background-color: #a2af94; */
     background-color: rgba(255, 137, 35, 0.6);
   }
 `;

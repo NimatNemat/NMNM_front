@@ -26,12 +26,28 @@ const StyledImg = styled.img`
   width: 12.5rem;
   height: 5rem;
 `;
-
+const Icon = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.3s ease;
+  gap: 0.5vw;
+  border: none;
+  background-color: white;
+  &:hover {
+    cursor: pointer;
+    transform: translateY(-3px);
+  }
+`;
 function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const isAuthenticated = sessionStorage.getItem('isAuthenticated');
   if (location.pathname === '/') return null;
+  const refresh = () => {
+    window.location.reload();
+  };
   return (
     <StyledHeader>
       {/* 이미지 */}
@@ -40,14 +56,21 @@ function Header() {
           <StyledImg src="/logo.png" alt="logo" />
         </StyledLink>
       ) : (
-        <StyledLink to="/main">
+        <StyledLink
+          to="/main"
+          onClick={() => {
+            if (location.pathname === '/main') {
+              refresh();
+            }
+          }}
+        >
           <StyledImg src="/logo.png" alt="logo" />
         </StyledLink>
       )}
 
       {isAuthenticated === 'true' ? (
-        <div>
-          <button
+        <div style={{ display: 'flex' }}>
+          <Icon
             type="button"
             className={Styles.p1bold}
             style={{
@@ -62,8 +85,8 @@ function Header() {
             }}
           >
             마이페이지
-          </button>
-          <button
+          </Icon>
+          <Icon
             type="button"
             className={Styles.p1bold}
             style={{
@@ -80,7 +103,7 @@ function Header() {
             }}
           >
             로그아웃
-          </button>
+          </Icon>
         </div>
       ) : null}
     </StyledHeader>
