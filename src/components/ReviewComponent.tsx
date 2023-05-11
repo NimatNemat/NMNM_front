@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { AiOutlineFrown, AiOutlineSmile, AiOutlineMeh, AiOutlineStar, AiFillStar } from 'react-icons/ai';
 import Styles from '../config/globalFontStyle.module.css';
@@ -34,6 +35,9 @@ const ProfileContainer = styled.div`
   justify-content: center;
   gap: 1rem;
   width: 100%;
+  :hover {
+    cursor: pointer;
+  }
 `;
 const ReviewTextContainer = styled.p<{ isMoreView: boolean }>`
   display: inline-block;
@@ -78,6 +82,7 @@ const Evaluation = styled.div`
 function ReviewComponent() {
   const data = {
     name: '김민수',
+    userId: 'testtest1',
     profileImg: '/img.png',
     createdAt: '2021-04-15',
     rating: 3,
@@ -85,9 +90,14 @@ function ReviewComponent() {
       '특이점 : 테이블 많아서 회전율 빠름. 주문 후 꽤 빨리 음식 나오는 편. 한국에서 김치나베가 가장 맛있는 곳.김치나베 : 매콤달콤칼칼한 맛. 맵칼 중독자라면 1번 먹고 계속 생각나서 재방문하게 됨. 본인은 돈까스 싫어하는데도 이 곳 김치나베는 한 달에 최소 한 번은 다시 먹으러 옴! 치즈가 고소하고 부드러워서 뭔진 모르겠지만 비싼 치즈구나 싶은 최고의 맛. 김치와 돈까스와 치즈의 양이 모두 넉넉해서 만족스러운 한끼 식사 할 수 있음. 재방문의사 : O, 이거 안 먹으면 손해🥹',
   };
   const [isMoreView, setIsMoreView] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const handleProfileClick = () => {
+    navigate(`/mypage/${data.userId}`);
+  };
+
   return (
     <ReviewContainer>
-      <ProfileContainer>
+      <ProfileContainer onClick={handleProfileClick}>
         <img src="/img.png" alt="profile" style={{ width: '4rem', height: '4rem', borderRadius: '50%' }} />
         <Colbox className={Styles.p2bold}>
           <div>{data.name}</div>

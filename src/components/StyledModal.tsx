@@ -36,6 +36,18 @@ const ModalContent = styled.div`
   align-items: flex-start;
   flex-direction: column;
   gap: 3.2vh;
+  @media (max-width: 768px) {
+    width: 50%;
+  }
+  @media (min-width: 768px) {
+    width: 40%;
+  }
+  @media (min-width: 1024px) {
+    width: 30%;
+  }
+  @media (min-width: 1440px) {
+    width: 20%;
+  }
 `;
 const ModalHeader = styled.div`
   display: flex;
@@ -197,7 +209,7 @@ function StyledModal(props: ModalProps) {
     );
   };
   return (
-    <ModalWrapper show={show} ref={modalRef}>
+    <ModalWrapper show={show} ref={modalRef} onClick={onClose}>
       <ModalContent onClick={(event) => event.stopPropagation()}>
         <ModalHeader>
           <span className={Styles.h3}>그룹선택</span>

@@ -205,12 +205,7 @@ function IntroPage() {
               <div className={className}>내 취향 맛집을 추천받아보세요</div>
             </StyledTextDiv>
             <StyledButtonDiv>
-              <StyledButton
-                color="rgba(255, 137, 35, 0.6)"
-                onClick={onClickFunction}
-                padding="0.8rem 1.6rem"
-                borderRadius="5rem"
-              >
+              <StyledButton onClick={onClickFunction} padding="0.8rem 1.6rem" borderRadius="5rem">
                 <div className={Styles.p1bold}>시작하기</div>
               </StyledButton>
             </StyledButtonDiv>

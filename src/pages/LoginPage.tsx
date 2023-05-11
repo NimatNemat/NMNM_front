@@ -36,14 +36,24 @@ function LoginPage() {
     setPasswordValue(event.target.value);
   };
 
+  const fetchuser = async () => {
+    try {
+      const response = await axios.get(`/users/userId`);
+      sessionStorage.setItem('userId', response.data.userId);
+    } catch (error) {
+      console.error('Error fetching data', error);
+    }
+  };
   const loginUser = async (formData: FormData) => {
     try {
       const response = await axios.post('/users/login', formData);
       if (response.status === 200) {
         navigate('/main/');
-        // accessToken 설정
+        // Token 설정
         axios.defaults.headers.common.Authorization = `Bearer ${response.data}`;
+        sessionStorage.setItem('token', `Bearer ${response.data}`);
         sessionStorage.setItem('isAuthenticated', 'true');
+        fetchuser();
       } else {
         alert('아이디, 비밀번호를 다시 한번 확인하세요.');
       }
@@ -62,7 +72,14 @@ function LoginPage() {
       alert('비밀번호를 입력해주세요.');
       return;
     }
-
+    if (idValue.length < 6) {
+      alert('아이디는 6자 이상이어야 합니다.');
+      return;
+    }
+    if (passwordValue.length < 8) {
+      alert('비밀번호는 8자 이상이어야 합니다.');
+      return;
+    }
     formData.append('userId', idValue);
     formData.append('password', passwordValue);
 

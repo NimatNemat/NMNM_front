@@ -78,6 +78,7 @@ const icons = require.context('../assets/icons', true);
 const options = [
   { value: 'reco1', label: '진정한 한국인의 추천리스트' },
   { value: 'reco2', label: '당신만을 위한 추천리스트' },
+  { value: 'all', label: '니맛내맛 전체 식당리스트' },
 ];
 
 const customStyles = {
@@ -128,7 +129,7 @@ function MainPage() {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalData, setModalData] = useState<number>(0);
   const [blur, setBlur] = useState<boolean>(false);
-  const [selected, setSelected] = useState<string>('reco1');
+  const [selected, setSelected] = useState<string>('all');
   const [postsPerPage, setPostsPerPage] = useState<number>(12);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [currentRestaurant, setCurrentRestaurant] = useState<Restaurant[]>([]);
@@ -139,29 +140,64 @@ function MainPage() {
   const [showSearchInput, setShowSearchInput] = useState<boolean>(false);
 
   interface Restaurant {
+    _id: {
+      timestamp: number;
+      date: string;
+    };
     restaurantId: number;
     name: string;
     cuisineType: string;
-    tags: string[];
+    avgPreference: number;
+    address: string;
+    roadAddress: string;
+    number: string;
+    businessHours: string;
+    tags: string[][];
+    imageFile: {
+      timestamp: number;
+      date: string;
+    };
+    menu: string[][];
+    peculiarTaste: null;
+    likeUserList: string[];
     imageUrl: string;
-    likeCount: number;
+    xposition: number;
+    yposition: number;
   }
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+
   const fetchData = async () => {
     setIsLoaded(false);
     try {
-      const response = await axios.get(`/restaurant/all`);
+      let response;
+      if (selected === 'all') {
+        response = await axios.get(`/restaurant/all`);
+      } else if (selected === 'reco1') {
+        const userId = sessionStorage.getItem('userId');
+        response = await axios.get(`/recommended/${userId}/first`);
+        // setRestaurants(response.data);
+      } else {
+        response = await axios.get('/recommended/second');
+        // setRestaurants(response.data);
+        console.log(response.data);
+      }
       setRestaurants(response.data);
+      console.log(response.data);
       setIsLoaded(true);
     } catch (error) {
       console.error('Error fetching data', error);
       setIsLoaded(false);
     }
   };
+
   useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common.Authorization = token;
+    }
     fetchData();
-  }, []);
+  }, [selected]);
 
   // 사용자 아이디를 검색하는 로직 (함께먹기 부분)
   const toggleSearchInput = () => {
@@ -198,19 +234,14 @@ function MainPage() {
   };
   const openModal = () => {
     setShowModal(true);
-    setBlur(true);
   };
   const closeModal = () => {
     setShowModal(false);
-    setBlur(false);
   };
-  const blurStyle = {
-    opacity: blur ? '0.5' : '1',
-    PointerEvents: blur ? 'none' : 'auto',
-  };
+
   useEffect(() => {
     const handleDocumentClick = (e: MouseEvent) => {
-      if (!modalRef.current?.contains(e.target as Node)) {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         closeModal();
       }
     };
@@ -230,7 +261,6 @@ function MainPage() {
       setSelectedTags([...selectedTags, tag]);
     }
   };
-
   // 태그 변경시마다 페이지를 1로 초기화
   useEffect(() => {
     setCurrentPage(1);
@@ -253,28 +283,21 @@ function MainPage() {
 
     return filtered;
   }, [restaurants, selectedTags, searchName]);
-
   useEffect(() => {
     setCurrentRestaurant(currentPosts(filteredRestaurants));
   }, [currentPage, filteredRestaurants]);
-
   // 추천 방식 1에 해당하는 레스토랑
-  const showFirstRecoBox = () => {
+  const showAllRestaurant = () => {
     return (
       <>
         <GridContainer>
           {isLoaded ? (
             currentRestaurant.map((restaurant) => (
               <StyledCard
-                key={restaurant.restaurantId}
-                imgSrc={`http://3.39.232.5:8080${restaurant.imageUrl}`}
-                likes={restaurant.likeCount}
-                name={restaurant.name}
-                category={restaurant.cuisineType}
-                hashtag={restaurant.tags ? restaurant.tags.slice(0, 3).join(' ') : ''}
-                id={restaurant.restaurantId}
+                restaurant={restaurant}
                 setModalData={handleModalData}
                 openModal={openModal}
+                key={restaurant.restaurantId}
               />
             ))
           ) : (
@@ -292,7 +315,7 @@ function MainPage() {
 
   return (
     <>
-      <MainPageContainer className="MainPage" style={blurStyle}>
+      <MainPageContainer className="MainPage">
         <Container>
           <ListContainer>
             <StyledInput
@@ -336,7 +359,8 @@ function MainPage() {
                     onChange={searchUser}
                     borderRadius="0.4rem"
                     padding="0.8rem"
-                    style={{ width: '15%' }}
+                    style={{ width: '100%' }}
+                    divWidth="13rem"
                   />
                 ) : (
                   <StyledTag text="+" onClick={toggleSearchInput} />
@@ -355,7 +379,7 @@ function MainPage() {
                 }}
               />
             </GridHeaderContainer>
-            {selected === 'reco1' ? showFirstRecoBox() : null}
+            {selected === 'all' ? showAllRestaurant() : null}
           </ListContainer>
         </Container>
       </MainPageContainer>

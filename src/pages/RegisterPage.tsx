@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import StyledInput from '../components/StyledInput';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledButton from '../components/StyledButton';
 import Calendar from '../components/Calendar';
+
+interface ResisterProps {
+  groupId: number;
+}
 
 const RegisterPageContainer = styled.div`
   display: flex;
@@ -60,6 +64,9 @@ const Checkbox = styled.input`
   border: 0.1rem solid rgba(255, 137, 35, 0.6);
   border-radius: 0.8rem;
   margin-right: 0.8rem;
+  :hover {
+    cursor: pointer;
+  }
 `;
 
 const PrivacyLink = styled(Link)`
@@ -85,7 +92,11 @@ const Styeldselect = styled.select`
   padding: 0.8rem;
   background-color: rgba(255, 137, 35, 0.6);
   border: 1px solid #dfdfdf;
-  border-radius: 2rem;
+  border-radius: 1rem;
+  :hover {
+    cursor: pointer;
+    background-color: rgba(255, 137, 35, 0.8);
+  }
 `;
 const OptionBox = styled.div`
   display: flex;
@@ -96,6 +107,7 @@ const OptionBox = styled.div`
 `;
 
 function RegisterPage() {
+  const { groupid } = useParams<{ groupid: string }>();
   const [checkIcon, setCheckIcon] = useState('');
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
@@ -207,6 +219,7 @@ function RegisterPage() {
     formData.append('birthdate', birthdate.toISOString());
     formData.append('gender', gender.toString());
     formData.append('nickName', nickname);
+    // formData.append('groupId', groupid)
     const jsonObject = formDataToJson(formData);
     registerUser(jsonObject);
   };
@@ -219,14 +232,45 @@ function RegisterPage() {
       });
       if (resposne.status === 200 || resposne.status === 201) {
         alert('회원가입이 완료되었습니다.');
-        window.location.href = '/main';
-        sessionStorage.setItem('isAuthenticated', 'true');
+        Loginfunction();
       } else {
         alert('회원가입에 실패하였습니다.');
       }
     } catch (error) {
       alert('빈칸을 올바르게 입력하세요.');
     }
+  };
+  const navigate = useNavigate();
+  const fetchuser = async () => {
+    try {
+      const response = await axios.get(`/users/userId`);
+      sessionStorage.setItem('userId', response.data.userId);
+    } catch (error) {
+      console.error('Error fetching data', error);
+    }
+  };
+  const loginUser = async (formData: FormData) => {
+    try {
+      const response = await axios.post('/users/login', formData);
+      if (response.status === 200) {
+        navigate('/main/');
+        // Token 설정
+        axios.defaults.headers.common.Authorization = `Bearer ${response.data}`;
+        sessionStorage.setItem('token', `Bearer ${response.data}`);
+        sessionStorage.setItem('isAuthenticated', 'true');
+        fetchuser();
+      } else {
+        alert('아이디, 비밀번호를 다시 한번 확인하세요.');
+      }
+    } catch (error) {
+      alert('아이디, 비밀번호를 다시 한번 확인하세요.');
+    }
+  };
+  const Loginfunction = () => {
+    const formData = new FormData();
+    formData.append('userId', id);
+    formData.append('password', password);
+    loginUser(formData);
   };
   return (
     <RegisterPageContainer>

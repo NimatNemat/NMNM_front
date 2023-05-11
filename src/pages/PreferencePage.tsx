@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledButton from '../components/StyledButton';
@@ -13,61 +14,22 @@ const PreferencePageContainer = styled.div`
 
 const Container = styled.div`
   @media (max-width: 768px) {
-    width: 100%;
+    width: 80%;
   }
   @media (min-width: 768px) {
-    width: 80%;
+    width: 70%;
   }
   @media (min-width: 1024px) {
-    width: 80%;
+    width: 60%;
   }
   @media (min-width: 1440px) {
-    width: 80%;
+    width: 50%;
   }
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 2.4vh;
-`;
-const Content = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 2rem;
-  width: 80%;
-  padding: 4vw;
-  background-color: rgba(255, 137, 35, 0.1);
-  box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 30px;
-  margin: 3vw 24rem;
-  overflow-y: auto;
-
-  &::-webkit-scrollbar {
-    display: block;
-    height: 8px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #888;
-    border-radius: 30px;
-    width: 20vw;
-  }
-  &::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
-  }
-  &::-webkit-scrollbar-track {
-    border-radius: 30px;
-  }
-  &::-webkit-scrollbar-button:horizontal:start:decrement {
-    width: 2vw;
-    height: 0;
-  }
-  &::-webkit-scrollbar-button:horizontal:end:increment {
-    width: 2vw;
-    height: 0;
-  }
 `;
 
 const Title = styled.div`
@@ -100,6 +62,33 @@ const Menu = styled.div`
   gap: 2.4vh;
 `;
 
+const Section = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: white;
+  box-shadow: 5rem 5rem 12rem 0rem rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+`;
+const ContentSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 2vh 5vw;
+  gap: 1.5vh;
+`;
+const Box = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  gap: 1vh;
+`;
+const Text = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5vw;
+`;
+
 function PreferencePage() {
   const data = {
     imgSrc: '/img.png',
@@ -109,110 +98,110 @@ function PreferencePage() {
     hashtag: ['돈까스', '우동'],
     id: 1,
   };
-  const [selected, setSelected] = useState(true);
-  const [selected2, setSelected2] = useState(false);
-  const [selected3, setSelected3] = useState(false);
-  const [selected4, setSelected4] = useState(false);
-  const [selected5, setSelected5] = useState(false);
-
+  const [selected, setSelected] = useState<number>(1);
   const onClick = () => {
-    setSelected(true);
-    setSelected2(false);
-    setSelected3(false);
-    setSelected4(false);
-    setSelected5(false);
+    setSelected(1);
   };
   const onClick2 = () => {
-    setSelected(false);
-    setSelected2(true);
-    setSelected3(false);
-    setSelected4(false);
-    setSelected5(false);
+    setSelected(2);
   };
   const onClick3 = () => {
-    setSelected(false);
-    setSelected2(false);
-    setSelected3(true);
-    setSelected4(false);
-    setSelected5(false);
+    setSelected(3);
   };
   const onClick4 = () => {
-    setSelected(false);
-    setSelected2(false);
-    setSelected3(false);
-    setSelected4(true);
-    setSelected5(false);
+    setSelected(4);
   };
   const onClick5 = () => {
-    setSelected(false);
-    setSelected2(false);
-    setSelected3(false);
-    setSelected4(false);
-    setSelected5(true);
+    setSelected(5);
   };
+  interface Restaurant {
+    _id: {
+      timestamp: number;
+      date: string;
+    };
+    restaurantId: number;
+    name: string;
+    cuisineType: string;
+    avgPreference: number;
+    address: string;
+    roadAddress: string;
+    number: string;
+    businessHours: string;
+    tags: string[][];
+    imageFile: {
+      timestamp: number;
+      date: string;
+    };
+    menu: string[][];
+    peculiarTaste: null;
+    likeUserList: string[];
+    imageUrl: string;
+    xposition: number;
+    yposition: number;
+  }
+  const [restaurant, setRestaurant] = useState<Restaurant>({} as Restaurant);
+
+  const fetchData = async () => {
+    setIsLoaded(false);
+    const response = await axios.get(`/restaurant/10`);
+    setRestaurant(response.data);
+    setIsLoaded(true);
+  };
+  const [isLoaded, setIsLoaded] = useState(false);
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <PreferencePageContainer>
       <Container>
         <Title className={Styles.h3}>나에게 맞는 그룹을 선택해보세요!</Title>
         <SubTitle className={Styles.h4}>해당 그룹의 데이터를 바탕으로 음식점을 추천해 드립니다.</SubTitle>
         <Menu>
-          <Choicebtn selected={selected} onClick={onClick}>
-            <Title className={Styles.h2}>👅</Title>
-            <SubTitle className={Styles.p1bold}>미식가</SubTitle>
+          <Choicebtn selected={selected === 1} onClick={onClick}>
+            <SubTitle className={Styles.h3}>👅</SubTitle>
+            <SubTitle className={Styles.h4}>미식가</SubTitle>
           </Choicebtn>
-          <Choicebtn selected={selected2} onClick={onClick2}>
-            <Title className={Styles.h2}>💵</Title>
-            <SubTitle className={Styles.p1bold}>가성비</SubTitle>
+          <Choicebtn selected={selected === 2} onClick={onClick2}>
+            <SubTitle className={Styles.h3}>💵</SubTitle>
+            <SubTitle className={Styles.h4}>가성비</SubTitle>
           </Choicebtn>
-          <Choicebtn selected={selected3} onClick={onClick3}>
-            <Title className={Styles.h2}>🥬</Title>
-            <SubTitle className={Styles.p1bold}>웰빙</SubTitle>
+          <Choicebtn selected={selected === 3} onClick={onClick3}>
+            <SubTitle className={Styles.h3}>🥬</SubTitle>
+            <SubTitle className={Styles.h4}>웰빙</SubTitle>
           </Choicebtn>
-          <Choicebtn selected={selected4} onClick={onClick4}>
-            <Title className={Styles.h2}>🥩</Title>
-            <SubTitle className={Styles.p1bold}>육식맨</SubTitle>
+          <Choicebtn selected={selected === 4} onClick={onClick4}>
+            <SubTitle className={Styles.h3}>🥩</SubTitle>
+            <SubTitle className={Styles.h4}>육식맨</SubTitle>
           </Choicebtn>
-          <Choicebtn selected={selected5} onClick={onClick5}>
-            <Title className={Styles.h2}>👶🏻</Title>
-            <SubTitle className={Styles.p1bold}>초딩입맛</SubTitle>
+          <Choicebtn selected={selected === 5} onClick={onClick5}>
+            <SubTitle className={Styles.h3}>👶🏻</SubTitle>
+            <SubTitle className={Styles.h4}>초딩입맛</SubTitle>
           </Choicebtn>
         </Menu>
+        {isLoaded ? (
+          <Section>
+            <ContentSection>
+              <Title>
+                <Text className={Styles.h4}>이런 가게는 어때요?</Text>
+              </Title>
+              <Box>
+                <StaylistSlider num={1}>
+                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
+                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
+                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
+                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
+                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
+                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
+                </StaylistSlider>
+              </Box>
+            </ContentSection>
+          </Section>
+        ) : null}
 
-        <Content>
-          <StaylistSlider num={3}>
-            <StyledCard
-              imgSrc={data.imgSrc}
-              likes={data.likes}
-              name={data.name}
-              category={data.category}
-              hashtag={data.hashtag ? data.hashtag.slice(0, 3).join(' ') : ''}
-              showIconBox={false}
-              id={data.id}
-            />
-            <StyledCard
-              imgSrc={data.imgSrc}
-              likes={data.likes}
-              name={data.name}
-              category={data.category}
-              hashtag={data.hashtag ? data.hashtag.slice(0, 3).join(' ') : ''}
-              showIconBox={false}
-              id={data.id}
-            />
-            <StyledCard
-              imgSrc={data.imgSrc}
-              likes={data.likes}
-              name={data.name}
-              category={data.category}
-              hashtag={data.hashtag ? data.hashtag.slice(0, 3).join(' ') : ''}
-              id={data.id}
-              showIconBox={false}
-            />
-          </StaylistSlider>
-        </Content>
         <BtnContainer>
           <StyledButton
             onClick={() => {
-              window.location.href = '/register';
+              window.location.href = `/register/${selected}`;
             }}
           >
             <div className={Styles.p1bold}>다음</div>

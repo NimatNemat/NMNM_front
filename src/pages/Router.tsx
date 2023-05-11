@@ -37,7 +37,7 @@ export default function Router() {
           <Route element={<PrivateRoute authentication={false} />}>
             <Route path="/login/*" element={<LoginPage />} />
             <Route path="/idsearch/*" element={<IdsearchPage />} />
-            <Route path="/register/*" element={<RegisterPage />} />
+            <Route path="/register/:id" element={<RegisterPage />} />
           </Route>
 
           {/* 인증을 반드시 해야지만 접속 가능한 페이지 정의 */}
@@ -45,7 +45,7 @@ export default function Router() {
             <Route path="/main/*" element={<Main />} />
             <Route path="/playlistpage/*" element={<PlayListPage />} />
             <Route path="/detail/:id" element={<DetailPage />} />
-            <Route path="/mypage/*" element={<Mypage />} />
+            <Route path="/mypage/:id" element={<Mypage />} />
             <Route path="/modify/*" element={<ModifyPage />} />
             <Route path="/review/:id" element={<ReviewPage />} />
           </Route>
