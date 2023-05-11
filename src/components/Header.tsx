@@ -59,7 +59,9 @@ function Header() {
         <StyledLink
           to="/main"
           onClick={() => {
-            refresh();
+            if (location.pathname === '/main') {
+              refresh();
+            }
           }}
         >
           <StyledImg src="/logo.png" alt="logo" />

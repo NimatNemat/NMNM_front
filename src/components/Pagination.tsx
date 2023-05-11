@@ -33,11 +33,11 @@ const PageSpan = styled.button<{ active?: boolean }>`
   align-items: center;
   color: ${({ active }) => (active ? 'white' : '#9b9b9b')};
   background-color: #fffdf5;
-  background-color: ${({ active }) => (active ? '#a2af94' : '#fffdf5')};
+  background-color: ${({ active }) => (active ? 'rgba(255, 137, 35, 0.6)' : '#fffdf5')};
   border-radius: 1rem;
   &:hover {
     color: white;
-    /* background-color: #a2af94; */
+
     background-color: rgba(255, 137, 35, 0.6);
   }
 `;

@@ -295,7 +295,6 @@ function Mypage() {
             </GridContainer>
           ) : null}
           <StyledButton
-            color="#fffdf5"
             onClick={() => {
               setRenderCnt((prev) => prev + 12);
             }}

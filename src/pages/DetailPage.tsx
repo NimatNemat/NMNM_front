@@ -222,32 +222,32 @@ function DetailPage() {
                 ))}
               </Rowcenterbox>
               <Rowcenterbox>
-                <Text className={Styles.h5}>
+                <Text className={Styles.h4}>
                   {liked ? (
-                    <Icon type="button" onClick={unlikefunction} className={Styles.h5}>
+                    <Icon type="button" onClick={unlikefunction} className={Styles.h4}>
                       <BsFillHeartFill color="red" />
                       <div>좋아요</div>
                     </Icon>
                   ) : (
-                    <Icon onClick={likefunction} className={Styles.h5}>
+                    <Icon onClick={likefunction} className={Styles.h4}>
                       <BsHeart />
                       <div>좋아요</div>
                     </Icon>
                   )}
                 </Text>
-                <Icon className={Styles.h5}>
+                <Icon className={Styles.h4}>
                   <AiOutlineShareAlt />
                   <Link to="/" style={{ textDecoration: 'none', color: 'black' }}>
                     공유하기
                   </Link>
                 </Icon>
-                <Icon className={Styles.h5}>
+                <Icon className={Styles.h4}>
                   <AiOutlineStar />
                   <Link to={`/review/${restaurant.restaurantId}`} style={{ textDecoration: 'none', color: 'black' }}>
                     평가하기
                   </Link>
                 </Icon>
-                <Icon className={Styles.h5}>
+                <Icon className={Styles.h4}>
                   <FiSlash />
                   <Link to="/" style={{ textDecoration: 'none', color: 'black' }}>
                     안볼래요
