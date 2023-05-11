@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import Styles from '../config/globalFontStyle.module.css';
 
 interface pageProps {
   postsPerPage: number;
@@ -19,20 +20,25 @@ const PageUl = styled.ul`
   align-items: center;
   text-align: center;
   padding: 0;
+  background-color: #fffdf5;
 `;
 
 const PageSpan = styled.button<{ active?: boolean }>`
-  border: ${({ active }) => (active ? '2px solid rgba(255, 137, 35, 0.6)' : 'none')};
+  border: none;
   cursor: pointer;
   height: 4rem;
   width: 4rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: ${({ active }) => (active ? '#FFFFFF' : '#FFFDF5')};
-
+  color: ${({ active }) => (active ? 'white' : '#9b9b9b')};
+  background-color: #fffdf5;
+  background-color: ${({ active }) => (active ? 'rgba(255, 137, 35, 0.6)' : '#fffdf5')};
+  border-radius: 1rem;
   &:hover {
-    border: 2px solid rgba(255, 137, 35, 0.6);
+    color: white;
+    /* background-color: #a2af94; */
+    background-color: rgba(255, 137, 35, 0.6);
   }
 `;
 
@@ -95,8 +101,12 @@ function Pagination(props: pageProps) {
   return (
     <StyledNav>
       <PageUl>
-        <PageSpan onClick={firstPage}>&lt;&lt;</PageSpan>
-        <PageSpan onClick={prevPage}>&lt;</PageSpan>
+        <PageSpan className={Styles.p2bold} onClick={firstPage}>
+          처음
+        </PageSpan>
+        <PageSpan className={Styles.p2bold} onClick={firstPage}>
+          이전
+        </PageSpan>
         {currentButtons.map((number) => (
           <PageSpan
             key={number}
@@ -105,12 +115,17 @@ function Pagination(props: pageProps) {
               paginate(number);
               setCurrentPage(number);
             }}
+            className={Styles.p2bold}
           >
             {number}
           </PageSpan>
         ))}
-        <PageSpan onClick={nextPage}>&gt;</PageSpan>
-        <PageSpan onClick={LastPage}>&gt;&gt;</PageSpan>
+        <PageSpan className={Styles.p2bold} onClick={nextPage}>
+          다음
+        </PageSpan>
+        <PageSpan className={Styles.p2bold} onClick={LastPage}>
+          끝
+        </PageSpan>
       </PageUl>
     </StyledNav>
   );
