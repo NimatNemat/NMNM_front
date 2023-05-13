@@ -254,6 +254,7 @@ function MainPage() {
 
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [users, setUsers] = useState<User[]>([]);
+  const [allUsers, setAllUsers] = useState<User[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   const fetchData = async () => {
@@ -283,6 +284,7 @@ function MainPage() {
       const userId = sessionStorage.getItem('userId');
       const userList = response.data;
       setUsers(userList.filter((user: User) => user.userId !== userId));
+      setAllUsers(userList.filter((user: User) => user.userId !== userId));
     } catch (error) {
       console.error('Error fetching user data', error);
     }
@@ -319,10 +321,19 @@ function MainPage() {
   const addUserTag = (userId: string) => {
     // 사용자 아이디를 태그에 추가하는 로직
     setAddedUsers([...addedUsers, userId]);
+    setUsers(users.filter((user: User) => user.userId !== userId));
   };
 
   const handleSearchName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchName(event.target.value);
+  };
+
+  const removeUserTag = (userId: string) => {
+    setAddedUsers(addedUsers.filter((id: string) => id !== userId));
+    const userToAddBack = allUsers.find((user: User) => user.userId === userId);
+    if (userToAddBack) {
+      setUsers([...users, userToAddBack]);
+    }
   };
 
   // 페이지네이션 각 페이지 별로 Post할 갯수 정해서 페이지 나누기
@@ -477,7 +488,7 @@ function MainPage() {
               </div>
               <TagListContainer>
                 {addedUsers.map((userId) => (
-                  <StyledTag key={userId} text={userId} />
+                  <StyledTag key={userId} text={userId} onClick={() => removeUserTag(userId)} />
                 ))}
                 {showSearchInput ? (
                   <Select
