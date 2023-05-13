@@ -281,11 +281,7 @@ function MainPage() {
 
     try {
       const response = await axios.get(`/users/all`);
-      console.log(response.data);
       const userId = sessionStorage.getItem('userId');
-      console.log(userId);
-      const token = sessionStorage.getItem('token');
-      console.log(token);
       const userList = response.data;
       setUsers(userList.filter((user: User) => user.userId !== userId));
     } catch (error) {
