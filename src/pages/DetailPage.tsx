@@ -266,7 +266,16 @@ function DetailPage() {
             <Content>
               <Title>
                 <Text className={Styles.h4}>상세정보</Text>
-                <Text className={Styles.p2bold}>정보수정요청</Text>
+                <Link
+                  to={`/Suggestion/${id}`}
+                  className={Styles.p2bold}
+                  style={{
+                    textDecoration: 'none',
+                    color: 'black',
+                  }}
+                >
+                  정보수정요청
+                </Link>
               </Title>
               <Box>
                 <Text className={Styles.p1regular}>
