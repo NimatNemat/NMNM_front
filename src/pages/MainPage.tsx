@@ -259,20 +259,19 @@ function MainPage() {
   const fetchData = async () => {
     setIsLoaded(false);
     try {
+      const token = sessionStorage.getItem('token');
+      if (token) {
+        axios.defaults.headers.common.Authorization = token;
+      }
       let response;
       if (selected === 'all') {
         response = await axios.get(`/restaurant/all`);
       } else if (selected === 'reco1') {
-        const userId = sessionStorage.getItem('userId');
-        response = await axios.get(`/recommended/${userId}/first`);
-        // setRestaurants(response.data);
+        response = await axios.get(`/recommended/first`);
       } else {
         response = await axios.get('/recommended/second');
-        // setRestaurants(response.data);
-        console.log(response.data);
       }
       setRestaurants(response.data);
-      console.log(response.data);
       setIsLoaded(true);
     } catch (error) {
       console.error('Error fetching restaurant data', error);
@@ -290,10 +289,6 @@ function MainPage() {
   };
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    if (token) {
-      axios.defaults.headers.common.Authorization = token;
-    }
     fetchData();
   }, [selected]);
 
@@ -380,7 +375,7 @@ function MainPage() {
 
   // 선택한 태그와 Restaurant의 QuisinType을 비교하여 필터링
   const filteredRestaurants = useMemo(() => {
-    let filtered = restaurants;
+    let filtered = restaurants || [];
 
     if (selectedTags.length > 0) {
       filtered = filtered.filter((restaurant) => {
@@ -405,7 +400,7 @@ function MainPage() {
     return (
       <>
         <GridContainer>
-          {isLoaded ? (
+          {isLoaded && currentRestaurant ? (
             currentRestaurant.map((restaurant) => (
               <StyledCard
                 restaurant={restaurant}
