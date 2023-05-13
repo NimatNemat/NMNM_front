@@ -36,14 +36,6 @@ function LoginPage() {
     setPasswordValue(event.target.value);
   };
 
-  const fetchuser = async () => {
-    try {
-      const response = await axios.get(`/users/userId`);
-      sessionStorage.setItem('userId', response.data.userId);
-    } catch (error) {
-      console.error('Error fetching data', error);
-    }
-  };
   const loginUser = async (formData: FormData) => {
     try {
       const response = await axios.post('/users/login', formData);
@@ -53,7 +45,7 @@ function LoginPage() {
         axios.defaults.headers.common.Authorization = `Bearer ${response.data}`;
         sessionStorage.setItem('token', `Bearer ${response.data}`);
         sessionStorage.setItem('isAuthenticated', 'true');
-        fetchuser();
+        sessionStorage.setItem('userId', formData.get('userId') as string);
       } else {
         alert('아이디, 비밀번호를 다시 한번 확인하세요.');
       }

@@ -147,19 +147,19 @@ function RegisterPage() {
       return false;
     }
     try {
-      const res = await axios.get(`http://3.39.232.5:8080/api/users/user/${id}`, {
+      const res = await axios.get(`http://3.39.232.5:8080/api/users/all`, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      if (res.status === 200) {
+      if (res.data.find((user: any) => user.userId === id)) {
         setCheckIcon('/bad.png');
-        return false;
+        return true;
       }
       setCheckIcon('/good.png');
-      return true;
+      return false;
     } catch (error) {
-      setCheckIcon('/good.png');
+      alert('아이디 중복체크에 실패하였습니다.');
       return false;
     }
   };
@@ -241,18 +241,10 @@ function RegisterPage() {
         alert('회원가입에 실패하였습니다.');
       }
     } catch (error) {
-      alert('빈칸을 올바르게 입력하세요.');
+      alert('회원가입에 실패하였습니다.');
     }
   };
   const navigate = useNavigate();
-  const fetchuser = async () => {
-    try {
-      const response = await axios.get(`/users/userId`);
-      sessionStorage.setItem('userId', response.data.userId);
-    } catch (error) {
-      console.error('Error fetching data', error);
-    }
-  };
   const loginUser = async (formData: FormData) => {
     try {
       const response = await axios.post('/users/login', formData);
@@ -262,7 +254,7 @@ function RegisterPage() {
         axios.defaults.headers.common.Authorization = `Bearer ${response.data}`;
         sessionStorage.setItem('token', `Bearer ${response.data}`);
         sessionStorage.setItem('isAuthenticated', 'true');
-        fetchuser();
+        sessionStorage.setItem('userId', formData.get('userId') as string);
       } else {
         alert('아이디, 비밀번호를 다시 한번 확인하세요.');
       }

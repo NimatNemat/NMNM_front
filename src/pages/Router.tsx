@@ -16,6 +16,7 @@ import Header from '../components/Header';
 import PlayListPage from './PlayListPage';
 import ReviewPage from './ReviewPage';
 import Suggestion from './Suggestion';
+import MydetailPage from './MyDetailPage';
 
 const Container = styled.div`
   padding: 2.4rem;
@@ -50,6 +51,7 @@ export default function Router() {
             <Route path="/modify/*" element={<ModifyPage />} />
             <Route path="/review/:id" element={<ReviewPage />} />
             <Route path="/Suggestion/:id" element={<Suggestion />} />
+            <Route path="/mydetail/:id*" element={<MydetailPage />} />
           </Route>
         </Routes>
       </Container>

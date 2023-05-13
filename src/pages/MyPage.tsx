@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { FiMoreHorizontal } from 'react-icons/fi';
 import { AiFillPlusCircle } from 'react-icons/ai';
+
 import StyledButton from '../components/StyledButton';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledCard from '../components/StyledCard';
@@ -35,6 +36,21 @@ interface Restaurant {
   xposition: number;
   yposition: number;
 }
+interface User {
+  _id: {
+    timestamp: number;
+    date: string;
+  };
+  birthdate: string;
+  email: string;
+  gender: number;
+  groupName: number | null;
+  nickName: string;
+  password: string;
+  profileImage: string | null;
+  Id: string;
+}
+
 const MypageContainer = styled.div`
   display: flex;
   align-items: center;
@@ -53,9 +69,9 @@ const Container = styled.div`
 const InfoContainer = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 1rem 2rem;
   gap: 2vw;
   align-items: center;
+  width: 100%;
   @media (max-width: 425px) {
     flex-direction: column;
   }
@@ -63,15 +79,16 @@ const InfoContainer = styled.div`
 const Infocontent = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0.8rem;
+  gap: 1rem;
   align-items: flex-start;
+  width: 100%;
 `;
 
 const Imgbox = styled.div`
   border-radius: 50%;
-  border: 1px solid black;
+  border: 1px solid #dfdfdf;
   overflow: hidden;
-  width: 12rem;
+  width: 14rem;
   height: 12rem;
   @media (max-width: 425px) {
     width: 20rem;
@@ -87,11 +104,31 @@ const Row = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0.8rem;
   gap: 2rem;
+  width: 100%;
+  @media (max-width: 425px) {
+    justify-content: center;
+  }
 `;
+const Rowbtn = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2rem;
+
+  @media (max-width: 425px) {
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+  }
+`;
+
 const Info = styled.div`
-  padding: 0.8rem;
+  display: flex;
+  width: 100%;
+  @media (max-width: 425px) {
+    justify-content: center;
+  }
 `;
 const Line = styled.div`
   width: 100%;
@@ -140,6 +177,12 @@ const CardContent = styled.div`
 const PlusIcon = styled(AiFillPlusCircle)`
   color: #9b9b9b;
 `;
+const Btncontainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  width: 20rem;
+`;
 
 function Mypage() {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -160,9 +203,10 @@ function Mypage() {
   const [renderCnt, setRenderCnt] = useState<number>(12);
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const [likedRestaurants, setLikedRestaurants] = useState<Restaurant[]>([]);
-
+  const [User, setUser] = useState<User | null>(null);
   const { id } = useParams<{ id: string }>();
   const userId = sessionStorage.getItem('userId');
+
   let likedCount = 0;
 
   const ClickReview = () => {
@@ -183,19 +227,28 @@ function Mypage() {
       const response = await axios.get(`/restaurant/all`);
       setRestaurants(response.data);
       setIsLoaded(true);
-      console.log(response.data);
-
       const liked = response.data.filter((restaurant: Restaurant) => {
-        return userId && restaurant.likeUserList && restaurant.likeUserList.includes(userId);
+        return id && restaurant.likeUserList && restaurant.likeUserList.includes(id);
       });
       setLikedRestaurants(liked);
     } catch (error) {
       console.error('Error fetching data', error);
       setIsLoaded(false);
     }
+    try {
+      const response = await axios.get(`/users/userId?userId=${userId}`);
+      setUser(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching data', error);
+    }
   };
 
   useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common.Authorization = token;
+    }
     fetchData();
   }, []);
 
@@ -207,27 +260,42 @@ function Mypage() {
 
   if (userId === id) {
     button = (
-      <StyledButton
-        padding="0.8rem"
-        borderRadius="0.4rem"
-        onClick={() => {
-          window.location.href = '/modify';
-        }}
-      >
-        <div className={Styles.p2bold}>프로필 편집</div>
-      </StyledButton>
+      <Btncontainer>
+        <StyledButton
+          padding="0.8rem"
+          borderRadius="0.4rem"
+          onClick={() => {
+            window.location.href = `/modify/${id}`;
+          }}
+        >
+          <div className={Styles.p2bold}>프로필 편집</div>
+        </StyledButton>
+        <StyledButton
+          padding="0.8rem"
+          borderRadius="0.4rem"
+          onClick={() => {
+            window.location.href = `/mydetail/${id}`;
+          }}
+        >
+          <div className={Styles.p2bold}>내 정보</div>
+        </StyledButton>
+      </Btncontainer>
     );
   } else if (isFollowing) {
     button = (
-      <StyledButton padding="0.8rem" borderRadius="0.4rem" onClick={toggleIsFollowing}>
-        <div className={Styles.p2bold}>팔로잉</div>
-      </StyledButton>
+      <Btncontainer>
+        <StyledButton padding="0.8rem" borderRadius="0.4rem" onClick={toggleIsFollowing}>
+          <div className={Styles.p2bold}>팔로잉</div>
+        </StyledButton>
+      </Btncontainer>
     );
   } else {
     button = (
-      <StyledButton padding="0.8rem" borderRadius="0.4rem" onClick={toggleIsFollowing}>
-        <div className={Styles.p2bold}>팔로우</div>
-      </StyledButton>
+      <Btncontainer>
+        <StyledButton padding="0.8rem" borderRadius="0.4rem" onClick={toggleIsFollowing}>
+          <div className={Styles.p2bold}>팔로우</div>
+        </StyledButton>
+      </Btncontainer>
     );
   }
 
@@ -237,18 +305,21 @@ function Mypage() {
         <Container>
           <InfoContainer>
             <Imgbox>
-              <Img src="/logo.png" />
+              <Img
+                src={User?.profileImage ? User.profileImage : 'https://cdn-icons-png.flaticon.com/512/1555/1555492.png'}
+              />
             </Imgbox>
             <Infocontent>
-              <Row>
-                <div className={Styles.p1bold}>s__smin0515</div>
+              <Rowbtn>
+                <div className={Styles.p1bold}>{id}</div>
                 {button}
-              </Row>
+              </Rowbtn>
               <Row>
                 <div className={Styles.p2bold}>작성한 리뷰 9</div>
                 <div className={Styles.p2bold}>팔로워 10</div>
                 <div className={Styles.p2bold}>팔로우 20</div>
               </Row>
+              <div className={Styles.p2bold}>{User?.nickName}</div>
               <Info>
                 <div className={Styles.p2regular}>안녕하세요. 저는 손성민 입니다.</div>
               </Info>

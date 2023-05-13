@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import StyledButton from './StyledButton';
@@ -22,13 +22,18 @@ const Btnbox = styled.div`
   justify-content: center;
 `;
 const ProfileImg = styled.img`
-  width: 25vw;
-  height: 25vw;
+  width: 20vw;
+  height: 20vw;
   border-radius: 50%;
   object-fit: cover;
   background-color: white;
   border: 1px solid #dfdfdf;
   @media (max-width: 768px) {
+    width: 30vw;
+    height: 30vw;
+  }
+
+  @media (max-width: 425px) {
     width: 50vw;
     height: 50vw;
   }
@@ -38,9 +43,12 @@ const ImgContainer = styled.div`
   justify-content: center;
   margin-bottom: 2rem;
 `;
-
-function ImageUpload() {
-  const [fileURL, setFileURL] = useState<string>('https://cdn-icons-png.flaticon.com/512/1555/1555492.png');
+interface Props {
+  fileUrl: string;
+}
+function ImageUpload(props: Props) {
+  const { fileUrl } = props;
+  const [fileURL, setFileURL] = useState<string>(fileUrl);
   const [file, setFile] = useState<FileList | null>(null);
   const [key, setKey] = useState<number>(0);
   const imgUploadInput = useRef<HTMLInputElement | null>(null);
@@ -81,6 +89,10 @@ function ImageUpload() {
   //     alert('업로드할 이미지가 없습니다');
   //   }
   // };
+  useEffect(() => {
+    setFileURL(fileUrl);
+  }, [fileUrl]);
+
   return (
     <Container>
       <Row>
@@ -109,12 +121,12 @@ function ImageUpload() {
             }}
             padding="0.8rem"
           >
-            <span className={Styles.p2bold}>업로드</span>
+            <span className={Styles.p2bold}>선택</span>
           </StyledButton>
         </Btnbox>
         <Btnbox>
           <StyledButton onClick={onImageRemove} color="#F2F4F6" padding="0.8rem">
-            <span className={Styles.p2bold}>삭제</span>
+            <span className={Styles.p2bold}>기본 프로필</span>
           </StyledButton>
         </Btnbox>
       </Row>

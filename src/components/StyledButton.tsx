@@ -14,7 +14,6 @@ interface StyledButtonProps {
 const Btn = styled.button<StyledButtonProps>`
   width: 100%;
   height: 100%;
-
   font-size: ${(props) => (props.fontsize === '24px' ? '24px' : props.fontsize)};
   font-weight: 700;
   border: 0px;
