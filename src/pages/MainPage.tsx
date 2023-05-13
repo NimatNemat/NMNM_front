@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import Select from 'react-select';
+import Select, { ActionMeta, InputActionMeta, SingleValue, components } from 'react-select';
 import axios from 'axios';
 import styled from 'styled-components';
 import { AiOutlineSearch } from 'react-icons/ai';
@@ -81,7 +81,26 @@ const options = [
   { value: 'all', label: '니맛내맛 전체 식당리스트' },
 ];
 
-const customStyles = {
+const OptionDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 1vw;
+`;
+
+const OptionImgDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+`;
+
+const OptionTextDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const SelectListStyle = {
   container: (provided: any) => ({
     ...provided,
   }),
@@ -102,7 +121,7 @@ const customStyles = {
     backgroundColor: state.isSelected ? 'rgba(255, 137, 35, 0.6)' : '#FFFDF5',
     cursor: 'pointer',
     fontSize: '1.6rem',
-    fontWeight: 'bold',
+    fontWeight: '700',
     lineHeight: '2',
     padding: '1rem 2rem',
   }),
@@ -125,6 +144,65 @@ const customStyles = {
   }),
 };
 
+const SelectIdSearchStyle = {
+  container: (provided: any) => ({
+    ...provided,
+    height: '3.5rem',
+  }),
+  control: (provided: any) => ({
+    ...provided,
+    backgroundColor: '#FFFDF5',
+    border: '#0.1rem solid rgba(128, 128, 128, 0.3)',
+    height: '3.5rem',
+    width: '20rem',
+    boxShadow: 'none',
+    minHeight: '3.5rem',
+  }),
+  valueContainer: (provided: any) => ({
+    ...provided,
+    padding: '0 1rem',
+    margin: '0',
+  }),
+  input: (provided: any) => ({
+    ...provided,
+    margin: '0',
+    padding: '0',
+    fontSize: '1.4rem',
+    fontWeight: '700',
+  }),
+  placeholder: (provided: any) => ({
+    ...provided,
+    fontSize: '1.4rem',
+    fontWeight: '700',
+  }),
+  option: (provided: any, state: any) => ({
+    ...provided,
+    color: state.isFocused ? '#FFFFFF' : 'rgba(128, 128, 128, 0.7)',
+    backgroundColor: state.isFocused ? 'rgba(255, 137, 35, 0.6)' : '#FFFDF5',
+    cursor: 'pointer',
+    fontSize: '1.4rem',
+    fontWeight: '700',
+    lineHeight: '1.5',
+    padding: '0.8rem 1rem',
+  }),
+  menuList: (provided: any) => ({
+    ...provided,
+    padding: '0',
+  }),
+
+  menu: (provided: any) => ({
+    ...provided,
+    boxShadow: 'none',
+    borderRadius: '0.2rem',
+    border: '0.1rem solid rgba(128, 128, 128, 0.3)',
+  }),
+  singleValue: (provided: any) => ({
+    ...provided,
+    fontSize: '1.4rem',
+    fontWeight: '700',
+  }),
+};
+
 function MainPage() {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalData, setModalData] = useState<number>(0);
@@ -137,7 +215,10 @@ function MainPage() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [searchName, setSearchName] = useState<string>('');
   const [searchUserID, setSearchUserID] = useState<string>('');
+  const [searchedUser, setSearchedUser] = useState<User[]>([]);
   const [showSearchInput, setShowSearchInput] = useState<boolean>(false);
+  const [addedUsers, setAddedUsers] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState<string>('');
 
   interface Restaurant {
     _id: {
@@ -164,7 +245,15 @@ function MainPage() {
     xposition: number;
     yposition: number;
   }
+
+  interface User {
+    userId: string;
+    profileImage: string;
+    nickName: string;
+  }
+
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   const fetchData = async () => {
@@ -186,8 +275,21 @@ function MainPage() {
       console.log(response.data);
       setIsLoaded(true);
     } catch (error) {
-      console.error('Error fetching data', error);
+      console.error('Error fetching restaurant data', error);
       setIsLoaded(false);
+    }
+
+    try {
+      const response = await axios.get(`/users/all`);
+      console.log(response.data);
+      const userId = sessionStorage.getItem('userId');
+      console.log(userId);
+      const token = sessionStorage.getItem('token');
+      console.log(token);
+      const userList = response.data;
+      setUsers(userList.filter((user: User) => user.userId !== userId));
+    } catch (error) {
+      console.error('Error fetching user data', error);
     }
   };
 
@@ -204,20 +306,34 @@ function MainPage() {
     setShowSearchInput(!showSearchInput);
   };
 
-  const searchUser = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchUserID(event.target.value);
+  const searchUser = (newValue: string, actionMeta: InputActionMeta) => {
+    setSearchUserID(newValue);
     // 사용자 아이디 검색하는 로직
+    let filtered = users;
+    filtered = filtered.filter((user) => user.userId.includes(searchUserID));
+
+    setSearchedUser(filtered);
+  };
+
+  const handleUserSelect = (
+    newValue: SingleValue<{ value: string; label: string }>,
+    actionMeta: ActionMeta<{ value: string; label: string }>
+  ) => {
+    if (newValue !== null) {
+      addUserTag(newValue.value);
+      setShowSearchInput(false);
+    }
   };
 
   const addUserTag = (userId: string) => {
     // 사용자 아이디를 태그에 추가하는 로직
-    // 예: setSelectedTags([...selectedTags, userId]);
-    setShowSearchInput(false);
+    setAddedUsers([...addedUsers, userId]);
   };
 
   const handleSearchName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchName(event.target.value);
   };
+
   // 페이지네이션 각 페이지 별로 Post할 갯수 정해서 페이지 나누기
   const indexOfLast = currentPage * postsPerPage;
   const indexOfFirst = indexOfLast - postsPerPage;
@@ -283,9 +399,11 @@ function MainPage() {
 
     return filtered;
   }, [restaurants, selectedTags, searchName]);
+
   useEffect(() => {
     setCurrentRestaurant(currentPosts(filteredRestaurants));
   }, [currentPage, filteredRestaurants]);
+
   // 추천 방식 1에 해당하는 레스토랑
   const showAllRestaurant = () => {
     return (
@@ -312,6 +430,24 @@ function MainPage() {
       </>
     );
   };
+
+  interface OptionType {
+    label: string;
+    value: string;
+    profileImage: string;
+    nickName: string;
+  }
+  const formatOptionLabel = ({ value, label, profileImage, nickName }: OptionType) => (
+    <OptionDiv>
+      <OptionImgDiv>
+        <img src={profileImage} alt={label} style={{ width: '5rem', height: '5rem', borderRadius: '50%' }} />
+      </OptionImgDiv>
+      <OptionTextDiv>
+        <span>{label}</span>
+        <span>{nickName}</span>
+      </OptionTextDiv>
+    </OptionDiv>
+  );
 
   return (
     <>
@@ -349,18 +485,38 @@ function MainPage() {
                 함께먹기
               </div>
               <TagListContainer>
+                {addedUsers.map((userId) => (
+                  <StyledTag key={userId} text={userId} />
+                ))}
                 {showSearchInput ? (
-                  <StyledInput
-                    value={searchUserID}
-                    type="text"
+                  <Select
+                    autoFocus
+                    options={
+                      inputValue
+                        ? searchedUser.map((user) => ({
+                            value: user.userId,
+                            label: user.userId,
+                            profileImage: user.profileImage,
+                            nickName: user.nickName,
+                          }))
+                        : []
+                    }
+                    isSearchable
+                    onInputChange={(input, action) => {
+                      setInputValue(input);
+                      searchUser(input, action);
+                    }}
+                    onChange={(value, action) => handleUserSelect(value, action)}
+                    styles={SelectIdSearchStyle}
                     placeholder="아이디를 검색하세요"
-                    background="#FFFBEF"
-                    border="0.1rem solid rgba(128, 128, 128, 0.3)"
-                    onChange={searchUser}
-                    borderRadius="0.4rem"
-                    padding="0.8rem"
-                    style={{ width: '100%' }}
-                    divWidth="13rem"
+                    components={{
+                      DropdownIndicator: () => null,
+                      IndicatorSeparator: () => null,
+                      IndicatorsContainer: () => null,
+                      NoOptionsMessage: () => null,
+                    }}
+                    maxMenuHeight={200}
+                    formatOptionLabel={formatOptionLabel}
                   />
                 ) : (
                   <StyledTag text="+" onClick={toggleSearchInput} />
@@ -370,7 +526,7 @@ function MainPage() {
             <GridHeaderContainer>
               <Select
                 isSearchable={false}
-                styles={customStyles}
+                styles={SelectListStyle}
                 options={options}
                 value={options.find((option) => option.value === selected)}
                 onChange={(option: any) => {
