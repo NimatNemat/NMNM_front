@@ -133,15 +133,10 @@ function ReviewPage() {
 
   // Date.now()를 이용하여 현재 시간의 밀리초 단위로 표현된 고유한 숫자 값을 키값으로 사용
   const handleImageUpload = () => {
-    if (uploadComponents.length < MAX_UPLOAD_COMPONENTS) {
-      setUploadComponents((prevState) => [...prevState, Date.now()]);
-    }
+    setUploadComponents((prevState) => [...prevState, Date.now()]);
   };
   const handleImageDelete = (uniqueKey: number) => {
     setUploadComponents((prevState) => prevState.filter((key) => key !== uniqueKey));
-    if (uploadComponents.length === 1) {
-      handleImageUpload();
-    }
   };
 
   const starArray = [0, 1, 2, 3, 4];
@@ -218,7 +213,7 @@ function ReviewPage() {
           />
         </Content>
         <GridContainer>
-          {uploadComponents.map((uniqueKey, index) => (
+          {uploadComponents.slice(0, 3).map((uniqueKey, index) => (
             <ReviewImageUpload
               key={uniqueKey}
               index={index + 1}
