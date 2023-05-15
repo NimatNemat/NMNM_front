@@ -213,7 +213,7 @@ function ReviewPage() {
           />
         </Content>
         <GridContainer>
-          {uploadComponents.slice(0, 3).map((uniqueKey, index) => (
+          {uploadComponents.slice(0, MAX_UPLOAD_COMPONENTS).map((uniqueKey, index) => (
             <ReviewImageUpload
               key={uniqueKey}
               index={index + 1}
