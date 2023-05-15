@@ -10,7 +10,7 @@ const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1.2rem;
+  gap: 0.8rem;
   background: #ffffff;
   box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
   padding: 1.6rem;
@@ -81,6 +81,7 @@ const Evaluation = styled.div`
 
 function ReviewComponent() {
   const data = {
+    restaurantName: '마리모',
     name: '김민수',
     userId: 'testtest1',
     profileImg: '/img.png',
@@ -97,6 +98,7 @@ function ReviewComponent() {
 
   return (
     <ReviewContainer>
+      <div className={Styles.p1bold}>{data.restaurantName}</div>
       <ProfileContainer onClick={handleProfileClick}>
         <img src="/img.png" alt="profile" style={{ width: '4rem', height: '4rem', borderRadius: '50%' }} />
         <Colbox className={Styles.p2bold}>
