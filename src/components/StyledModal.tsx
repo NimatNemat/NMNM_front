@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { AiOutlineClose, AiOutlinePlus, AiOutlineLock, AiOutlineUnlock } from 'react-icons/ai';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledInput from './StyledInput';
+import StyledButton from './StyledButton';
 
 interface ModalProps {
   onClose?: () => void;
@@ -89,18 +90,9 @@ const ButtonBox = styled.div`
   align-items: center;
   width: 100%;
 `;
-const Button = styled.button`
-  white-space: nowrap;
-  height: 3vh;
-  border: none;
-  padding: 0.5rem 2rem;
-  background-color: #ffffff;
-  &:hover {
-    background-color: #f2f4f6;
-    color: black;
-    cursor: pointer;
-    border-radius: 3rem;
-  }
+const Button = styled.div`
+  display: flex;
+  width: 10rem;
 `;
 const Div = styled.div`
   display: flex;
@@ -201,8 +193,10 @@ function StyledModal(props: ModalProps) {
           </Styeldselect>
         </RowDiv>
         <ButtonBox>
-          <Button type="button" onClick={handleSubmit}>
-            만들기
+          <Button>
+            <StyledButton onClick={handleSubmit} borderRadius="3rem">
+              <span className={Styles.p2bold}>만들기</span>
+            </StyledButton>
           </Button>
         </ButtonBox>
       </Div>
