@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { FiMoreHorizontal } from 'react-icons/fi';
 import Styles from '../config/globalFontStyle.module.css';
@@ -41,7 +42,6 @@ const Card = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 278px;
   background: #ffffff;
   box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
 `;
@@ -53,6 +53,9 @@ const CardContent = styled.div`
   justify-content: center;
   width: 100%;
   gap: 0.5rem;
+  :hover {
+    cursor: pointer;
+  }
 `;
 
 const PlusIcon = styled(AiFillPlusCircle)`
@@ -98,10 +101,7 @@ function PlayListPage() {
     roadAddress: '서울특별시 강남구 테헤란로 123-45',
     number: '02-123-4567',
     businessHours: '10:00 ~ 22:00',
-    tags: [
-      ['#태그1', '#태그2', '#태그3'],
-      ['#태그4', '#태그5', '#태그6'],
-    ],
+    tags: [['#태그1', '#태그2', '#태그3']],
     imageFile: {
       timestamp: 1627665600,
       date: '2021-07-30T00:00:00.000Z',
@@ -116,13 +116,18 @@ function PlayListPage() {
     xposition: 37.123456,
     yposition: 127.123456,
   };
+  const navigate = useNavigate();
   return (
     <PlayListPageContainer>
       <Container>
         <Header className={Styles.h3}>손성민님의 맛플리</Header>
         <GridContainer>
           <Card className={Styles.h3medium}>
-            <CardContent>
+            <CardContent
+              onClick={() => {
+                navigate(`/main`);
+              }}
+            >
               <PlusIcon />
               <div style={{ color: '#9B9B9B' }}>맛집 추가하기</div>
             </CardContent>
