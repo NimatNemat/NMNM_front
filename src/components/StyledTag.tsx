@@ -21,6 +21,10 @@ const Tag = styled.div<{ isActive: boolean }>`
   border: 0.1rem solid rgba(128, 128, 128, 0.3);
   background: ${(props) => (props.isActive ? 'rgba(255, 137, 35, 0.6)' : '#FFFBEF')};
   cursor: pointer;
+  opacity: 0.8;
+  &:hover {
+    opacity: 1;
+  }
 `;
 
 const ImgIcon = styled.img`

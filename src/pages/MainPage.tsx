@@ -8,6 +8,7 @@ import StyledTag from '../components/StyledTag';
 import StyledCard from '../components/StyledCard';
 import StyledModal from '../components/StyledModal';
 import StyledInput from '../components/StyledInput';
+import StyledButton from '../components/StyledButton';
 import Pagination from '../components/Pagination';
 
 const MainPageContainer = styled.div`
@@ -98,6 +99,11 @@ const OptionTextDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+`;
+
+const Btn = styled.div`
+  display: flex;
+  width: 10rem;
 `;
 
 const SelectListStyle = {
@@ -206,7 +212,6 @@ const SelectIdSearchStyle = {
 function MainPage() {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalData, setModalData] = useState<number>(0);
-  const [blur, setBlur] = useState<boolean>(false);
   const [selected, setSelected] = useState<string>('all');
   const [postsPerPage, setPostsPerPage] = useState<number>(12);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -519,10 +524,28 @@ function MainPage() {
                     }}
                     maxMenuHeight={200}
                     formatOptionLabel={formatOptionLabel}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !inputValue) {
+                        setShowSearchInput(false);
+                      }
+                    }}
                   />
                 ) : (
                   <StyledTag text="+" onClick={toggleSearchInput} />
                 )}
+                {addedUsers.length > 0 ? (
+                  <Btn>
+                    <StyledButton
+                      padding="1rem"
+                      borderRadius="0.4rem"
+                      onClick={() => {
+                        console.log('button clicked');
+                      }}
+                    >
+                      <div className={Styles.p2bold}>함께 먹기</div>
+                    </StyledButton>
+                  </Btn>
+                ) : null}
               </TagListContainer>
             </TagContainer>
             <GridHeaderContainer>

@@ -39,15 +39,19 @@ const ImgContainer = styled.div`
   height: 8.8rem;
   background-color: #fffdf5;
   border: 1px solid #dfdfdf;
+  // opacity: 0;
   &:hover ${IconContainer} {
     opacity: 1;
+  }
+  &:hover {
+    opacity: 0.5;
   }
 `;
 
 const RemoveIcon = styled.div`
   cursor: pointer;
   padding: 0.4rem;
-  color: white;
+  color: #ffffff;
   font-size: 1.6rem;
   position: absolute;
   bottom: 0;
@@ -57,7 +61,7 @@ const RemoveIcon = styled.div`
 const EnlargeIcon = styled.div`
   cursor: pointer;
   padding: 0.4rem;
-  color: white;
+  color: #ffffff;
   font-size: 1.6rem;
   position: absolute;
   bottom: 0;
