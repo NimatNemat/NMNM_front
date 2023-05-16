@@ -299,6 +299,22 @@ function MainPage() {
     fetchData();
   }, [selected]);
 
+  // 함께먹기 로직
+  const togetherFetchData = async () => {
+    setIsLoaded(false);
+    const userId = sessionStorage.getItem('userId');
+    if (userId) {
+      setAddedUsers([...addedUsers, userId]);
+    }
+    try {
+      const response = await axios.post(`http://127.0.0.1:5000/thirdRecommend`, addedUsers);
+      console.log(response.data);
+      setRestaurants(response.data);
+      setIsLoaded(true);
+    } catch (error) {
+      console.error('Error fetching together data', error);
+    }
+  };
   // 사용자 아이디를 검색하는 로직 (함께먹기 부분)
   const toggleSearchInput = () => {
     setShowSearchInput(!showSearchInput);
@@ -535,13 +551,7 @@ function MainPage() {
                 )}
                 {addedUsers.length > 0 ? (
                   <Btn>
-                    <StyledButton
-                      padding="1rem"
-                      borderRadius="0.4rem"
-                      onClick={() => {
-                        console.log('button clicked');
-                      }}
-                    >
+                    <StyledButton padding="1rem" borderRadius="0.4rem" onClick={togetherFetchData}>
                       <div className={Styles.p2bold}>함께 먹기</div>
                     </StyledButton>
                   </Btn>
@@ -560,7 +570,7 @@ function MainPage() {
                 }}
               />
             </GridHeaderContainer>
-            {selected === 'all' ? showAllRestaurant() : null}
+            {showAllRestaurant()}
           </ListContainer>
         </Container>
       </MainPageContainer>

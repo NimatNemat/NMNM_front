@@ -103,7 +103,7 @@ function Pagination(props: pageProps) {
         <PageSpan className={Styles.p2bold} onClick={firstPage}>
           처음
         </PageSpan>
-        <PageSpan className={Styles.p2bold} onClick={firstPage}>
+        <PageSpan className={Styles.p2bold} onClick={prevPage}>
           이전
         </PageSpan>
         {currentButtons.map((number) => (
