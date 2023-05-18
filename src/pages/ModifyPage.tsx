@@ -74,7 +74,9 @@ function ModifyPage() {
       ) : (
         <Container>
           <span className={Styles.h3}>회원 정보 수정</span>
-          <ImageUpload fileUrl={fileurl === '' ? 'https://cdn-icons-png.flaticon.com/512/1555/1555492.png' : fileurl} />
+          <ImageUpload
+            fileUrl={fileurl === null ? 'https://cdn-icons-png.flaticon.com/512/1555/1555492.png' : fileurl}
+          />
           <span className={Styles.p1bold}>닉네임</span>
           <StyledInput
             value={nicknameValue}

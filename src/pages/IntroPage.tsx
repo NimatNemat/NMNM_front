@@ -84,7 +84,7 @@ function IntroPage() {
     }
   };
   const contentRefs = useRef<Array<React.RefObject<HTMLDivElement>>>([]);
-  contentRefs.current = [0, 1, 2, 3, 4].map((_, i) => contentRefs.current[i] ?? React.createRef());
+  contentRefs.current = [0, 1, 2, 3].map((_, i) => contentRefs.current[i] ?? React.createRef());
 
   useEffect(() => {
     const onScroll = () => {
@@ -196,7 +196,7 @@ function IntroPage() {
       </Container>
       <Container backGround="#FFFDF5">
         <ContentContainer justifyContent="center">
-          <FooterContainer ref={contentRefs.current[4]} className={`${Styles.fadeInOnScroll} ${Styles.visible}`}>
+          <FooterContainer>
             <StyledLogoDiv>
               <img src="/logo.png" alt="logo" style={{ width: '12.5rem', height: '5rem' }} />
             </StyledLogoDiv>

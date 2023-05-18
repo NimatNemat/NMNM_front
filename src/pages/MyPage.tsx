@@ -65,6 +65,7 @@ const Container = styled.div`
   justify-content: center;
   flex-direction: column;
   gap: 2.4rem;
+  // max-width: 1440px;
   @media (max-width: 425px) {
     width: 100%;
   }
@@ -140,7 +141,7 @@ const Line = styled.div`
 `;
 const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   column-gap: 4vh;
   row-gap: 4vh;
   width: 100%;
@@ -212,18 +213,24 @@ function Mypage() {
   const userId = sessionStorage.getItem('userId');
 
   let likedCount = 0;
+
   let banCount = 0;
+
+  const totalReviews = restaurants.length; // 작성한 리뷰의 총 개수
+  const totalLists = restaurants.length; // 맛플리의 총 개수
+  const totalLikes = likedRestaurants.length; // 좋아요한 식당의 총 개수
+
 
   const ClickReview = () => {
     setTab(0);
     setRenderCnt(12);
   };
   const ClickLike = () => {
-    setTab(1);
+    setTab(2);
     setRenderCnt(12);
   };
   const ClickList = () => {
-    setTab(2);
+    setTab(1);
     setRenderCnt(12);
   };
   const ClickBan = () => {
@@ -332,7 +339,9 @@ function Mypage() {
                 <div className={Styles.p2bold}>팔로워 10</div>
                 <div className={Styles.p2bold}>팔로우 20</div>
               </Row>
-              <div className={Styles.p2bold}>{User?.nickName}</div>
+              <Row>
+                <div className={Styles.p2bold}>{User?.nickName}</div>
+              </Row>
               <Info>
                 <div className={Styles.p2regular}>안녕하세요. 저는 손성민 입니다.</div>
               </Info>
@@ -343,10 +352,10 @@ function Mypage() {
             <Btn className={Styles.p1bold} onClick={ClickReview} clicked={tab === 0}>
               작성한 리뷰
             </Btn>
-            <Btn className={Styles.p1bold} onClick={ClickLike} clicked={tab === 1}>
+            <Btn className={Styles.p1bold} onClick={ClickList} clicked={tab === 1}>
               맛플리
             </Btn>
-            <Btn className={Styles.p1bold} onClick={ClickList} clicked={tab === 2}>
+            <Btn className={Styles.p1bold} onClick={ClickLike} clicked={tab === 2}>
               좋아요한 식당
             </Btn>
             <Btn className={Styles.p1bold} onClick={ClickBan} clicked={tab === 3}>
@@ -360,7 +369,7 @@ function Mypage() {
               <Card className={Styles.h3medium}>
                 <CardContent>
                   <PlusIcon />
-                  <div style={{ color: '#9B9B9B' }}>맛집 추가하기</div>
+                  <div style={{ color: '#9B9B9B' }}>맛플리 추가하기</div>
                 </CardContent>
               </Card>
               {restaurants.map((restaurant: any, index) =>
@@ -397,6 +406,7 @@ function Mypage() {
               })()}
             </GridContainer>
           ) : null}
+
           {isLoaded && tab === 3 ? (
             <GridContainer>
               {banRestaurants.length === 0 ? <div className={Styles.p2bold}>안볼래요 식당이 없습니다.</div> : null}
@@ -433,6 +443,19 @@ function Mypage() {
           >
             더보기
           </StyledButton>
+          {(tab === 0 && renderCnt < totalReviews) ||
+          (tab === 1 && renderCnt < totalLists) ||
+          (tab === 2 && renderCnt < totalLikes) ? (
+            <StyledButton
+              onClick={() => {
+                setRenderCnt((prev) => prev + 12);
+              }}
+              fontsize="1.2rem"
+              padding="0.5rem 0"
+            >
+              더보기
+            </StyledButton>
+          ) : null}
         </Container>
       </MypageContainer>
       {showModal ? <StyledModal show={showModal} onClose={closeModal} data={modalData} modalRef={modalRef} /> : null}

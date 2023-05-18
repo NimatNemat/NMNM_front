@@ -21,7 +21,7 @@ const ReviewContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1.2rem;
+  gap: 0.8rem;
   background: #ffffff;
   box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
   padding: 1.6rem;
@@ -98,10 +98,12 @@ const Evaluation = styled.div`
   width: 6rem;
 `;
 
+
 interface Review {
   _id: {
     timestamp: number;
     date: string;
+
   };
   reviewId: number;
   restaurantId: number;
@@ -136,6 +138,7 @@ function ReviewComponent(props: Props) {
 
   return (
     <ReviewContainer>
+
       <Rowbox>
         <div className={Styles.p2bold}>가게이름</div>
         {userId === review.userId && (
@@ -150,6 +153,7 @@ function ReviewComponent(props: Props) {
         >
           <img src="/img.png" alt="profile" style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
         </button>
+
         <Colbox className={Styles.p2bold}>
           <div>{review.userId}</div>
           <div>{review.reviewDate.split('T')[0]}</div>
