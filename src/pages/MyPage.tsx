@@ -211,15 +211,14 @@ function Mypage() {
   const [User, setUser] = useState<User | null>(null);
   const { id } = useParams<{ id: string }>();
   const userId = sessionStorage.getItem('userId');
+  const [totalReviews, setTotalReviews] = useState<number>(0);
 
   let likedCount = 0;
-
   let banCount = 0;
 
-  const totalReviews = restaurants.length; // 작성한 리뷰의 총 개수
   const totalLists = restaurants.length; // 맛플리의 총 개수
   const totalLikes = likedRestaurants.length; // 좋아요한 식당의 총 개수
-
+  const totalBan = banRestaurants.length;
 
   const ClickReview = () => {
     setTab(0);
@@ -363,7 +362,7 @@ function Mypage() {
             </Btn>
           </Row>
 
-          {isLoaded && tab === 0 ? <MyReview /> : null}
+          {isLoaded && tab === 0 ? <MyReview setTotalReviews={setTotalReviews} /> : null}
           {isLoaded && tab === 1 ? (
             <GridContainer>
               <Card className={Styles.h3medium}>
@@ -434,18 +433,10 @@ function Mypage() {
               })()}
             </GridContainer>
           ) : null}
-          <StyledButton
-            onClick={() => {
-              setRenderCnt((prev) => prev + 12);
-            }}
-            fontsize="1.2rem"
-            padding="0.5rem 0"
-          >
-            더보기
-          </StyledButton>
           {(tab === 0 && renderCnt < totalReviews) ||
           (tab === 1 && renderCnt < totalLists) ||
-          (tab === 2 && renderCnt < totalLikes) ? (
+          (tab === 2 && renderCnt < totalLikes) ||
+          (tab === 3 && renderCnt < totalBan) ? (
             <StyledButton
               onClick={() => {
                 setRenderCnt((prev) => prev + 12);

@@ -12,6 +12,9 @@ const GridContainer = styled.div`
   width: 100%;
 `;
 
+interface MyReviewProps {
+  setTotalReviews: (value: number) => void;
+}
 interface Review {
   _id: {
     timestamp: number;
@@ -34,7 +37,7 @@ const Text = styled.div`
   align-items: center;
   gap: 0.5vw;
 `;
-function MyReview() {
+function MyReview({ setTotalReviews }: MyReviewProps) {
   const userId = sessionStorage.getItem('userId');
   const [reviewList, setReviewList] = useState<Review[]>([]);
   useEffect(() => {
@@ -42,6 +45,7 @@ function MyReview() {
       .get(`/reviews/user/${userId}`)
       .then((res) => {
         setReviewList(res.data);
+        setTotalReviews(res.data.length);
       })
       .catch((err) => {
         alert(err);
