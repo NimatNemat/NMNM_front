@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import axios from 'axios';
 import StyledInput from '../components/StyledInput';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledButton from '../components/StyledButton';
 import ImageUpload from '../components/ImageUpload';
+import PwdModal from '../components/PwdModal';
 
 interface User {
   _id: {
@@ -25,6 +26,8 @@ function MydetailPage() {
   const [User, setUser] = useState<User | null>(null);
   const [email, setEmail] = useState('');
   const [detailValue, setDetailValue] = useState<string>('');
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const navigate = useNavigate();
   const handleNicknameEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   };
@@ -82,64 +85,125 @@ function MydetailPage() {
     loadUser();
   }, []);
 
-  return (
-    <ModifyPageContainer>
-      <Container>
-        <span className={Styles.h3}>내 정보</span>
-        <span className={Styles.p1bold}>이메일</span>
-        <StyledInput
-          value={email}
-          type="text"
-          placeholder="이메일 주소를 입력하세요."
-          style={{ width: '100%' }}
-          onChange={handleNicknameEvent}
-        />
+  const ChangePwdFunction = () => {
+    setShowModal(true);
+  };
+  const modalRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleDocumentClick = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        setShowModal(false);
+      }
+    };
 
-        <span className={Styles.p1bold}>생년월일</span>
-        <StyledDiv>
-          <div style={{ padding: '1.6rem 1.6rem' }}>
-            {User?.birthdate
-              ? `${User.birthdate.slice(0, 4)}년 ${User.birthdate.slice(5, 7)}월 ${User.birthdate.slice(8, 10)}일`
-              : ''}
-          </div>
-        </StyledDiv>
-        <span className={Styles.p1bold}>성별</span>
-        <StyledDiv>
-          <div style={{ padding: '1.6rem 1.6rem' }}>{User?.gender === 0 ? '남자' : '여자'}</div>
-        </StyledDiv>
-        <EndBox>
-          <Row>
-            <div>
-              <StyledButton onClick={Submitfunction} color="F2F4F6">
-                <span className={Styles.p1bold}>취소</span>
-              </StyledButton>
+    document.addEventListener('mousedown', handleDocumentClick);
+    return () => {
+      document.removeEventListener('mousedown', handleDocumentClick);
+    };
+  }, []);
+
+  const loginUser = async (formData: FormData) => {
+    try {
+      const response = await axios.post('/users/login', formData);
+      const userId = sessionStorage.getItem('userId');
+      if (response.status === 200) {
+        sessionStorage.setItem('pwdAuthenticated', 'true');
+        navigate(`/pwdchange/${userId}`);
+      } else {
+        alert('아이디, 비밀번호를 다시 한번 확인하세요.');
+      }
+    } catch (error) {
+      alert('아이디, 비밀번호를 다시 한번 확인하세요.');
+    }
+  };
+  const Loginfunction = (pwd: string) => {
+    const formData = new FormData();
+    const userId = sessionStorage.getItem('userId');
+
+    if (userId) {
+      formData.append('userId', userId);
+    }
+    formData.append('password', pwd);
+    loginUser(formData);
+  };
+
+  return (
+    <>
+      <ModifyPageContainer>
+        <Container>
+          <span className={Styles.h3}>내 정보</span>
+          <span className={Styles.p1bold}>이메일</span>
+          <StyledInput
+            value={email}
+            type="text"
+            placeholder="이메일 주소를 입력하세요."
+            style={{ width: '100%' }}
+            onChange={handleNicknameEvent}
+          />
+
+          <span className={Styles.p1bold}>생년월일</span>
+          <StyledDiv>
+            <div style={{ padding: '1.6rem 1.6rem' }}>
+              {User?.birthdate
+                ? `${User.birthdate.slice(0, 4)}년 ${User.birthdate.slice(5, 7)}월 ${User.birthdate.slice(8, 10)}일`
+                : ''}
             </div>
-            <div>
-              <StyledButton onClick={Submitfunction}>
-                <span className={Styles.p1bold}>수정하기</span>
-              </StyledButton>
-            </div>
-          </Row>
-        </EndBox>
-        <EndBox>
-          <div style={{}}>
-            <UseroutBtn onClick={UserOutfunction}>
-              <span className={Styles.p1bold}>회원탈퇴</span>
-            </UseroutBtn>
-          </div>
-        </EndBox>
-      </Container>
-    </ModifyPageContainer>
+          </StyledDiv>
+          <span className={Styles.p1bold}>성별</span>
+          <StyledDiv>
+            <div style={{ padding: '1.6rem 1.6rem' }}>{User?.gender === 0 ? '남자' : '여자'}</div>
+          </StyledDiv>
+          <EndBox>
+            <Row>
+              <div>
+                <StyledButton onClick={Submitfunction} color="F2F4F6">
+                  <span className={Styles.p1bold}>취소</span>
+                </StyledButton>
+              </div>
+              <div>
+                <StyledButton onClick={Submitfunction}>
+                  <span className={Styles.p1bold}>수정하기</span>
+                </StyledButton>
+              </div>
+            </Row>
+          </EndBox>
+          <EndBox>
+            <Row>
+              <div>
+                <UseroutBtn onClick={ChangePwdFunction} btnColor="rgba(255, 137, 35, 0.6)">
+                  <span className={Styles.p1bold}>비밀번호 변경</span>
+                </UseroutBtn>
+              </div>
+              <div>
+                <UseroutBtn onClick={UserOutfunction} btnColor="#ff0000">
+                  <span className={Styles.p1bold}>회원탈퇴</span>
+                </UseroutBtn>
+              </div>
+            </Row>
+          </EndBox>
+        </Container>
+      </ModifyPageContainer>
+      {showModal ? (
+        <PwdModal
+          show={showModal}
+          onClose={() => setShowModal(false)}
+          onConfirm={(pwd) => {
+            Loginfunction(pwd);
+          }}
+          modalRef={modalRef}
+        />
+      ) : null}
+    </>
   );
 }
 const ModifyPageContainer = styled.div`
   display: flex;
   justify-content: center;
 `;
-const UseroutBtn = styled.button`
-  background-color: #ff0000;
+const UseroutBtn = styled.button<{ btnColor: string }>`
+  background-color: ${({ btnColor }) => btnColor};
   color: #ffffff;
-  border: 1px solid #ff0000;
+  border: 1px solid ${({ btnColor }) => btnColor};
   width: 100%;
   height: 2.4rem;
   border-radius: 0.8rem;
@@ -148,9 +212,9 @@ const UseroutBtn = styled.button`
   opacity: 0.8;
   &:hover {
     opacity: 1;
-    background-color: #ff0000;
+    background-color: ${({ btnColor }) => btnColor};
     color: #ffffff;
-    border: 1px solid #ff0000;
+    border: 1px solid ${({ btnColor }) => btnColor};
   }
 `;
 
@@ -177,7 +241,7 @@ const Row = styled.div`
 `;
 const EndBox = styled.div`
   display: flex;
-
+  flex-direction: row;
   justify-content: end;
   align-items: center;
   width: 100%;

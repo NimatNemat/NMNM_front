@@ -109,7 +109,7 @@ const RowDiv = styled.div`
   align-items: center;
   width: 100%;
 `;
-const Styeldselect = styled.select`
+const Styledselect = styled.select`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -187,10 +187,10 @@ function StyledModal(props: ModalProps) {
           <div className={Styles.p1bold} style={{ width: '100%', textAlign: 'left' }}>
             공개 범위 설정
           </div>
-          <Styeldselect className={Styles.p1bold} value={lock} onChange={handleLockEvent}>
+          <Styledselect className={Styles.p1bold} value={lock} onChange={handleLockEvent}>
             <option value={1}>공개</option>
             <option value={2}>비공개</option>
-          </Styeldselect>
+          </Styledselect>
         </RowDiv>
         <ButtonBox>
           <Button>
