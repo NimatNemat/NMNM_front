@@ -12,11 +12,13 @@ import PreferencePage from './PreferencePage';
 import RegisterPage from './RegisterPage';
 import PrivacyPage from './PrivacyPage';
 import PrivateRoute from './PrivateRoute';
+import PwdRoute from './PwdRoute';
 import Header from '../components/Header';
 import PlayListPage from './PlayListPage';
 import ReviewPage from './ReviewPage';
 import Suggestion from './Suggestion';
 import MydetailPage from './MyDetailPage';
+import PwdChangePage from './PwdChangePage';
 
 const Container = styled.div`
   padding: 2.4rem;
@@ -52,6 +54,9 @@ export default function Router() {
             <Route path="/review/:id" element={<ReviewPage />} />
             <Route path="/Suggestion/:id" element={<Suggestion />} />
             <Route path="/mydetail/:id*" element={<MydetailPage />} />
+          </Route>
+          <Route element={<PwdRoute />}>
+            <Route path="/pwdchange/:id" element={<PwdChangePage />} />
           </Route>
         </Routes>
       </Container>
