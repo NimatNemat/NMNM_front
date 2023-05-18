@@ -138,6 +138,7 @@ function PreferencePage() {
     imageUrl: string;
     xposition: number;
     yposition: number;
+    banUserList: string[];
   }
   const [restaurant, setRestaurant] = useState<Restaurant>({} as Restaurant);
 

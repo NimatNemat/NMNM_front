@@ -249,6 +249,7 @@ function MainPage() {
     imageUrl: string;
     xposition: number;
     yposition: number;
+    banUserList: string[];
   }
 
   interface User {
@@ -433,14 +434,16 @@ function MainPage() {
       <>
         <GridContainer>
           {isLoaded && currentRestaurant ? (
-            currentRestaurant.map((restaurant) => (
-              <StyledCard
-                restaurant={restaurant}
-                setModalData={handleModalData}
-                openModal={openModal}
-                key={restaurant.restaurantId}
-              />
-            ))
+            currentRestaurant.map((restaurant) =>
+              restaurant.banUserList?.includes(sessionStorage.getItem('userId') || '') ? null : (
+                <StyledCard
+                  restaurant={restaurant}
+                  setModalData={handleModalData}
+                  openModal={openModal}
+                  key={restaurant.restaurantId}
+                />
+              )
+            )
           ) : (
             <h1>로딩중입니다.</h1>
           )}

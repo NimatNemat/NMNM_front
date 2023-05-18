@@ -80,9 +80,11 @@ interface ReviewImageUploadProps {
   index: number;
   onUpload: () => void;
   onDelete: () => void;
+  addFile: (file: FileList) => void;
+  removeFile: (file: FileList) => void;
 }
 
-function ReviewImageUpload({ index, onUpload, onDelete }: ReviewImageUploadProps) {
+function ReviewImageUpload({ index, onUpload, onDelete, addFile, removeFile }: ReviewImageUploadProps) {
   const [fileURL, setFileURL] = useState<string>('/plus.png');
   const [file, setFile] = useState<FileList | null>(null);
   const [key, setKey] = useState<number>(0);
@@ -91,12 +93,14 @@ function ReviewImageUpload({ index, onUpload, onDelete }: ReviewImageUploadProps
 
   const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
+
     if (files) {
       setFile(files);
+      addFile(files);
       const newFileURL = URL.createObjectURL(files[0]);
       setFileURL(newFileURL);
+      onUpload();
       if (firstUpload) {
-        onUpload();
         setFirstUpload(false);
       }
     }
@@ -106,6 +110,9 @@ function ReviewImageUpload({ index, onUpload, onDelete }: ReviewImageUploadProps
   const onImageRemove = (event: React.MouseEvent): void => {
     event.stopPropagation();
     URL.revokeObjectURL(fileURL);
+    if (file) {
+      removeFile(file);
+    }
     setFileURL('/plus.png'); // 렌더링 이미지 초기화
     setFile(null);
     onDelete();

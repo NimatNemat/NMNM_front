@@ -38,7 +38,9 @@ const StyledSlider = styled(Slider)`
   }
   .slick-slide img {
     width: 100%;
+    height: 200px;
   }
+
   .slick-prev,
   .slick-next {
     z-index: 9999;

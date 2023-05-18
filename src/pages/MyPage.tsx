@@ -10,6 +10,7 @@ import Styles from '../config/globalFontStyle.module.css';
 import StyledCard from '../components/StyledCard';
 import ReviewComponent from '../components/ReviewComponent';
 import StyledModal from '../components/StyledModal';
+import MyReview from '../components/MyReivew';
 
 interface Restaurant {
   _id: {
@@ -35,6 +36,8 @@ interface Restaurant {
   imageUrl: string;
   xposition: number;
   yposition: number;
+  banUserList: string[];
+  reviews: [];
 }
 interface User {
   _id: {
@@ -204,14 +207,19 @@ function Mypage() {
   const [renderCnt, setRenderCnt] = useState<number>(12);
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const [likedRestaurants, setLikedRestaurants] = useState<Restaurant[]>([]);
+  const [banRestaurants, setbanRestaurants] = useState<Restaurant[]>([]);
   const [User, setUser] = useState<User | null>(null);
   const { id } = useParams<{ id: string }>();
   const userId = sessionStorage.getItem('userId');
 
   let likedCount = 0;
+
+  let banCount = 0;
+
   const totalReviews = restaurants.length; // 작성한 리뷰의 총 개수
   const totalLists = restaurants.length; // 맛플리의 총 개수
   const totalLikes = likedRestaurants.length; // 좋아요한 식당의 총 개수
+
 
   const ClickReview = () => {
     setTab(0);
@@ -225,6 +233,10 @@ function Mypage() {
     setTab(1);
     setRenderCnt(12);
   };
+  const ClickBan = () => {
+    setTab(3);
+    setRenderCnt(12);
+  };
   const fetchData = async () => {
     setIsLoaded(false);
     try {
@@ -234,7 +246,11 @@ function Mypage() {
       const liked = response.data.filter((restaurant: Restaurant) => {
         return id && restaurant.likeUserList && restaurant.likeUserList.includes(id);
       });
+      const ban = response.data.filter((restaurant: Restaurant) => {
+        return id && restaurant.banUserList && restaurant.banUserList.includes(id);
+      });
       setLikedRestaurants(liked);
+      setbanRestaurants(ban);
     } catch (error) {
       console.error('Error fetching data', error);
       setIsLoaded(false);
@@ -342,13 +358,12 @@ function Mypage() {
             <Btn className={Styles.p1bold} onClick={ClickLike} clicked={tab === 2}>
               좋아요한 식당
             </Btn>
+            <Btn className={Styles.p1bold} onClick={ClickBan} clicked={tab === 3}>
+              안볼래요 식당
+            </Btn>
           </Row>
 
-          {isLoaded && tab === 0 ? (
-            <GridContainer>
-              {restaurants.map((restaurants: any, index) => (index < renderCnt ? <ReviewComponent /> : null))}
-            </GridContainer>
-          ) : null}
+          {isLoaded && tab === 0 ? <MyReview /> : null}
           {isLoaded && tab === 1 ? (
             <GridContainer>
               <Card className={Styles.h3medium}>
@@ -366,6 +381,7 @@ function Mypage() {
           ) : null}
           {isLoaded && tab === 2 ? (
             <GridContainer>
+              {likedRestaurants.length === 0 ? <div className={Styles.p2bold}>좋아요한 식당이 없습니다.</div> : null}
               {(() => {
                 return likedRestaurants.map((restaurant: Restaurant) => {
                   if (likedCount < renderCnt) {
@@ -391,6 +407,42 @@ function Mypage() {
             </GridContainer>
           ) : null}
 
+          {isLoaded && tab === 3 ? (
+            <GridContainer>
+              {banRestaurants.length === 0 ? <div className={Styles.p2bold}>안볼래요 식당이 없습니다.</div> : null}
+              {(() => {
+                return banRestaurants.map((restaurant: Restaurant) => {
+                  if (banCount < renderCnt) {
+                    banCount += 1;
+                    return (
+                      <StyledCard
+                        restaurant={restaurant}
+                        setModalData={handleModalData}
+                        openModal={openModal}
+                        key={restaurant.restaurantId}
+                        updateLikedRestaurant={() => {
+                          const updatedbanRestaurants = banRestaurants.filter(
+                            (banRestaurant: Restaurant) => banRestaurant.restaurantId !== restaurant.restaurantId
+                          );
+                          setbanRestaurants(updatedbanRestaurants);
+                        }}
+                      />
+                    );
+                  }
+                  return null;
+                });
+              })()}
+            </GridContainer>
+          ) : null}
+          <StyledButton
+            onClick={() => {
+              setRenderCnt((prev) => prev + 12);
+            }}
+            fontsize="1.2rem"
+            padding="0.5rem 0"
+          >
+            더보기
+          </StyledButton>
           {(tab === 0 && renderCnt < totalReviews) ||
           (tab === 1 && renderCnt < totalLists) ||
           (tab === 2 && renderCnt < totalLikes) ? (

@@ -87,6 +87,7 @@ function PlayListPage() {
     imageUrl: string;
     xposition: number;
     yposition: number;
+    banUserList: string[];
   }
   const restaurant: Restaurant = {
     _id: {
@@ -115,6 +116,7 @@ function PlayListPage() {
     imageUrl: 'https://picsum.photos/200',
     xposition: 37.123456,
     yposition: 127.123456,
+    banUserList: [],
   };
   const navigate = useNavigate();
   return (

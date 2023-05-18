@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { AiOutlineFrown, AiOutlineSmile, AiOutlineMeh, AiOutlineStar, AiFillStar } from 'react-icons/ai';
+import axios from 'axios';
 import Styles from '../config/globalFontStyle.module.css';
 import ReviewImageUpload from '../components/ReviewImageUpload';
 import StyledButton from '../components/StyledButton';
@@ -117,20 +118,56 @@ const Btn = styled.div`
 const MAX_UPLOAD_COMPONENTS = 3;
 
 function ReviewPage() {
-  const [selectedEvaluation, setSelectedEvaluation] = useState<string>('맛있다'); // 간단평가항목 선택
+  const [selectedEvaluation, setSelectedEvaluation] = useState<number>(0); // 간단평가항목 선택
   const [reviewTextValue, setReviewTextValue] = useState<string>(''); // 리뷰텍스트
   const [starClicked, setStarClicked] = useState<boolean[]>([false, false, false, false, false]);
   const [uploadComponents, setUploadComponents] = useState<number[]>([0]);
-
+  const [fileList, setFileList] = useState<[FileList]>(); // 업로드한 파일 목록
+  const [ImageList, setImageList] = useState<string[]>([]); // 업로드한 이미지 목록
   const { id } = useParams<{ id: string }>();
-  const handleEvaluationClickEvent = (evaluation: string) => {
+  const handleEvaluationClickEvent = (evaluation: number) => {
     setSelectedEvaluation(evaluation);
   };
 
   const handleReviewTextChangeEvent = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setReviewTextValue(event.target.value);
   };
+  const addFile = (file: FileList) => {
+    let newFileList = fileList;
+    if (newFileList) {
+      newFileList.push(file);
+    } else {
+      newFileList = [file];
+    }
+    setFileList(newFileList);
+  };
+  const removefile = (file: FileList) => {
+    const index = findFileindex(file);
+    const newFileList = fileList;
+    if (newFileList) {
+      newFileList.splice(index, 1);
+    }
+    setFileList(newFileList);
+  };
+  const findFileindex = (file: FileList) => {
+    let index = -1;
+    fileList?.forEach((el, idx) => {
+      if (el === file) {
+        index = idx;
+      }
+    });
+    return index;
+  };
 
+  const addImg = (img: string) => {
+    let newImgList = ImageList;
+    if (newImgList) {
+      newImgList.push(img);
+    } else {
+      newImgList = [img];
+    }
+    setImageList(newImgList);
+  };
   // Date.now()를 이용하여 현재 시간의 밀리초 단위로 표현된 고유한 숫자 값을 키값으로 사용
   const handleImageUpload = () => {
     setUploadComponents((prevState) => [...prevState, Date.now()]);
@@ -138,7 +175,6 @@ function ReviewPage() {
   const handleImageDelete = (uniqueKey: number) => {
     setUploadComponents((prevState) => prevState.filter((key) => key !== uniqueKey));
   };
-
   const starArray = [0, 1, 2, 3, 4];
   const handleStarClick = (index: number) => {
     const clickStates = [...starClicked];
@@ -151,6 +187,66 @@ function ReviewPage() {
   const navigate = useNavigate();
   const handleCancelButtonClick = () => {
     navigate(`/detail/${id}`);
+  };
+  const handleFileUpload = async (file: FileList) => {
+    const formData = new FormData();
+    formData.append('image', file[0]);
+    try {
+      const response = await axios.post('/reviews/uploadImage', formData);
+      if (response.status === 200) {
+        addImg(response.data.imageUrl);
+      } else {
+        alert('업로드 실패');
+      }
+    } catch (error) {
+      alert('업로드 실패');
+    }
+  };
+  const onUpload = async () => {
+    const requsetbody = {
+      reviewInfo: reviewTextValue,
+      simpleEvaluation: selectedEvaluation,
+      reviewDate: new Date().toISOString(),
+      reviewImage: ImageList,
+      reviewScore: starClicked.filter((el) => el).length,
+    };
+    try {
+      const response = await axios.post(
+        `/reviews/createReview?userId=${sessionStorage.getItem('userId')}&restaurantId=${id}`,
+        requsetbody
+      );
+      if (response.status === 201) {
+        console.log(response.data);
+        navigate(`/detail/${id}`);
+      } else {
+        alert('업로드 실패');
+      }
+    } catch (error) {
+      alert('업로드 실패');
+    }
+  };
+
+  const handleSubmitButtonClick = async () => {
+    if (reviewTextValue === '') {
+      alert('리뷰를 입력해주세요');
+      return;
+    }
+    if (selectedEvaluation === 0) {
+      alert('간단평가를 선택해주세요');
+      return;
+    }
+    if (starClicked.filter((el) => el).length === 0) {
+      alert('별점을 선택해주세요');
+      return;
+    }
+    if (fileList) {
+      await Promise.all(
+        fileList.map(async (file) => {
+          await handleFileUpload(file);
+        })
+      );
+    }
+    onUpload();
   };
 
   return (
@@ -179,28 +275,19 @@ function ReviewPage() {
           </StarDiv>
           <EvaluationPicker>
             <li>
-              <EvaluationButton
-                selected={selectedEvaluation === '맛있다'}
-                onClick={() => handleEvaluationClickEvent('맛있다')}
-              >
+              <EvaluationButton selected={selectedEvaluation === 1} onClick={() => handleEvaluationClickEvent(1)}>
                 <AiOutlineSmile size="4rem" />
                 <span className={Styles.p1medium}>맛있다</span>
               </EvaluationButton>
             </li>
             <li>
-              <EvaluationButton
-                selected={selectedEvaluation === '괜찮아요'}
-                onClick={() => handleEvaluationClickEvent('괜찮아요')}
-              >
+              <EvaluationButton selected={selectedEvaluation === 2} onClick={() => handleEvaluationClickEvent(2)}>
                 <AiOutlineMeh size="4rem" />
                 <span className={Styles.p1medium}>괜찮아요</span>
               </EvaluationButton>
             </li>
             <li>
-              <EvaluationButton
-                selected={selectedEvaluation === '별로에요'}
-                onClick={() => handleEvaluationClickEvent('별로에요')}
-              >
+              <EvaluationButton selected={selectedEvaluation === 3} onClick={() => handleEvaluationClickEvent(3)}>
                 <AiOutlineFrown size="4rem" />
                 <div className={Styles.p1medium}>별로에요</div>
               </EvaluationButton>
@@ -219,6 +306,12 @@ function ReviewPage() {
               index={index + 1}
               onUpload={handleImageUpload}
               onDelete={() => handleImageDelete(uniqueKey)}
+              addFile={(file: FileList) => {
+                addFile(file);
+              }}
+              removeFile={(file: FileList) => {
+                removefile(file);
+              }}
             />
           ))}
         </GridContainer>
@@ -229,7 +322,7 @@ function ReviewPage() {
             </StyledButton>
           </Btn>
           <Btn>
-            <StyledButton borderRadius="2rem" fontsize="1.6rem" onClick={handleCancelButtonClick}>
+            <StyledButton borderRadius="2rem" fontsize="1.6rem" onClick={handleSubmitButtonClick}>
               완료
             </StyledButton>
           </Btn>
