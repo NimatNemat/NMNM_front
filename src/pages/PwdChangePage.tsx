@@ -116,6 +116,7 @@ function PwdChangePage() {
           </StyledButton>
           <StyledButton
             onClick={() => {
+              sessionStorage.setItem('pwdAuthenticated', 'false');
               navigate(`/main`);
             }}
             color="rgba(128, 128, 128, 1)"
