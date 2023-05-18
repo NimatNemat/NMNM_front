@@ -1,7 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { AiOutlineFrown, AiOutlineSmile, AiOutlineMeh, AiOutlineStar, AiFillStar } from 'react-icons/ai';
+import { FiMoreHorizontal } from 'react-icons/fi';
+import {
+  AiOutlineFrown,
+  AiOutlineSmile,
+  AiOutlineMeh,
+  AiOutlineStar,
+  AiFillStar,
+  AiFillCloseCircle,
+  AiFillDelete,
+  AiOutlineDelete,
+} from 'react-icons/ai';
+import axios from 'axios';
 import Styles from '../config/globalFontStyle.module.css';
 import StaylistSlider from './StaylistSlider';
 import StyledButton from './StyledButton';
@@ -28,6 +39,12 @@ const Colbox = styled.div`
   flex-direction: column;
   width: 100%;
 `;
+const Rowbox = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+`;
 const ProfileContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -44,8 +61,11 @@ const ReviewTextContainer = styled.p<{ isMoreView: boolean }>`
   margin: 0;
   gap: 0.5rem;
   width: 100%;
-  height: ${({ isMoreView }) => (isMoreView ? '100%' : '5.6rem')};
+  height: 100%;
+  max-height: ${({ isMoreView }) => (isMoreView ? '100%' : '4.8rem')};
   overflow-y: hidden;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
   /* padding-top: 2.4rem; */
 `;
 const SliderContainer = styled.div`
@@ -72,80 +92,108 @@ const Evaluation = styled.div`
   display: flex;
   align-items: center;
   color: rgba(255, 137, 35, 0.6);
-  background-color: #fffdf5;
   gap: 0.5rem;
   padding: 0;
   flex-direction: column;
   width: 6rem;
 `;
 
-function ReviewComponent() {
-  const data = {
-    name: '김민수',
-    userId: 'testtest1',
-    profileImg: '/img.png',
-    createdAt: '2021-04-15',
-    rating: 3,
-    content:
-      '특이점 : 테이블 많아서 회전율 빠름. 주문 후 꽤 빨리 음식 나오는 편. 한국에서 김치나베가 가장 맛있는 곳.김치나베 : 매콤달콤칼칼한 맛. 맵칼 중독자라면 1번 먹고 계속 생각나서 재방문하게 됨. 본인은 돈까스 싫어하는데도 이 곳 김치나베는 한 달에 최소 한 번은 다시 먹으러 옴! 치즈가 고소하고 부드러워서 뭔진 모르겠지만 비싼 치즈구나 싶은 최고의 맛. 김치와 돈까스와 치즈의 양이 모두 넉넉해서 만족스러운 한끼 식사 할 수 있음. 재방문의사 : O, 이거 안 먹으면 손해🥹',
+interface Review {
+  _id: {
+    timestamp: number;
+    date: string;
   };
+  reviewId: number;
+  restaurantId: number;
+  userId: string;
+  reviewInfo: string;
+  reviewScore: number;
+  simpleEvaluation: number;
+  reviewDate: string;
+  reviewImage: string[];
+}
+interface Props {
+  review: Review;
+}
+function ReviewComponent(props: Props) {
+  const { review } = props;
+  const userId = sessionStorage.getItem('userId');
   const [isMoreView, setIsMoreView] = useState<boolean>(false);
   const navigate = useNavigate();
+
   const handleProfileClick = () => {
-    navigate(`/mypage/${data.userId}`);
+    navigate(`/mypage/${review.userId}`);
+  };
+
+  const handleDelete = async () => {
+    alert(review.reviewId);
+    const res = await axios.delete(`/reviews/deleteReview/${review.reviewId}`);
+    if (res.status === 200) {
+      alert('리뷰가 삭제되었습니다.');
+      window.location.reload();
+    }
   };
 
   return (
     <ReviewContainer>
-      <ProfileContainer onClick={handleProfileClick}>
-        <img src="/img.png" alt="profile" style={{ width: '4rem', height: '4rem', borderRadius: '50%' }} />
+      <Rowbox>
+        <div className={Styles.p2bold}>가게이름</div>
+        {userId === review.userId && (
+          <AiOutlineDelete size="2.4rem" onClick={handleDelete} style={{ cursor: 'pointer' }} />
+        )}
+      </Rowbox>
+      <ProfileContainer>
+        <button
+          type="button"
+          onClick={handleProfileClick}
+          style={{ width: '4rem', height: '4rem', cursor: 'pointer', border: 'none', background: 'none', padding: '0' }}
+        >
+          <img src="/img.png" alt="profile" style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
+        </button>
         <Colbox className={Styles.p2bold}>
-          <div>{data.name}</div>
-          <div>{data.createdAt}</div>
+          <div>{review.userId}</div>
+          <div>{review.reviewDate.split('T')[0]}</div>
           <div>
-            {[...Array(data.rating)].map((index, i) => (
+            {[...Array(review.reviewScore)].map((index, i) => (
               <AiFillStar style={{ color: 'rgba(255, 137, 35,0.6)' }} />
             ))}
-            {[...Array(5 - data.rating)].map((index, i) => (
+            {[...Array(5 - review.reviewScore)].map((index, i) => (
               <AiOutlineStar style={{ color: 'rgba(255, 137, 35,0.6)' }} />
             ))}
           </div>
         </Colbox>
         <EvaluationPicker>
-          <li>
-            <Evaluation>
-              <AiOutlineFrown size="3rem" />
-              <div className={Styles.p2bold}>별로에요</div>
-            </Evaluation>
-          </li>
+          <Evaluation>
+            {review.simpleEvaluation === 1 && <AiOutlineSmile size="3rem" />}
+            {review.simpleEvaluation === 1 && <div className={Styles.p2bold}>좋아요</div>}
+            {review.simpleEvaluation === 2 && <AiOutlineMeh size="3rem" />}
+            {review.simpleEvaluation === 2 && <div className={Styles.p2bold}>괜찮아요</div>}
+            {review.simpleEvaluation === 3 && <AiOutlineFrown size="3rem" />}
+            {review.simpleEvaluation === 3 && <div className={Styles.p2bold}>별로에요</div>}
+          </Evaluation>
         </EvaluationPicker>
       </ProfileContainer>
       <Content className={Styles.p2medium}>
         <SliderContainer>
           <StaylistSlider num={1}>
-            <div style={{ width: '100%' }}>
-              <img src="/img.png" alt="sdf" />
-            </div>
-            <div style={{ width: '100%' }}>
-              <img src="/logo.png" alt="sdf" />
-            </div>
-            <div style={{ width: '100%' }}>
-              <img src="/img.png" alt="sdf" />
-            </div>
+            {review.reviewImage.map((image, index) => (
+              <div style={{ width: '100%' }}>
+                <img src={image} alt="sdf" />
+              </div>
+            ))}
           </StaylistSlider>
         </SliderContainer>
         <ReviewTextContainer className={Styles.p2regular} isMoreView={isMoreView}>
-          {data.content}
+          {review.reviewInfo}
         </ReviewTextContainer>
       </Content>
       <BtnContainer>
         <StyledButton
-          // color="white"
           onClick={() => {
             setIsMoreView(!isMoreView);
           }}
           fontsize="1.2rem"
-          padding="0.5rem 0"
+          padding="0.5rem"
         >
           {isMoreView ? '접기' : '더보기'}
         </StyledButton>

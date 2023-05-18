@@ -3,7 +3,17 @@ import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 
-import { AiOutlineShareAlt, AiOutlineStar, AiOutlineBulb, AiOutlineClockCircle, AiFillSignal } from 'react-icons/ai';
+import {
+  AiOutlineShareAlt,
+  AiOutlineStar,
+  AiOutlineBulb,
+  AiOutlineClockCircle,
+  AiFillSignal,
+  AiOutlineBlock,
+  AiFillUnlock,
+  AiOutlineUnlock,
+  AiOutlineLock,
+} from 'react-icons/ai';
 import { BsBookmark, BsBookmarkFill, BsFillHeartFill, BsHeart } from 'react-icons/bs';
 import { FiSlash } from 'react-icons/fi';
 import Map from '../components/Map';
@@ -147,13 +157,19 @@ function DetailPage() {
     imageUrl: string;
     xposition: number;
     yposition: number;
+    reviews: [];
+    banUserList: string[];
   }
   const [restaurant, setRestaurant] = useState<Restaurant>({} as Restaurant);
   const [liked, setLiked] = useState<boolean>(false);
+  const [ban, setBan] = useState<boolean>(false);
   const fetchData = async () => {
     setIsLoaded(false);
     const response = await axios.get(`/restaurant/${id}`);
     setRestaurant(response.data);
+    setReview(response.data.reviews.length);
+    console.log(response.data);
+
     if (response.data.likeUserList) {
       response.data.likeUserList.forEach((user: string) => {
         if (user === sessionStorage.getItem('userId')) {
@@ -161,10 +177,17 @@ function DetailPage() {
         }
       });
     }
+    if (response.data.banUserList) {
+      response.data.banUserList.forEach((user: string) => {
+        if (user === sessionStorage.getItem('userId')) {
+          setBan(true);
+        }
+      });
+    }
     setIsLoaded(true);
   };
   const [isLoaded, setIsLoaded] = useState(false);
-  const [review, setReview] = useState<number>(3);
+  const [review, setReview] = useState<number>(0);
   const likefunction: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
     const formData = new FormData();
@@ -185,6 +208,30 @@ function DetailPage() {
     try {
       const response = await axios.post('/likes/unlike', formData);
       setLiked(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const banfunction: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append('restaurantId', restaurant?.restaurantId.toString() as never);
+    formData.append('userId', sessionStorage.getItem('userId') as never);
+    try {
+      const response = await axios.post('/likes/ban', formData);
+      window.location.href = '/main';
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const unbanfunction: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append('restaurantId', restaurant?.restaurantId.toString() as never);
+    formData.append('userId', sessionStorage.getItem('userId') as never);
+    try {
+      const response = await axios.post('/likes/unban', formData);
+      window.location.href = '/main';
     } catch (error) {
       console.log(error);
     }
@@ -254,10 +301,17 @@ function DetailPage() {
                   </Link>
                 </Icon>
                 <Icon className={Styles.h4}>
-                  <FiSlash />
-                  <Link to="/" style={{ textDecoration: 'none', color: 'black' }}>
-                    안볼래요
-                  </Link>
+                  {ban ? (
+                    <Icon type="button" onClick={unbanfunction} className={Styles.h4}>
+                      <AiOutlineUnlock />
+                      <div>볼래요</div>
+                    </Icon>
+                  ) : (
+                    <Icon type="button" onClick={banfunction} className={Styles.h4}>
+                      <AiOutlineLock />
+                      <div>안볼래요</div>
+                    </Icon>
+                  )}
                 </Icon>
               </Rowcenterbox>
             </Content>
@@ -331,20 +385,31 @@ function DetailPage() {
                 <Text className={Styles.h4}>리뷰</Text>
               </Title>
               <Box>
-                {[...Array(review)].map((index, i) => (
-                  <ReviewComponent />
-                ))}
+                {restaurant.reviews.length === 0 ? (
+                  <Text className={Styles.p2bold}>리뷰가 없습니다.</Text>
+                ) : (
+                  restaurant.reviews.map((Review, index) => {
+                    if (index < review) {
+                      return <ReviewComponent review={Review} />;
+                    }
+                    return null;
+                  })
+                )}
               </Box>
             </Content>
-            <StyledButton
-              onClick={() => {
-                setReview((prev) => prev + 3);
-              }}
-              fontsize="1.2rem"
-              padding="0.5rem 0"
-            >
-              더보기
-            </StyledButton>
+            {review < restaurant.reviews.length && (
+              <StyledButton
+                onClick={() => {
+                  if (review <= restaurant.reviews.length) {
+                    setReview((prev) => prev + 3);
+                  }
+                }}
+                fontsize="1.2rem"
+                padding="0.5rem 0"
+              >
+                더보기
+              </StyledButton>
+            )}
           </Section>
           <Section>
             <Content>

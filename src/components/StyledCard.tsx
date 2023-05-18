@@ -29,6 +29,7 @@ interface Restaurant {
   imageUrl: string;
   xposition: number;
   yposition: number;
+  banUserList: string[] | null;
 }
 interface StyledCardProps {
   restaurant: Restaurant;
