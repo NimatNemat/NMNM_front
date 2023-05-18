@@ -409,6 +409,7 @@ function MainPage() {
   // 선택한 태그와 Restaurant의 QuisinType을 비교하여 필터링
   const filteredRestaurants = useMemo(() => {
     let filtered = restaurants || [];
+    const userId = sessionStorage.getItem('userId');
 
     if (selectedTags.length > 0) {
       filtered = filtered.filter((restaurant) => {
@@ -421,6 +422,14 @@ function MainPage() {
 
     filtered = filtered.filter((restaurant) => restaurant.name.includes(searchName));
 
+    filtered = filtered.filter((restaurant) => {
+      if (userId && restaurant.banUserList) {
+        if (restaurant.banUserList.includes(userId)) {
+          return false;
+        }
+      }
+      return true;
+    });
     return filtered;
   }, [restaurants, selectedTags, searchName]);
 
@@ -434,16 +443,14 @@ function MainPage() {
       <>
         <GridContainer>
           {isLoaded && currentRestaurant ? (
-            currentRestaurant.map((restaurant) =>
-              restaurant.banUserList?.includes(sessionStorage.getItem('userId') || '') ? null : (
-                <StyledCard
-                  restaurant={restaurant}
-                  setModalData={handleModalData}
-                  openModal={openModal}
-                  key={restaurant.restaurantId}
-                />
-              )
-            )
+            currentRestaurant.map((restaurant) => (
+              <StyledCard
+                restaurant={restaurant}
+                setModalData={handleModalData}
+                openModal={openModal}
+                key={restaurant.restaurantId}
+              />
+            ))
           ) : (
             <h1>로딩중입니다.</h1>
           )}
