@@ -62,6 +62,7 @@ const ReviewTextContainer = styled.p<{ isMoreView: boolean }>`
   gap: 0.5rem;
   width: 100%;
   height: 100%;
+  min-height: 5rem;
   max-height: ${({ isMoreView }) => (isMoreView ? '100%' : '4.8rem')};
   overflow-y: hidden;
   word-wrap: break-word;
@@ -98,12 +99,10 @@ const Evaluation = styled.div`
   width: 6rem;
 `;
 
-
 interface Review {
   _id: {
     timestamp: number;
     date: string;
-
   };
   reviewId: number;
   restaurantId: number;
@@ -138,7 +137,6 @@ function ReviewComponent(props: Props) {
 
   return (
     <ReviewContainer>
-
       <Rowbox>
         <div className={Styles.p2bold}>가게이름</div>
         {userId === review.userId && (
