@@ -357,12 +357,14 @@ function Mypage() {
             <Btn className={Styles.p1bold} onClick={ClickLike} clicked={tab === 2}>
               좋아요한 식당
             </Btn>
-            <Btn className={Styles.p1bold} onClick={ClickBan} clicked={tab === 3}>
-              안볼래요 식당
-            </Btn>
+            {id === userId ? (
+              <Btn className={Styles.p1bold} onClick={ClickBan} clicked={tab === 3}>
+                안볼래요 식당
+              </Btn>
+            ) : null}
           </Row>
 
-          {isLoaded && tab === 0 ? <MyReview setTotalReviews={setTotalReviews} /> : null}
+          {isLoaded && tab === 0 ? <MyReview setTotalReviews={setTotalReviews} id={id || ''} /> : null}
           {isLoaded && tab === 1 ? (
             <GridContainer>
               <Card className={Styles.h3medium}>
@@ -397,6 +399,7 @@ function Mypage() {
                           );
                           setLikedRestaurants(updatedLikedRestaurants);
                         }}
+                        showIconBox={userId === id}
                       />
                     );
                   }
@@ -406,7 +409,7 @@ function Mypage() {
             </GridContainer>
           ) : null}
 
-          {isLoaded && tab === 3 ? (
+          {id === userId && isLoaded && tab === 3 ? (
             <GridContainer>
               {banRestaurants.length === 0 ? <div className={Styles.p2bold}>안볼래요 식당이 없습니다.</div> : null}
               {(() => {

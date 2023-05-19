@@ -14,6 +14,7 @@ const GridContainer = styled.div`
 
 interface MyReviewProps {
   setTotalReviews: (value: number) => void;
+  id: string;
 }
 interface Review {
   _id: {
@@ -37,12 +38,11 @@ const Text = styled.div`
   align-items: center;
   gap: 0.5vw;
 `;
-function MyReview({ setTotalReviews }: MyReviewProps) {
-  const userId = sessionStorage.getItem('userId');
+function MyReview({ setTotalReviews, id }: MyReviewProps) {
   const [reviewList, setReviewList] = useState<Review[]>([]);
   useEffect(() => {
     axios
-      .get(`/reviews/user/${userId}`)
+      .get(`/reviews/user/${id}`)
       .then((res) => {
         setReviewList(res.data);
         setTotalReviews(res.data.length);
