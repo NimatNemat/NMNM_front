@@ -60,7 +60,7 @@ function Pagination(props: pageProps) {
     if (currentPage !== totalPages) {
       if (currentPage < indexOfLastButton) {
         setCurrentPage(currentPage + 1);
-        paginate(currentPage);
+        paginate(currentPage + 1);
       } else {
         setCurrentPageSet(currentPageSet + 1);
         paginate(indexOfLastButton + 1);
@@ -72,7 +72,7 @@ function Pagination(props: pageProps) {
     if (currentPage !== 1) {
       if (currentPage > indexOfFirstButton + 1) {
         setCurrentPage(currentPage - 1);
-        paginate(currentPage);
+        paginate(currentPage - 1);
       } else {
         setCurrentPageSet(currentPageSet - 1);
         paginate(indexOfFirstButton);

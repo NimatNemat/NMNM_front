@@ -10,6 +10,7 @@ import Styles from '../config/globalFontStyle.module.css';
 import StyledCard from '../components/StyledCard';
 import ReviewComponent from '../components/ReviewComponent';
 import StyledModal from '../components/StyledModal';
+import FollowModal from '../components/FollowModal';
 import MyReview from '../components/MyReivew';
 
 interface Restaurant {
@@ -52,6 +53,13 @@ interface User {
   password: string;
   profileImage: string | null;
   Id: string;
+  infoMessage: string;
+}
+
+interface FollowUser {
+  userId: string;
+  nickName: string;
+  profileImage: string | null;
 }
 
 const MypageContainer = styled.div`
@@ -192,6 +200,7 @@ function Mypage() {
   const modalRef = useRef<HTMLDivElement>(null);
   const [modalData, setModalData] = useState<number>(0);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [showFollowModal, setShowFollowModal] = useState<boolean>(false);
   const handleModalData = (data: number) => {
     setModalData(data);
   };
@@ -212,6 +221,11 @@ function Mypage() {
   const { id } = useParams<{ id: string }>();
   const userId = sessionStorage.getItem('userId');
   const [totalReviews, setTotalReviews] = useState<number>(0);
+  const [followerCnt, setFollowerCnt] = useState<number>(0);
+  const [followingCnt, setFollowingCnt] = useState<number>(0);
+  const [followers, setFollowers] = useState<FollowUser[]>([]);
+  const [followings, setFollowings] = useState<FollowUser[]>([]);
+  const [followingClicked, setFollowingClicked] = useState<boolean>(false);
 
   let likedCount = 0;
   let banCount = 0;
@@ -255,11 +269,27 @@ function Mypage() {
       setIsLoaded(false);
     }
     try {
-      const response = await axios.get(`/users/userId?userId=${userId}`);
+      const response = await axios.get(`/users/userId?userId=${id}`);
       setUser(response.data);
       console.log(response.data);
     } catch (error) {
       console.error('Error fetching data', error);
+    }
+  };
+
+  const fetchFollowData = async () => {
+    try {
+      if (id) {
+        const responseFollowing = await axios.get(`/follows/getMyfollows?userId=${id}`);
+        setFollowingCnt(responseFollowing.data.length);
+        setFollowings(responseFollowing.data);
+
+        const responseFollowers = await axios.get(`/follows/getMyfollowers?userId=${id}`);
+        setFollowerCnt(responseFollowers.data.length);
+        setFollowers(responseFollowers.data);
+      }
+    } catch (error) {
+      console.error('getFollowers error', error);
     }
   };
 
@@ -269,12 +299,44 @@ function Mypage() {
       axios.defaults.headers.common.Authorization = token;
     }
     fetchData();
-  }, []);
+    fetchFollowData();
+  }, [id]);
 
   const toggleIsFollowing = () => {
+    follow();
     setIsFollowing(!isFollowing);
   };
 
+  const follow = async () => {
+    const token = sessionStorage.getItem('token');
+    let response;
+    const formData = new FormData();
+    if (token) {
+      axios.defaults.headers.common.Authorization = token;
+    }
+    try {
+      if (id) {
+        formData.append('targetId', id);
+        if (isFollowing) {
+          response = await axios.post(`/follows/unfollow`, formData);
+        } else {
+          response = await axios.post(`/follows/follow`, formData);
+        }
+      }
+    } catch (error) {
+      console.error('Follow Api error', error);
+    }
+  };
+
+  const showFollowerList = () => {
+    setFollowingClicked(false);
+    setShowFollowModal(true);
+  };
+
+  const showFollowingList = () => {
+    setFollowingClicked(true);
+    setShowFollowModal(true);
+  };
   let button;
 
   if (userId === id) {
@@ -318,6 +380,35 @@ function Mypage() {
     );
   }
 
+  let modal;
+  if (showFollowModal) {
+    if (followingClicked) {
+      modal = (
+        <FollowModal
+          show={showFollowModal}
+          modalRef={modalRef}
+          userList={followings}
+          isFollowing
+          onClose={() => setShowFollowModal(false)}
+          onFollowChange={fetchFollowData}
+        />
+      );
+    } else {
+      modal = (
+        <FollowModal
+          show={showFollowModal}
+          modalRef={modalRef}
+          userList={followers}
+          isFollowing={false}
+          onClose={() => setShowFollowModal(false)}
+          onFollowChange={fetchFollowData}
+        />
+      );
+    }
+  } else {
+    modal = null;
+  }
+
   return (
     <>
       <MypageContainer>
@@ -334,15 +425,19 @@ function Mypage() {
                 {button}
               </Rowbtn>
               <Row>
-                <div className={Styles.p2bold}>작성한 리뷰 9</div>
-                <div className={Styles.p2bold}>팔로워 10</div>
-                <div className={Styles.p2bold}>팔로우 20</div>
+                <div className={Styles.p2bold}>작성한 리뷰 {totalReviews}</div>
+                <Btn onClick={showFollowerList}>
+                  <div className={Styles.p2bold}>팔로워 {followerCnt}</div>
+                </Btn>
+                <Btn onClick={showFollowingList}>
+                  <div className={Styles.p2bold}>팔로잉 {followingCnt}</div>
+                </Btn>
               </Row>
               <Row>
                 <div className={Styles.p2bold}>{User?.nickName}</div>
               </Row>
               <Info>
-                <div className={Styles.p2regular}>안녕하세요. 저는 손성민 입니다.</div>
+                <div className={Styles.p2regular}>{User?.infoMessage}</div>
               </Info>
             </Infocontent>
           </InfoContainer>
@@ -453,6 +548,7 @@ function Mypage() {
         </Container>
       </MypageContainer>
       {showModal ? <StyledModal show={showModal} onClose={closeModal} data={modalData} modalRef={modalRef} /> : null}
+      {modal}
     </>
   );
 }
