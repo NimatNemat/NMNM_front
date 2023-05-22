@@ -300,7 +300,7 @@ function Mypage() {
     }
     fetchData();
     fetchFollowData();
-  }, [id]);
+  }, [id, isFollowing]);
 
   const toggleIsFollowing = () => {
     follow();
