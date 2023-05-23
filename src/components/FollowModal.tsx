@@ -31,6 +31,7 @@ const ModalWrapper = styled.div<{ show: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
 `;
 const ModalContent = styled.div`
   display: flex;
