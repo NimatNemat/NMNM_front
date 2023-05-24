@@ -412,7 +412,7 @@ function Mypage() {
   } else if (isFollowing) {
     button = (
       <Btncontainer>
-        <StyledButton padding="0.8rem" borderRadius="0.4rem" onClick={toggleIsFollowing}>
+        <StyledButton padding="0.8rem" borderRadius="0.4rem" onClick={toggleIsFollowing} color="rgba(128, 128, 128, 1)">
           <div className={Styles.p2bold}>팔로잉</div>
         </StyledButton>
       </Btncontainer>

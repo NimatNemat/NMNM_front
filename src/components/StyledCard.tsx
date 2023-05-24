@@ -116,7 +116,7 @@ const StyledLink = styled(Link)`
   :hover {
     cursor: pointer;
     transform: translateY(-5px);
-    box-shadow: 0.5rem 0.5rem 1.5rem rgba(255, 112, 3, 0.3);
+    box-shadow: 0.5rem 0.5rem 1.5rem rgba(255, 137, 35, 0.6);
   }
 `;
 const Icon = styled.div`
