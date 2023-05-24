@@ -279,9 +279,9 @@ function StyledModal(props: ModalProps) {
             </TextBox>
             <IconBox>
               {data.publicOrPrivate === 1 ? (
-                <AiOutlineLock size="2rem" color="#6E6E6E" />
-              ) : (
                 <AiOutlineUnlock size="2rem" color="#6E6E6E" />
+              ) : (
+                <AiOutlineLock size="2rem" color="#6E6E6E" />
               )}
             </IconBox>
           </ModalRow>

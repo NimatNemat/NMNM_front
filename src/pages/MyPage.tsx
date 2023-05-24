@@ -327,6 +327,7 @@ function Mypage() {
     }
     fetchData();
     fetchFollowData();
+    fetchPlayList();
   }, [id, isFollowing]);
 
   const toggleIsFollowing = () => {
