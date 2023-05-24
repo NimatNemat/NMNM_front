@@ -127,7 +127,6 @@ function ReviewComponent(props: Props) {
   };
 
   const handleDelete = async () => {
-    alert(review.reviewId);
     const res = await axios.delete(`/reviews/deleteReview/${review.reviewId}`);
     if (res.status === 200) {
       alert('리뷰가 삭제되었습니다.');

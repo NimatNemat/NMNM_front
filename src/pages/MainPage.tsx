@@ -3,6 +3,7 @@ import Select, { ActionMeta, InputActionMeta, SingleValue, components } from 're
 import axios from 'axios';
 import styled from 'styled-components';
 import { AiOutlineSearch } from 'react-icons/ai';
+import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledTag from '../components/StyledTag';
 import StyledCard from '../components/StyledCard';
@@ -11,6 +12,13 @@ import StyledInput from '../components/StyledInput';
 import StyledButton from '../components/StyledButton';
 import Pagination from '../components/Pagination';
 
+interface playList {
+  tastePlaylistName: string;
+  tastePlaylistDesc: string;
+  publicOrPrivate: number;
+  playlistDetail: number[];
+  tastePlaylistId: number;
+}
 const MainPageContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -208,6 +216,38 @@ const SelectIdSearchStyle = {
     fontWeight: '700',
   }),
 };
+interface Restaurant {
+  _id: {
+    timestamp: number;
+    date: string;
+  };
+  restaurantId: number;
+  name: string;
+  cuisineType: string;
+  avgPreference: number;
+  address: string;
+  roadAddress: string;
+  number: string;
+  businessHours: string;
+  tags: string[][];
+  imageFile: {
+    timestamp: number;
+    date: string;
+  };
+  menu: string[][];
+  peculiarTaste: null;
+  likeUserList: string[];
+  imageUrl: string;
+  xposition: number;
+  yposition: number;
+  banUserList: string[];
+}
+
+interface User {
+  userId: string;
+  profileImage: string;
+  nickName: string;
+}
 
 function MainPage() {
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -224,45 +264,37 @@ function MainPage() {
   const [showSearchInput, setShowSearchInput] = useState<boolean>(false);
   const [addedUsers, setAddedUsers] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
+  const [playlist, setPlaylist] = useState<playList[]>([]);
 
-  interface Restaurant {
-    _id: {
-      timestamp: number;
-      date: string;
-    };
-    restaurantId: number;
-    name: string;
-    cuisineType: string;
-    avgPreference: number;
-    address: string;
-    roadAddress: string;
-    number: string;
-    businessHours: string;
-    tags: string[][];
-    imageFile: {
-      timestamp: number;
-      date: string;
-    };
-    menu: string[][];
-    peculiarTaste: null;
-    likeUserList: string[];
-    imageUrl: string;
-    xposition: number;
-    yposition: number;
-    banUserList: string[];
-  }
-
-  interface User {
-    userId: string;
-    profileImage: string;
-    nickName: string;
-  }
-
+  const fetchPlayList = async () => {
+    try {
+      const response = await axios.get(`tastePlaylist/getTastePlaylist?userId=${sessionStorage.getItem('userId')}`);
+      setPlaylist(response.data);
+      const tmp = new Map<string, number>(Object.entries(bookmark));
+      response.data.forEach((playlist: playList) => {
+        playlist.playlistDetail.forEach((restaurantId: number) => {
+          const currentCount = tmp.get(restaurantId.toString()) || 0;
+          tmp.set(restaurantId.toString(), currentCount + 1);
+        });
+      });
+      setBookmark(Object.fromEntries(tmp));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const addPlayList = async (userId: string, playListName: string, playListDesc: string, lock: number) => {
+    const formData = new FormData();
+    formData.append('tastePlaylistName', playListName);
+    formData.append('tastePlaylistDesc', playListDesc);
+    formData.append('publicOrPrivate', String(lock));
+    formData.append('userId', userId);
+    const response = await axios.post(`tastePlaylist/addTastePlaylist`, formData);
+  };
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-
+  const [bookmark, setBookmark] = useState<{ [key: string]: number }>({});
   const fetchData = async () => {
     setIsLoaded(false);
     try {
@@ -296,8 +328,29 @@ function MainPage() {
     }
   };
 
+  const addrestaurantToPlayList = async (playlistId: number | any, restaurantId: number) => {
+    const formData = new FormData();
+    formData.append('playlistId', playlistId?.toString());
+    formData.append('restaurantId', String(restaurantId));
+    const response = await axios.post(`tastePlaylist/addDetail`, formData);
+    const tmp = new Map<string, number>(Object.entries(bookmark));
+    const currentCount = tmp.get(restaurantId.toString()) || 0;
+    tmp.set(restaurantId.toString(), currentCount + 1);
+    setBookmark(Object.fromEntries(tmp));
+  };
+  const removerestaurantToPlayList = async (playlistId: number | any, restaurantId: number) => {
+    const formData = new FormData();
+    formData.append('playlistId', playlistId?.toString());
+    formData.append('restaurantId', String(restaurantId));
+    const response = await axios.post(`tastePlaylist/deleteDetail`, formData);
+    const tmp = new Map<string, number>(Object.entries(bookmark));
+    const currentCount = tmp.get(restaurantId.toString()) || 0;
+    tmp.set(restaurantId.toString(), currentCount - 1);
+    setBookmark(Object.fromEntries(tmp));
+  };
   useEffect(() => {
     fetchData();
+    fetchPlayList();
   }, [selected]);
 
   // 함께먹기 로직
@@ -308,7 +361,7 @@ function MainPage() {
       setAddedUsers([...addedUsers, userId]);
     }
     try {
-      const response = await axios.post(`http://127.0.0.1:5000/thirdRecommend`, addedUsers);
+      const response = await axios.post(`thirdRecommend`, addedUsers);
       console.log(response.data);
       setRestaurants(response.data);
       setIsLoaded(true);
@@ -449,6 +502,8 @@ function MainPage() {
                 setModalData={handleModalData}
                 openModal={openModal}
                 key={restaurant.restaurantId}
+                bookmark={bookmark}
+                setBookmark={setBookmark}
               />
             ))
           ) : (
@@ -481,7 +536,6 @@ function MainPage() {
       </OptionTextDiv>
     </OptionDiv>
   );
-
   return (
     <>
       <MainPageContainer className="MainPage">
@@ -584,7 +638,17 @@ function MainPage() {
           </ListContainer>
         </Container>
       </MainPageContainer>
-      {showModal ? <StyledModal show={showModal} onClose={closeModal} data={modalData} modalRef={modalRef} /> : null}
+      {showModal ? (
+        <StyledModal
+          show={showModal}
+          onClose={closeModal}
+          modalData={modalData}
+          modalRef={modalRef}
+          addPlayList={addPlayList}
+          addrestaurantToPlayList={addrestaurantToPlayList}
+          removerestaurantToPlayList={removerestaurantToPlayList}
+        />
+      ) : null}
     </>
   );
 }

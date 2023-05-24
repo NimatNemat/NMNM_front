@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { AiOutlineClose, AiOutlinePlus, AiOutlineLock, AiOutlineUnlock } from 'react-icons/ai';
+import { BiCheckbox, BiCheckboxChecked } from 'react-icons/bi';
+import axios from 'axios';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledInput from './StyledInput';
 import StyledButton from './StyledButton';
@@ -8,8 +10,11 @@ import StyledButton from './StyledButton';
 interface ModalProps {
   onClose?: () => void;
   show: boolean;
-  data: number;
+  modalData: number;
   modalRef: React.ForwardedRef<HTMLDivElement>;
+  addPlayList: (userId: string, playListName: string, playListDesc: string, lock: number) => void;
+  addrestaurantToPlayList: (playlistId: number, restaurantId: number) => void;
+  removerestaurantToPlayList: (playlistId: number, restaurantId: number) => void;
 }
 
 interface ModalRowProps {
@@ -30,25 +35,14 @@ const ModalWrapper = styled.div<{ show: boolean }>`
 `;
 const ModalContent = styled.div`
   display: flex;
-  width: 30%;
+  width: 20rem;
   background-color: white;
-  padding: 4rem;
+  border-radius: 2rem;
+  padding: 3.2rem;
   justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
-  gap: 3.2vh;
-  @media (max-width: 768px) {
-    width: 50%;
-  }
-  @media (min-width: 768px) {
-    width: 40%;
-  }
-  @media (min-width: 1024px) {
-    width: 30%;
-  }
-  @media (min-width: 1440px) {
-    width: 20%;
-  }
+  gap: 2.4rem;
 `;
 const ModalHeader = styled.div`
   display: flex;
@@ -69,7 +63,6 @@ const IconBox = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background: #f2f4f6;
   border-radius: 0.5rem;
 `;
 const TextBox = styled.div`
@@ -100,7 +93,7 @@ const Div = styled.div`
   justify-content: flex-start;
   align-items: center;
   width: 100%;
-  gap: 1.6vh;
+  gap: 1.6rem;
 `;
 const RowDiv = styled.div`
   display: flex;
@@ -108,6 +101,7 @@ const RowDiv = styled.div`
   justify-content: flex-start;
   align-items: center;
   width: 100%;
+  gap: 1.2vh;
 `;
 const Styledselect = styled.select`
   display: flex;
@@ -124,16 +118,37 @@ const Styledselect = styled.select`
   -webkit-appearance: none; // 크롬, 사파리 등 웹킷 기반 브라우저에서 기본 스타일 제거
   -moz-appearance: none; // 파이어폭스에서 기본 스타일 제거
 `;
-
+interface playList {
+  tastePlaylistName: string;
+  tastePlaylistDesc: string;
+  publicOrPrivate: number;
+  playlistDetail: number[];
+  tastePlaylistId: number;
+}
 function StyledModal(props: ModalProps) {
-  const { onClose = () => null, show, data, modalRef } = props;
+  const [playlist, setPlaylist] = useState<playList[]>([]);
+  const {
+    onClose = () => null,
+    show,
+    modalData,
+    modalRef,
+    addPlayList,
+    addrestaurantToPlayList,
+    removerestaurantToPlayList,
+  } = props;
   const [inputVisible, setInputVisible] = useState<boolean>(false);
   const [playListName, setPlayListName] = useState<string>('');
+  const [playListDesc, setPlayListDesc] = useState<string>('');
   const [lock, setLock] = useState<number>(1);
-  const [rows, setRows] = useState<ModalRowProps[]>([
-    { playListName: '노동욱님의 맛집리스트', locked: false },
-    { playListName: '선동운님의 맛집리스트', locked: true },
-  ]);
+  const [chekced, setChecked] = useState<boolean>(false);
+  const userId = sessionStorage.getItem('userId');
+  const fetchPlayList = async () => {
+    const response = await axios.get(`tastePlaylist/getTastePlaylist?userId=${userId}`);
+    setPlaylist(response.data);
+  };
+  useEffect(() => {
+    fetchPlayList();
+  }, []);
 
   const setInputVisibleFalse = () => {
     setInputVisible(false);
@@ -144,20 +159,29 @@ function StyledModal(props: ModalProps) {
     onClose();
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (playListName !== '') {
-      if (lock === 1) {
-        setRows((prevRows) => [...prevRows, { playListName, locked: false }]);
-      } else {
-        setRows((prevRows) => [...prevRows, { playListName, locked: true }]);
-      }
+      await addPlayList(userId!, playListName, playListDesc, lock);
+      fetchPlayList();
       setPlayListName('');
+      setPlayListDesc('');
       setInputVisible(false);
     }
   };
 
+  const handleaddrestaurantToPlayList = async (playlistId: number | any) => {
+    await addrestaurantToPlayList(playlistId, modalData);
+    fetchPlayList();
+  };
+  const handleremovereataurantToPlayList = async (playlistId: number | any) => {
+    await removerestaurantToPlayList(playlistId, modalData);
+    fetchPlayList();
+  };
   const handlePlayListNameEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPlayListName(event.target.value);
+  };
+  const handlePlayListDescEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPlayListDesc(event.target.value);
   };
 
   const handleLockEvent = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -185,6 +209,22 @@ function StyledModal(props: ModalProps) {
         </RowDiv>
         <RowDiv>
           <div className={Styles.p1bold} style={{ width: '100%', textAlign: 'left' }}>
+            세부설명
+          </div>
+          <StyledInput
+            value={playListDesc}
+            type="text"
+            placeholder="맛플리 세부 설명"
+            style={{ width: '100%' }}
+            onChange={handlePlayListDescEvent}
+            border="none"
+            borderBottom="1px solid #6E6E6E"
+            background="#FFFFFF"
+            padding="0.2rem 0"
+          />
+        </RowDiv>
+        <RowDiv>
+          <div className={Styles.p1bold} style={{ width: '100%', textAlign: 'left' }}>
             공개 범위 설정
           </div>
           <Styledselect className={Styles.p1bold} value={lock} onChange={handleLockEvent}>
@@ -194,7 +234,7 @@ function StyledModal(props: ModalProps) {
         </RowDiv>
         <ButtonBox>
           <Button>
-            <StyledButton onClick={handleSubmit} borderRadius="3rem">
+            <StyledButton onClick={handleSubmit} borderRadius="3rem" padding="1rem">
               <span className={Styles.p2bold}>만들기</span>
             </StyledButton>
           </Button>
@@ -209,20 +249,41 @@ function StyledModal(props: ModalProps) {
           <span className={Styles.h3}>그룹선택</span>
           <AiOutlineClose size="2.4rem" onClick={handleClose} />
         </ModalHeader>
-        {rows.map((row) => (
-          <ModalRow key={row.playListName}>
+        {playlist.map((data) => (
+          <ModalRow key={data.tastePlaylistName}>
             <IconBox>
-              {row.locked ? (
-                <AiOutlineLock size="4rem" color="#6E6E6E" />
+              {data.playlistDetail.includes(modalData) ? (
+                <BiCheckboxChecked
+                  size="2rem"
+                  color="#6E6E6E"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    handleremovereataurantToPlayList(data.tastePlaylistId);
+                  }}
+                />
               ) : (
-                <AiOutlineUnlock size="4rem" color="#6E6E6E" />
+                <BiCheckbox
+                  size="2rem"
+                  color="#372323"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    handleaddrestaurantToPlayList(data.tastePlaylistId);
+                  }}
+                />
               )}
             </IconBox>
             <TextBox>
               <span className={Styles.p1bold} style={{ color: '#6E6E6E' }}>
-                {row.playListName}
+                {data.tastePlaylistName}
               </span>
             </TextBox>
+            <IconBox>
+              {data.publicOrPrivate === 1 ? (
+                <AiOutlineLock size="2rem" color="#6E6E6E" />
+              ) : (
+                <AiOutlineUnlock size="2rem" color="#6E6E6E" />
+              )}
+            </IconBox>
           </ModalRow>
         ))}
         {inputVisible ? (
@@ -230,7 +291,7 @@ function StyledModal(props: ModalProps) {
         ) : (
           <ModalRow onClick={() => setInputVisible(true)}>
             <IconBox>
-              <AiOutlinePlus size="4rem" color="#6E6E6E" />
+              <AiOutlinePlus size="2rem" color="#6E6E6E" />
             </IconBox>
             <TextBox>
               <span className={Styles.p1bold} style={{ color: '#6E6E6E' }}>
