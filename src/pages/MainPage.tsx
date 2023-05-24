@@ -276,10 +276,14 @@ function MainPage() {
         response = await axios.get(`/restaurant/all`);
       } else if (selected === 'reco1') {
         response = await axios.get(`/recommended/first`);
-      } else {
+      } else if (selected === 'reco2') {
         response = await axios.get('/recommended/second');
+      } else {
+        await togetherFetchData();
       }
-      setRestaurants(response.data);
+      if (response) {
+        setRestaurants(response.data);
+      }
       setIsLoaded(true);
     } catch (error) {
       console.error('Error fetching restaurant data', error);
@@ -302,16 +306,15 @@ function MainPage() {
   }, [selected]);
 
   // 함께먹기 로직
+  const together = () => {
+    setSelected('together');
+    setSelectedLabel('함께먹기 추천 식당리스트');
+  };
   const togetherFetchData = async () => {
     setIsLoaded(false);
     const userId = sessionStorage.getItem('userId');
-    if (userId) {
-      setAddedUsers([...addedUsers, userId]);
-    }
-    setSelected('together');
-    setSelectedLabel('함께먹기 추천 식당리스트');
     try {
-      const response = await axios.post(`http://127.0.0.1:5000/thirdRecommend`, addedUsers);
+      const response = await axios.post(`http://15.165.161.104:5000/thirdRecommend`, [userId, ...addedUsers]);
       console.log(response.data);
       setRestaurants(response.data);
       setIsLoaded(true);
@@ -580,7 +583,7 @@ function MainPage() {
                       </StyledButton>
                     </Btn>
                     <Btn>
-                      <StyledButton padding="1rem" borderRadius="0.4rem" onClick={togetherFetchData}>
+                      <StyledButton padding="1rem" borderRadius="0.4rem" onClick={together}>
                         <div className={Styles.p2bold}>함께 먹기</div>
                       </StyledButton>
                     </Btn>

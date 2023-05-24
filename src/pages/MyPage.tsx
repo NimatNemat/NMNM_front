@@ -10,6 +10,7 @@ import StyledCard from '../components/StyledCard';
 import ReviewComponent from '../components/ReviewComponent';
 import StyledModal from '../components/StyledModal';
 import FollowModal from '../components/FollowModal';
+import DeleteModal from '../components/DeleteModal';
 import MyReview from '../components/MyReivew';
 
 interface Restaurant {
@@ -200,6 +201,7 @@ function Mypage() {
   const [modalData, setModalData] = useState<number>(0);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showFollowModal, setShowFollowModal] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const handleModalData = (data: number) => {
     setModalData(data);
   };
@@ -408,6 +410,11 @@ function Mypage() {
     modal = null;
   }
 
+  const handleIconClick: React.MouseEventHandler<SVGElement> = (event) => {
+    event.preventDefault();
+    setShowDeleteModal(true);
+  };
+
   return (
     <>
       <MypageContainer>
@@ -517,7 +524,7 @@ function Mypage() {
                         openModal={openModal}
                         key={restaurant.restaurantId}
                         showIconBox={false}
-                        icon={<FiMoreHorizontal size="2.4rem" />}
+                        icon={<FiMoreHorizontal size="2.4rem" onClick={handleIconClick} />}
                         updateLikedRestaurant={() => {
                           const updatedbanRestaurants = banRestaurants.filter(
                             (banRestaurant: Restaurant) => banRestaurant.restaurantId !== restaurant.restaurantId
@@ -550,6 +557,14 @@ function Mypage() {
       </MypageContainer>
       {showModal ? <StyledModal show={showModal} onClose={closeModal} data={modalData} modalRef={modalRef} /> : null}
       {modal}
+      {showDeleteModal ? (
+        <DeleteModal
+          show={showDeleteModal}
+          onClose={() => setShowDeleteModal(false)}
+          onDelete={() => console.log('clicked')}
+          modalRef={modalRef}
+        />
+      ) : null}
     </>
   );
 }

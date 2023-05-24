@@ -107,7 +107,7 @@ const StyledLink = styled(Link)`
   :hover {
     cursor: pointer;
     transform: translateY(-5px);
-    box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.3);
+    box-shadow: 0.5rem 0.5rem 1.5rem rgba(255, 112, 3, 0.3);
   }
 `;
 const Icon = styled.div`
@@ -189,7 +189,7 @@ function StyledCard(props: StyledCardProps) {
         {restaurant.imageUrl === null ? (
           <CardImage src="/logo.png" alt="" />
         ) : (
-          <CardImage src={`http://3.39.232.5:8080${restaurant.imageUrl}`} alt="" />
+          <CardImage src={`http://15.165.161.104:8080${restaurant.imageUrl}`} alt="" />
         )}
         <CardInfoBox>
           {showIconBox && (
@@ -223,17 +223,10 @@ function StyledCard(props: StyledCardProps) {
                   </span>
                 ) : null}
               </InfoHeader>
-              {icon && <div>{icon}</div>}
+              {icon && <Icon>{icon}</Icon>}
             </InfoName>
             <span className={Styles.p2medium}>{restaurant?.cuisineType}</span>
-            <span className={Styles.p2medium}>
-              {restaurant.tags
-                ? restaurant?.tags
-                    .slice(0, 3)
-                    .map((tagGroup) => tagGroup.join(' '))
-                    .join(' ')
-                : ''}
-            </span>
+            <span className={Styles.p2medium}>{restaurant.tags ? restaurant?.tags.slice(0, 3).join(' ') : ''}</span>
           </InfoBox>
         </CardInfoBox>
       </Card>
