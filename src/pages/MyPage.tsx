@@ -195,6 +195,14 @@ const Btncontainer = styled.div`
   width: 20rem;
 `;
 
+interface playList {
+  tastePlaylistName: string;
+  tastePlaylistDesc: string;
+  publicOrPrivate: number;
+  playlistDetail: number[];
+  tastePlaylistId: number;
+}
+
 function Mypage() {
   const modalRef = useRef<HTMLDivElement>(null);
   const [modalData, setModalData] = useState<number>(0);
@@ -209,7 +217,6 @@ function Mypage() {
   const closeModal = () => {
     setShowModal(false);
   };
-  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [tab, setTab] = useState<number>(0);
   const [renderCnt, setRenderCnt] = useState<number>(12);
@@ -225,13 +232,32 @@ function Mypage() {
   const [followers, setFollowers] = useState<FollowUser[]>([]);
   const [followings, setFollowings] = useState<FollowUser[]>([]);
   const [followingClicked, setFollowingClicked] = useState<boolean>(false);
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
   let likedCount = 0;
   let banCount = 0;
-
-  const totalLists = restaurants.length; // 맛플리의 총 개수
+  const [playlist, setPlaylist] = useState<playList[]>([]);
+  const totalLists = playlist.length; // 맛플리의 총 개수
   const totalLikes = likedRestaurants.length; // 좋아요한 식당의 총 개수
   const totalBan = banRestaurants.length;
+  const [bookmark, setBookmark] = useState<{ [key: string]: number }>({});
+  const fetchPlayList = async () => {
+    try {
+      const response = await axios.get(`tastePlaylist/getTastePlaylist?userId=${sessionStorage.getItem('userId')}`);
+      setPlaylist(response.data);
+      const tmp = new Map<string, number>(Object.entries(bookmark));
+
+      response.data.forEach((playlist: playList) => {
+        playlist.playlistDetail.forEach((restaurantId: number) => {
+          const currentCount = tmp.get(restaurantId.toString()) || 0;
+          tmp.set(restaurantId.toString(), currentCount + 1);
+        });
+      });
+      setBookmark(Object.fromEntries(tmp));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const ClickReview = () => {
     setTab(0);
@@ -299,6 +325,7 @@ function Mypage() {
     }
     fetchData();
     fetchFollowData();
+
   }, [id, isFollowing]);
 
   const toggleIsFollowing = () => {
@@ -326,7 +353,27 @@ function Mypage() {
       console.error('Follow Api error', error);
     }
   };
+  const addrestaurantToPlayList = async (playlistId: number | any, restaurantId: number) => {
+    const formData = new FormData();
+    formData.append('playlistId', playlistId?.toString());
+    formData.append('restaurantId', String(restaurantId));
+    const response = await axios.post(`tastePlaylist/addDetail`, formData);
+  };
+  const removerestaurantToPlayList = async (playlistId: number | any, restaurantId: number) => {
+    const formData = new FormData();
+    formData.append('playlistId', playlistId?.toString());
+    formData.append('restaurantId', String(restaurantId));
+    const response = await axios.post(`tastePlaylist/deleteDetail`, formData);
+  };
 
+  const addPlayList = async (userId: string, playListName: string, playListDesc: string, lock: number) => {
+    const formData = new FormData();
+    formData.append('tastePlaylistName', playListName);
+    formData.append('tastePlaylistDesc', playListDesc);
+    formData.append('publicOrPrivate', String(lock));
+    formData.append('userId', userId);
+    const response = await axios.post(`tastePlaylist/addTastePlaylist`, formData);
+  };
   const showFollowerList = () => {
     setFollowingClicked(false);
     setShowFollowModal(true);
@@ -407,7 +454,6 @@ function Mypage() {
   } else {
     modal = null;
   }
-
   return (
     <>
       <MypageContainer>
@@ -462,16 +508,29 @@ function Mypage() {
           {isLoaded && tab === 1 ? (
             <GridContainer>
               <Card className={Styles.h3medium}>
-                <CardContent>
+                <CardContent onClick={openModal}>
                   <PlusIcon />
                   <div style={{ color: '#9B9B9B' }}>맛플리 추가하기</div>
                 </CardContent>
               </Card>
-              {restaurants.map((restaurant: any, index) =>
-                index < renderCnt - 1 ? (
-                  <StyledCard restaurant={restaurant} icon={<FiMoreHorizontal size="2.4rem" />} showIconBox={false} />
-                ) : null
-              )}
+              {playlist.map((playList: playList) => (
+                <Card
+                  key={playList.tastePlaylistId}
+                  onClick={() => {
+                    window.location.href = `/playlist/${playList.tastePlaylistId}`;
+                  }}
+                >
+                  <CardContent>
+                    <div className={Styles.h3medium}>{playList.tastePlaylistName}</div>
+                  </CardContent>
+                  <CardContent>
+                    <div style={{ color: '#9B9B9B' }}>{playList.playlistDetail.length}개의 식당</div>
+                  </CardContent>
+                  <CardContent>
+                    <div className={Styles.p2regular}>{playList.tastePlaylistDesc}</div>
+                  </CardContent>
+                </Card>
+              ))}
             </GridContainer>
           ) : null}
           {isLoaded && tab === 2 ? (
@@ -548,7 +607,17 @@ function Mypage() {
           ) : null}
         </Container>
       </MypageContainer>
-      {showModal ? <StyledModal show={showModal} onClose={closeModal} data={modalData} modalRef={modalRef} /> : null}
+      {showModal ? (
+        <StyledModal
+          show={showModal}
+          onClose={closeModal}
+          modalData={modalData}
+          modalRef={modalRef}
+          addPlayList={addPlayList}
+          addrestaurantToPlayList={addrestaurantToPlayList}
+          removerestaurantToPlayList={removerestaurantToPlayList}
+        />
+      ) : null}
       {modal}
     </>
   );
