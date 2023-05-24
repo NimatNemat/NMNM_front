@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import { AiOutlineClose } from 'react-icons/ai';
@@ -30,6 +31,7 @@ const ModalWrapper = styled.div<{ show: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
 `;
 const ModalContent = styled.div`
   display: flex;
@@ -71,6 +73,9 @@ const OptionDiv = styled.div`
 const OptionInfo = styled.div`
   display: flex;
   gap: 1vw;
+  :hover {
+    cursor: pointer;
+  }
 `;
 const OptionImgDiv = styled.div`
   display: flex;
@@ -90,6 +95,7 @@ function FollowModal(props: ModalProps) {
   const { onClose = () => null, show, userList, modalRef, isFollowing, onFollowChange } = props;
   const [followingList, setFollowingList] = useState<FollowUser[]>([]);
   const userId = sessionStorage.getItem('userId') || '';
+  const navigate = useNavigate();
 
   const handleClose = () => {
     onClose();
@@ -136,6 +142,11 @@ function FollowModal(props: ModalProps) {
     }
   };
 
+  const handleProfileClick = (userId: string) => {
+    navigate(`/mypage/${userId}`);
+    handleClose();
+  };
+
   return (
     <ModalWrapper show={show} ref={modalRef} onClick={onClose}>
       <ModalContent onClick={(event) => event.stopPropagation()}>
@@ -145,7 +156,7 @@ function FollowModal(props: ModalProps) {
         </ModalHeader>
         {userList?.map((user) => (
           <OptionDiv key={user.userId}>
-            <OptionInfo>
+            <OptionInfo onClick={() => handleProfileClick(user.userId)}>
               <OptionImgDiv>
                 <img
                   src={user.profileImage || ''}
@@ -191,4 +202,5 @@ function FollowModal(props: ModalProps) {
 FollowModal.defaultProps = {
   onClose: () => null,
 };
+
 export default FollowModal;

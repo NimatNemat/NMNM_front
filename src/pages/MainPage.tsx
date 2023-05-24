@@ -88,6 +88,7 @@ const options = [
   { value: 'reco1', label: '진정한 한국인의 추천리스트' },
   { value: 'reco2', label: '당신만을 위한 추천리스트' },
   { value: 'all', label: '니맛내맛 전체 식당리스트' },
+  { value: 'together', label: '함께먹기 추천 식당리스트', isDisabled: true },
 ];
 
 const OptionDiv = styled.div`
@@ -360,6 +361,8 @@ function MainPage() {
     if (userId) {
       setAddedUsers([...addedUsers, userId]);
     }
+    setSelected('together');
+    setSelectedLabel('함께먹기 추천 식당리스트');
     try {
       const response = await axios.post(`thirdRecommend`, addedUsers);
       console.log(response.data);
@@ -368,6 +371,7 @@ function MainPage() {
     } catch (error) {
       console.error('Error fetching together data', error);
     }
+    setAddedUsers(addedUsers.filter((id) => id !== userId));
   };
   // 사용자 아이디를 검색하는 로직 (함께먹기 부분)
   const toggleSearchInput = () => {
@@ -409,6 +413,10 @@ function MainPage() {
     if (userToAddBack) {
       setUsers([...users, userToAddBack]);
     }
+  };
+
+  const clearUserTag = () => {
+    setAddedUsers([]);
   };
 
   // 페이지네이션 각 페이지 별로 Post할 갯수 정해서 페이지 나누기
@@ -614,11 +622,23 @@ function MainPage() {
                   <StyledTag text="+" onClick={toggleSearchInput} />
                 )}
                 {addedUsers.length > 0 ? (
-                  <Btn>
-                    <StyledButton padding="1rem" borderRadius="0.4rem" onClick={togetherFetchData}>
-                      <div className={Styles.p2bold}>함께 먹기</div>
-                    </StyledButton>
-                  </Btn>
+                  <>
+                    <Btn>
+                      <StyledButton
+                        padding="1rem"
+                        borderRadius="0.4rem"
+                        onClick={clearUserTag}
+                        color="rgba(128, 128, 128, 1)"
+                      >
+                        <div className={Styles.p2bold}>초기화</div>
+                      </StyledButton>
+                    </Btn>
+                    <Btn>
+                      <StyledButton padding="1rem" borderRadius="0.4rem" onClick={togetherFetchData}>
+                        <div className={Styles.p2bold}>함께 먹기</div>
+                      </StyledButton>
+                    </Btn>
+                  </>
                 ) : null}
               </TagListContainer>
             </TagContainer>

@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { FiMoreHorizontal } from 'react-icons/fi';
 import { AiFillPlusCircle } from 'react-icons/ai';
-
 import StyledButton from '../components/StyledButton';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledCard from '../components/StyledCard';
@@ -326,8 +325,8 @@ function Mypage() {
     }
     fetchData();
     fetchFollowData();
-    fetchPlayList();
-  }, [id]);
+
+  }, [id, isFollowing]);
 
   const toggleIsFollowing = () => {
     follow();
@@ -576,6 +575,8 @@ function Mypage() {
                         setModalData={handleModalData}
                         openModal={openModal}
                         key={restaurant.restaurantId}
+                        showIconBox={false}
+                        icon={<FiMoreHorizontal size="2.4rem" />}
                         updateLikedRestaurant={() => {
                           const updatedbanRestaurants = banRestaurants.filter(
                             (banRestaurant: Restaurant) => banRestaurant.restaurantId !== restaurant.restaurantId
