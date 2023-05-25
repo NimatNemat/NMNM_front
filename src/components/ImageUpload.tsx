@@ -66,7 +66,7 @@ function ImageUpload(props: Props) {
 
   const onImageRemove = (): void => {
     URL.revokeObjectURL(fileURL);
-    setFileURL('/default.png'); // 렌더링 이미지 초기화
+    setFileURL('/images/646f673fe659b357ce17f902'); // 렌더링 이미지 초기화
     setFile(null);
   };
   useEffect(() => {
@@ -77,7 +77,11 @@ function ImageUpload(props: Props) {
     <Container>
       <Row>
         <ImgContainer>
-          <ProfileImg src={fileURL} alt="profile" />
+          {file ? (
+            <ProfileImg src={fileURL} alt="profile" />
+          ) : (
+            <ProfileImg src={`https://nimatnemat.site${fileURL}`} alt="profile" />
+          )}
         </ImgContainer>
       </Row>
       <Row>

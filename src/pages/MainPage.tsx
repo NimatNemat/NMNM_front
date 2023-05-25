@@ -596,7 +596,7 @@ function MainPage() {
                         ? searchedUser.map((user) => ({
                             value: user.userId,
                             label: user.userId,
-                            profileImage: user.profileImage,
+                            profileImage: `https://nimatnemat.site${user.profileImage}`,
                             nickName: user.nickName,
                           }))
                         : []

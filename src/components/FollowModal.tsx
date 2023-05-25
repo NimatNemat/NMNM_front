@@ -159,7 +159,7 @@ function FollowModal(props: ModalProps) {
             <OptionInfo onClick={() => handleProfileClick(user.userId)}>
               <OptionImgDiv>
                 <img
-                  src={user.profileImage || ''}
+                  src={`https://nimatnemat.site${user.profileImage}`}
                   alt={user.nickName}
                   style={{ width: '5rem', height: '5rem', borderRadius: '50%' }}
                 />

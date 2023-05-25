@@ -102,7 +102,7 @@ function ModifyPage() {
       ) : (
         <Container>
           <span className={Styles.h3}>회원 정보 수정</span>
-          <ImageUpload file={file} setFile={setFile} fileUrl={fileurl === null ? '/default.png' : fileurl} />
+          <ImageUpload file={file} setFile={setFile} fileUrl={fileurl} />
           <span className={Styles.p1bold}>닉네임</span>
           <StyledInput
             value={nicknameValue}
