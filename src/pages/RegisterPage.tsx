@@ -147,7 +147,7 @@ function RegisterPage() {
       return false;
     }
     try {
-      const res = await axios.get(`http://3.39.232.5:8080/api/users/all`, {
+      const res = await axios.get(`users/all`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -223,7 +223,7 @@ function RegisterPage() {
     formData.append('birthdate', birthdate.toISOString());
     formData.append('gender', gender.toString());
     formData.append('nickName', nickname);
-    // formData.append('groupId', groupid)
+    formData.append('profileImage', '/default.png');
     const jsonObject = formDataToJson(formData);
     registerUser(jsonObject);
   };
