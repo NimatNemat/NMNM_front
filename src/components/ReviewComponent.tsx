@@ -107,6 +107,8 @@ interface Review {
   reviewId: number;
   restaurantId: number;
   userId: string;
+  restaurantName: string;
+  userNickName: string;
   reviewInfo: string;
   reviewScore: number;
   simpleEvaluation: number;
@@ -137,7 +139,7 @@ function ReviewComponent(props: Props) {
   return (
     <ReviewContainer>
       <Rowbox>
-        <div className={Styles.p2bold}>가게이름</div>
+        <div className={Styles.p2bold}>{review.restaurantName}</div>
         {userId === review.userId && (
           <AiOutlineDelete size="2.4rem" onClick={handleDelete} style={{ cursor: 'pointer' }} />
         )}
@@ -152,7 +154,7 @@ function ReviewComponent(props: Props) {
         </button>
 
         <Colbox className={Styles.p2bold}>
-          <div>{review.userId}</div>
+          <div>{review.userNickName}</div>
           <div>{review.reviewDate.split('T')[0]}</div>
           <div>
             {[...Array(review.reviewScore)].map((index, i) => (

@@ -24,6 +24,8 @@ interface Review {
   reviewId: number;
   restaurantId: number;
   userId: string;
+  restaurantName: string;
+  userNickName: string;
   reviewInfo: string;
   reviewScore: number;
   simpleEvaluation: number;
@@ -44,8 +46,9 @@ function MyReview({ setTotalReviews, id }: MyReviewProps) {
     axios
       .get(`/reviews/user/${id}`)
       .then((res) => {
-        setReviewList(res.data);
-        setTotalReviews(res.data.length);
+        const reviews = res.data.map((item: any) => item.review);
+        setReviewList(reviews);
+        setTotalReviews(reviews.length);
       })
       .catch((err) => {
         alert(err);
@@ -55,7 +58,7 @@ function MyReview({ setTotalReviews, id }: MyReviewProps) {
     <GridContainer>
       {reviewList.length === 0 && <Text className={Styles.p2bold}>작성한 리뷰가 없습니다.</Text>}
       {reviewList.map((review) => (
-        <ReviewComponent review={review} />
+        <ReviewComponent review={review} key={review.reviewId} />
       ))}
     </GridContainer>
   );

@@ -366,7 +366,7 @@ function MainPage() {
     setIsLoaded(false);
     const userId = sessionStorage.getItem('userId');
     try {
-      const response = await axios.post(`http://15.165.161.104:5000/thirdRecommend`, [userId, ...addedUsers]);
+      const response = await axios.post(`/thirdRecommend`, [userId, ...addedUsers]);
       setRestaurants(response.data);
       setIsLoaded(true);
     } catch (error) {

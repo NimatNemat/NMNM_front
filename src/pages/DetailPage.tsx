@@ -168,6 +168,7 @@ function DetailPage() {
     const response = await axios.get(`/restaurant/${id}`);
     setRestaurant(response.data);
     setReview(response.data.reviews.length);
+    console.log(response.data.reviews);
     console.log(response.data);
 
     if (response.data.likeUserList) {
