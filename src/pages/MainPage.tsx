@@ -310,8 +310,6 @@ function MainPage() {
         response = await axios.get(`/recommended/first`);
       } else if (selected === 'reco2') {
         response = await axios.get('/recommended/second');
-      } else {
-        await togetherFetchData();
       }
       if (response) {
         setRestaurants(response.data);
@@ -362,13 +360,13 @@ function MainPage() {
   const together = () => {
     setSelected('together');
     setSelectedLabel('함께먹기 추천 식당리스트');
+    togetherFetchData();
   };
   const togetherFetchData = async () => {
     setIsLoaded(false);
     const userId = sessionStorage.getItem('userId');
     try {
       const response = await axios.post(`http://15.165.161.104:5000/thirdRecommend`, [userId, ...addedUsers]);
-      console.log(response.data);
       setRestaurants(response.data);
       setIsLoaded(true);
     } catch (error) {

@@ -12,6 +12,7 @@ import StyledModal from '../components/StyledModal';
 import FollowModal from '../components/FollowModal';
 import DeleteModal from '../components/DeleteModal';
 import MyReview from '../components/MyReivew';
+import Playlist from '../components/Playlist';
 
 interface Restaurant {
   _id: {
@@ -173,8 +174,16 @@ const Card = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
+  min-height: 200px;
   background: #ffffff;
+  color: black;
+  transition: transform 0.3s ease;
   box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+  :hover {
+    cursor: pointer;
+    transform: translateY(-5px);
+    box-shadow: 0.5rem 0.5rem 1.5rem rgba(255, 112, 3, 0.3);
+  }
 `;
 
 const CardContent = styled.div`
@@ -209,7 +218,7 @@ function Mypage() {
   const [modalData, setModalData] = useState<number>(0);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showFollowModal, setShowFollowModal] = useState<boolean>(false);
-  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<number>(0);
   const handleModalData = (data: number) => {
     setModalData(data);
   };
@@ -327,6 +336,7 @@ function Mypage() {
     }
     fetchData();
     fetchFollowData();
+    fetchPlayList();
   }, [id, isFollowing]);
 
   const toggleIsFollowing = () => {
@@ -359,12 +369,20 @@ function Mypage() {
     formData.append('playlistId', playlistId?.toString());
     formData.append('restaurantId', String(restaurantId));
     const response = await axios.post(`tastePlaylist/addDetail`, formData);
+    const tmp = new Map<string, number>(Object.entries(bookmark));
+    const currentCount = tmp.get(restaurantId.toString()) || 0;
+    tmp.set(restaurantId.toString(), currentCount + 1);
+    setBookmark(Object.fromEntries(tmp));
   };
   const removerestaurantToPlayList = async (playlistId: number | any, restaurantId: number) => {
     const formData = new FormData();
     formData.append('playlistId', playlistId?.toString());
     formData.append('restaurantId', String(restaurantId));
     const response = await axios.post(`tastePlaylist/deleteDetail`, formData);
+    const tmp = new Map<string, number>(Object.entries(bookmark));
+    const currentCount = tmp.get(restaurantId.toString()) || 0;
+    tmp.set(restaurantId.toString(), currentCount - 1);
+    setBookmark(Object.fromEntries(tmp));
   };
 
   const addPlayList = async (userId: string, playListName: string, playListDesc: string, lock: number) => {
@@ -374,6 +392,8 @@ function Mypage() {
     formData.append('publicOrPrivate', String(lock));
     formData.append('userId', userId);
     const response = await axios.post(`tastePlaylist/addTastePlaylist`, formData);
+    closeModal();
+    fetchPlayList();
   };
   const showFollowerList = () => {
     setFollowingClicked(false);
@@ -458,7 +478,20 @@ function Mypage() {
 
   const handleIconClick: React.MouseEventHandler<SVGElement> = (event) => {
     event.preventDefault();
-    setShowDeleteModal(true);
+    setShowDeleteModal(1);
+  };
+  const handle = (number: number) => {
+    setShowDeleteModal(2);
+    setModalData(number);
+  };
+
+  const DeletePlaylist = async (playlistId: number) => {
+    const formData = new FormData();
+    formData.append('playlistId', playlistId?.toString());
+    const response = await axios.post(`tastePlaylist/deleteTastePlaylist`, formData).then((res) => {
+      fetchPlayList();
+      setShowDeleteModal(0);
+    });
   };
 
   return (
@@ -514,29 +547,35 @@ function Mypage() {
           {isLoaded && tab === 0 ? <MyReview setTotalReviews={setTotalReviews} id={id || ''} /> : null}
           {isLoaded && tab === 1 ? (
             <GridContainer>
-              <Card className={Styles.h3medium}>
-                <CardContent onClick={openModal}>
+              <Card
+                className={Styles.h3medium}
+                onClick={openModal}
+                style={{
+                  cursor: 'pointer',
+                }}
+              >
+                <CardContent>
                   <PlusIcon />
                   <div style={{ color: '#9B9B9B' }}>맛플리 추가하기</div>
                 </CardContent>
               </Card>
               {playlist.map((playList: playList) => (
-                <Card
-                  key={playList.tastePlaylistId}
-                  onClick={() => {
-                    window.location.href = `/playlist/${playList.tastePlaylistId}`;
-                  }}
-                >
-                  <CardContent>
-                    <div className={Styles.h3medium}>{playList.tastePlaylistName}</div>
-                  </CardContent>
-                  <CardContent>
-                    <div style={{ color: '#9B9B9B' }}>{playList.playlistDetail.length}개의 식당</div>
-                  </CardContent>
-                  <CardContent>
-                    <div className={Styles.p2regular}>{playList.tastePlaylistDesc}</div>
-                  </CardContent>
-                </Card>
+                <Playlist
+                  tastePlaylistName={playList.tastePlaylistName}
+                  setModalData={handleModalData}
+                  tastePlaylistId={playList.tastePlaylistId}
+                  publicOrPrivate={playList.publicOrPrivate}
+                  tastePlaylistDesc={playList.tastePlaylistDesc}
+                  icon={
+                    <FiMoreHorizontal
+                      size="2.4rem"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        handle(playList.tastePlaylistId);
+                      }}
+                    />
+                  }
+                />
               ))}
             </GridContainer>
           ) : null}
@@ -560,6 +599,8 @@ function Mypage() {
                           setLikedRestaurants(updatedLikedRestaurants);
                         }}
                         showIconBox={userId === id}
+                        bookmark={bookmark}
+                        setBookmark={setBookmark}
                       />
                     );
                   }
@@ -614,7 +655,19 @@ function Mypage() {
           ) : null}
         </Container>
       </MypageContainer>
-      {showModal ? (
+      {showModal && tab === 1 ? (
+        <StyledModal
+          show={showModal}
+          addbutton={false}
+          onClose={closeModal}
+          modalData={modalData}
+          modalRef={modalRef}
+          addPlayList={addPlayList}
+          addrestaurantToPlayList={addrestaurantToPlayList}
+          removerestaurantToPlayList={removerestaurantToPlayList}
+        />
+      ) : null}
+      {tab === 2 && showModal ? (
         <StyledModal
           show={showModal}
           onClose={closeModal}
@@ -626,11 +679,19 @@ function Mypage() {
         />
       ) : null}
       {modal}
-      {showDeleteModal ? (
+      {showDeleteModal === 1 ? (
         <DeleteModal
           show={showDeleteModal}
-          onClose={() => setShowDeleteModal(false)}
-          onDelete={() => console.log('clicked')}
+          onClose={() => setShowDeleteModal(0)}
+          onDelete={() => console.log(modalData)}
+          modalRef={modalRef}
+        />
+      ) : null}
+      {showDeleteModal === 2 ? (
+        <DeleteModal
+          show={showDeleteModal}
+          onClose={() => setShowDeleteModal(0)}
+          onDelete={() => DeletePlaylist(modalData)}
           modalRef={modalRef}
         />
       ) : null}

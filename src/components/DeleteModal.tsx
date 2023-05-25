@@ -8,12 +8,12 @@ import StyledButton from './StyledButton';
 
 interface ModalProps {
   onClose?: () => void;
-  show: boolean;
+  show: number;
   modalRef: React.ForwardedRef<HTMLDivElement>;
   onDelete: () => void;
 }
 
-const ModalWrapper = styled.div<{ show: boolean }>`
+const ModalWrapper = styled.div<{ show: number }>`
   position: fixed;
   top: 0;
   left: 0;
