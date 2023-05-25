@@ -36,7 +36,7 @@ function ModifyPage() {
   };
   const modifyUser = async (formData: FormData) => {
     try {
-      const response = await axios.post('#', formData);
+      // const response = await axios.post('#', formData);
       window.location.href = '/main';
     } catch (error) {
       alert('에러');
@@ -52,12 +52,33 @@ function ModifyPage() {
       console.error('Error fetching data', error);
     }
   };
-
-  const Submitfunction = () => {
+  const [file, setFile] = useState<FileList | null>(null);
+  const postImage = async (file: FileList) => {
     const formData = new FormData();
+    formData.append('image', file[0]);
+    try {
+      const response = await axios.post(`/users/upload-image?userId=${sessionStorage.getItem('userId')}`, formData);
+      setFileurl(response.data);
+    } catch (error) {
+      console.error('Error fetching data', error);
+    }
+  };
+  const Submitfunction = async () => {
+    const formData = new FormData();
+    if (nicknameValue === '') {
+      alert('닉네임을 입력해주세요.');
+      return;
+    }
+    if (detailValue === '') {
+      alert('세부사항을 입력해주세요.');
+      return;
+    }
+    if (file !== null) {
+      await postImage(file);
+    }
     formData.append('nickname', nicknameValue);
     formData.append('detail', detailValue);
-    modifyUser(formData);
+    await modifyUser(formData);
   };
   useEffect(() => {
     const token = sessionStorage.getItem('token');
@@ -66,7 +87,6 @@ function ModifyPage() {
     }
     loadUser();
   }, []);
-
   return (
     <ModifyPageContainer>
       {loading ? (
@@ -75,6 +95,8 @@ function ModifyPage() {
         <Container>
           <span className={Styles.h3}>회원 정보 수정</span>
           <ImageUpload
+            file={file}
+            setFile={setFile}
             fileUrl={fileurl === null ? 'https://cdn-icons-png.flaticon.com/512/1555/1555492.png' : fileurl}
           />
           <span className={Styles.p1bold}>닉네임</span>

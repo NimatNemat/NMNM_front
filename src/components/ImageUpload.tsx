@@ -45,11 +45,12 @@ const ImgContainer = styled.div`
 `;
 interface Props {
   fileUrl: string;
+  file: FileList | null;
+  setFile: React.Dispatch<React.SetStateAction<FileList | null>>;
 }
 function ImageUpload(props: Props) {
-  const { fileUrl } = props;
+  const { fileUrl, file, setFile } = props;
   const [fileURL, setFileURL] = useState<string>(fileUrl);
-  const [file, setFile] = useState<FileList | null>(null);
   const [key, setKey] = useState<number>(0);
   const imgUploadInput = useRef<HTMLInputElement | null>(null);
 
@@ -57,6 +58,7 @@ function ImageUpload(props: Props) {
     const { files } = event.target;
     if (files) {
       setFile(files);
+
       const newFileURL = URL.createObjectURL(files[0]);
       setFileURL(newFileURL);
     }
@@ -68,27 +70,6 @@ function ImageUpload(props: Props) {
     setFileURL('https://cdn-icons-png.flaticon.com/512/1555/1555492.png'); // 렌더링 이미지 초기화
     setFile(null);
   };
-  // const submitHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
-  //   event.preventDefault();
-
-  //   /** 서버통신 */
-  //   const formData = new FormData();
-
-  //   if (file) {
-  //     formData.append('file', file[0]);
-
-  //     try {
-  //       const response = await axios.post('/api/upload', formData, {
-  //         headers: { 'content-type': 'multipart/form-data' },
-  //       });
-  //     } catch (error: any) {
-  //       console.log('이미지업로드 에러 발생');
-  //       throw new Error(error);
-  //     }
-  //   } else {
-  //     alert('업로드할 이미지가 없습니다');
-  //   }
-  // };
   useEffect(() => {
     setFileURL(fileUrl);
   }, [fileUrl]);

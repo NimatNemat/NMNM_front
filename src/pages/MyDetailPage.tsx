@@ -33,11 +33,16 @@ function MydetailPage() {
   };
 
   const modifyUser = async (formData: FormData) => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common.Authorization = token;
+    }
     try {
-      const response = await axios.post('#', formData);
-      window.location.href = '/main';
+      const response = await axios.put('/users/change-email', formData);
+      alert('이메일이 변경되었습니다.');
+      window.location.href = `/mypage/${sessionStorage.getItem('userId')}`;
     } catch (error) {
-      alert('에러');
+      console.error('Error fetching data', error);
     }
   };
   const loadUser = async () => {
@@ -71,10 +76,12 @@ function MydetailPage() {
         });
     }
   };
+  const cancel = () => {
+    window.location.href = `/mypage/${sessionStorage.getItem('userId')}`;
+  };
   const Submitfunction = () => {
     const formData = new FormData();
-    formData.append('nickname', email);
-    formData.append('detail', detailValue);
+    formData.append('newEmail', email);
     modifyUser(formData);
   };
   useEffect(() => {
@@ -156,7 +163,7 @@ function MydetailPage() {
           <EndBox>
             <Row>
               <div>
-                <StyledButton onClick={Submitfunction} color="F2F4F6">
+                <StyledButton onClick={cancel} color="F2F4F6">
                   <span className={Styles.p1bold}>취소</span>
                 </StyledButton>
               </div>
