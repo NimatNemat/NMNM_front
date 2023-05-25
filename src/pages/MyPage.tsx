@@ -255,7 +255,7 @@ function Mypage() {
   const [bookmark, setBookmark] = useState<{ [key: string]: number }>({});
   const fetchPlayList = async () => {
     try {
-      const response = await axios.get(`tastePlaylist/getTastePlaylist?userId=${sessionStorage.getItem('userId')}`);
+      const response = await axios.get(`tastePlaylist/getTastePlaylist?userId=${id}`);
       setPlaylist(response.data);
       const tmp = new Map<string, number>(Object.entries(bookmark));
 
@@ -560,36 +560,50 @@ function Mypage() {
           {isLoaded && tab === 0 ? <MyReview setTotalReviews={setTotalReviews} id={id || ''} /> : null}
           {isLoaded && tab === 1 ? (
             <GridContainer>
-              <Card
-                className={Styles.h3medium}
-                onClick={openModal}
-                style={{
-                  cursor: 'pointer',
-                }}
-              >
-                <CardContent>
-                  <PlusIcon />
-                  <div style={{ color: '#9B9B9B' }}>맛플리 추가하기</div>
-                </CardContent>
-              </Card>
-              {playlist.map((playList: playList) => (
-                <Playlist
-                  tastePlaylistName={playList.tastePlaylistName}
-                  setModalData={handleModalData}
-                  tastePlaylistId={playList.tastePlaylistId}
-                  publicOrPrivate={playList.publicOrPrivate}
-                  tastePlaylistDesc={playList.tastePlaylistDesc}
-                  icon={
-                    <FiMoreHorizontal
-                      size="2.4rem"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        handlePlayList(playList.tastePlaylistId);
-                      }}
+              {id === userId ? (
+                <Card
+                  className={Styles.h3medium}
+                  onClick={openModal}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                >
+                  <CardContent>
+                    <PlusIcon />
+                    <div style={{ color: '#9B9B9B' }}>맛플리 추가하기</div>
+                  </CardContent>
+                </Card>
+              ) : null}
+              {id === userId
+                ? playlist.map((playList: playList) => (
+                    <Playlist
+                      tastePlaylistName={playList.tastePlaylistName}
+                      setModalData={handleModalData}
+                      tastePlaylistId={playList.tastePlaylistId}
+                      publicOrPrivate={playList.publicOrPrivate}
+                      tastePlaylistDesc={playList.tastePlaylistDesc}
+                      icon={
+                        <FiMoreHorizontal
+                          size="2.4rem"
+                          onClick={(event) => {
+                            event.preventDefault();
+                            handlePlayList(playList.tastePlaylistId);
+                          }}
+                        />
+                      }
                     />
-                  }
-                />
-              ))}
+                  ))
+                : playlist
+                    .filter((playList: playList) => playList.publicOrPrivate === 1)
+                    .map((playList: playList) => (
+                      <Playlist
+                        tastePlaylistName={playList.tastePlaylistName}
+                        setModalData={handleModalData}
+                        tastePlaylistId={playList.tastePlaylistId}
+                        publicOrPrivate={playList.publicOrPrivate}
+                        tastePlaylistDesc={playList.tastePlaylistDesc}
+                      />
+                    ))}
             </GridContainer>
           ) : null}
           {isLoaded && tab === 2 ? (
