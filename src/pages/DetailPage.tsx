@@ -252,7 +252,7 @@ function DetailPage() {
             {restaurant.imageUrl === null ? (
               <StyledImg src="/logo.png" alt="" />
             ) : (
-              <StyledImg src={`http://15.165.161.104:8080${restaurant.imageUrl}`} alt="" />
+              <StyledImg src={`https://nimatnemat.site${restaurant.imageUrl}`} alt="" />
             )}
             <Content>
               <Rowcenterbox>

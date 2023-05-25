@@ -513,9 +513,7 @@ function Mypage() {
         <Container>
           <InfoContainer>
             <Imgbox>
-              <Img
-                src={User?.profileImage ? User.profileImage : 'https://cdn-icons-png.flaticon.com/512/1555/1555492.png'}
-              />
+              <Img src={User?.profileImage ? `https://nimatnemat.site${User.profileImage}` : '/default.png'} />
             </Imgbox>
             <Infocontent>
               <Rowbtn>
