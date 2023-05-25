@@ -35,8 +35,15 @@ function ModifyPage() {
     setDetailValue(event.target.value);
   };
   const modifyUser = async (formData: FormData) => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common.Authorization = token;
+    }
     try {
-      const response = await axios.post('#', formData);
+      const response = await axios.put(`/users/update?userId=${sessionStorage.getItem('userId')}`, {
+        nickName: nicknameValue,
+        infoMessage: detailValue,
+      });
       window.location.href = '/main';
     } catch (error) {
       alert('에러');
@@ -47,17 +54,39 @@ function ModifyPage() {
       const response = await axios.get(`/users/userId?userId=${sessionStorage.getItem('userId')}`);
       setUser(response.data);
       setNicknameValue(response.data.nickName);
+      setDetailValue(response.data.infoMessage);
       setFileurl(response.data.profileImage);
     } catch (error) {
       console.error('Error fetching data', error);
     }
   };
-
-  const Submitfunction = () => {
+  const [file, setFile] = useState<FileList | null>(null);
+  const postImage = async (file: FileList) => {
     const formData = new FormData();
-    formData.append('nickname', nicknameValue);
-    formData.append('detail', detailValue);
-    modifyUser(formData);
+    formData.append('image', file[0]);
+    try {
+      const response = await axios.post(`/users/upload-image?userId=${sessionStorage.getItem('userId')}`, formData);
+      setFileurl(response.data);
+    } catch (error) {
+      console.error('Error fetching data', error);
+    }
+  };
+  const Submitfunction = async () => {
+    const formData = new FormData();
+    if (nicknameValue === '') {
+      alert('닉네임을 입력해주세요.');
+      return;
+    }
+    if (detailValue === '') {
+      alert('세부사항을 입력해주세요.');
+      return;
+    }
+    if (file !== null) {
+      await postImage(file);
+    }
+    formData.append('nickName', nicknameValue);
+    formData.append('infoMessage', detailValue);
+    await modifyUser(formData);
   };
   useEffect(() => {
     const token = sessionStorage.getItem('token');
@@ -66,7 +95,6 @@ function ModifyPage() {
     }
     loadUser();
   }, []);
-
   return (
     <ModifyPageContainer>
       {loading ? (
@@ -74,9 +102,7 @@ function ModifyPage() {
       ) : (
         <Container>
           <span className={Styles.h3}>회원 정보 수정</span>
-          <ImageUpload
-            fileUrl={fileurl === null ? 'https://cdn-icons-png.flaticon.com/512/1555/1555492.png' : fileurl}
-          />
+          <ImageUpload file={file} setFile={setFile} fileUrl={fileurl === null ? '/default.png' : fileurl} />
           <span className={Styles.p1bold}>닉네임</span>
           <StyledInput
             value={nicknameValue}
