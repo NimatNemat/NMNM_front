@@ -127,7 +127,6 @@ function ReviewComponent(props: Props) {
   };
 
   const handleDelete = async () => {
-    alert(review.reviewId);
     const res = await axios.delete(`/reviews/deleteReview/${review.reviewId}`);
     if (res.status === 200) {
       alert('리뷰가 삭제되었습니다.');
@@ -180,13 +179,20 @@ function ReviewComponent(props: Props) {
           <StaylistSlider num={1}>
             {review.reviewImage.map((image, index) => (
               <div style={{ width: '100%' }}>
-                <img src={image} alt="sdf" />
+                <img src={`https://nimatnemat.site${image}`} alt="sdf" />
               </div>
             ))}
           </StaylistSlider>
         </SliderContainer>
         <ReviewTextContainer className={Styles.p2regular} isMoreView={isMoreView}>
-          {review.reviewInfo}
+          {review.reviewInfo.split('\n').map((line) => {
+            return (
+              <span>
+                {line}
+                <br />
+              </span>
+            );
+          })}
         </ReviewTextContainer>
       </Content>
       <BtnContainer>

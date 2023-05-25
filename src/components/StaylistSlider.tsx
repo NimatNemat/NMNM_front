@@ -43,7 +43,7 @@ const StyledSlider = styled(Slider)`
 
   .slick-prev,
   .slick-next {
-    z-index: 9999;
+    z-index: 1;
     width: 30px !important;
     opacity: 1;
   }

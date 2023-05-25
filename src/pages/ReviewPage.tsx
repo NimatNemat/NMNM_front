@@ -83,6 +83,7 @@ const ReviewTextArea = styled.textarea`
   padding: 0;
   border: none;
   font-size: 1.6rem;
+  white-space: pre-line;
   ::placeholder {
     font-size: 1.6rem;
     color: rgba(128, 128, 128, 0.3);

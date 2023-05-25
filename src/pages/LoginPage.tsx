@@ -46,6 +46,7 @@ function LoginPage() {
         sessionStorage.setItem('token', `Bearer ${response.data}`);
         sessionStorage.setItem('isAuthenticated', 'true');
         sessionStorage.setItem('userId', formData.get('userId') as string);
+        console.log(response.data);
       } else {
         alert('아이디, 비밀번호를 다시 한번 확인하세요.');
       }

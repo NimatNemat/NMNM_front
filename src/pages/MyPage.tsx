@@ -4,13 +4,15 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { FiMoreHorizontal } from 'react-icons/fi';
 import { AiFillPlusCircle } from 'react-icons/ai';
-
 import StyledButton from '../components/StyledButton';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledCard from '../components/StyledCard';
 import ReviewComponent from '../components/ReviewComponent';
 import StyledModal from '../components/StyledModal';
+import FollowModal from '../components/FollowModal';
+import DeleteModal from '../components/DeleteModal';
 import MyReview from '../components/MyReivew';
+import Playlist from '../components/Playlist';
 
 interface Restaurant {
   _id: {
@@ -52,6 +54,13 @@ interface User {
   password: string;
   profileImage: string | null;
   Id: string;
+  infoMessage: string;
+}
+
+interface FollowUser {
+  userId: string;
+  nickName: string;
+  profileImage: string | null;
 }
 
 const MypageContainer = styled.div`
@@ -165,8 +174,16 @@ const Card = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
+  min-height: 200px;
   background: #ffffff;
+  color: black;
+  transition: transform 0.3s ease;
   box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+  :hover {
+    cursor: pointer;
+    transform: translateY(-5px);
+    box-shadow: 0.5rem 0.5rem 1.5rem rgba(255, 112, 3, 0.3);
+  }
 `;
 
 const CardContent = styled.div`
@@ -188,10 +205,20 @@ const Btncontainer = styled.div`
   width: 20rem;
 `;
 
+interface playList {
+  tastePlaylistName: string;
+  tastePlaylistDesc: string;
+  publicOrPrivate: number;
+  playlistDetail: number[];
+  tastePlaylistId: number;
+}
+
 function Mypage() {
   const modalRef = useRef<HTMLDivElement>(null);
   const [modalData, setModalData] = useState<number>(0);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [showFollowModal, setShowFollowModal] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<number>(0);
   const handleModalData = (data: number) => {
     setModalData(data);
   };
@@ -201,7 +228,6 @@ function Mypage() {
   const closeModal = () => {
     setShowModal(false);
   };
-  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [tab, setTab] = useState<number>(0);
   const [renderCnt, setRenderCnt] = useState<number>(12);
@@ -212,13 +238,38 @@ function Mypage() {
   const { id } = useParams<{ id: string }>();
   const userId = sessionStorage.getItem('userId');
   const [totalReviews, setTotalReviews] = useState<number>(0);
+  const [followerCnt, setFollowerCnt] = useState<number>(0);
+  const [followingCnt, setFollowingCnt] = useState<number>(0);
+  const [followers, setFollowers] = useState<FollowUser[]>([]);
+  const [followings, setFollowings] = useState<FollowUser[]>([]);
+  const [followingClicked, setFollowingClicked] = useState<boolean>(false);
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [deleteModalData, setDeleteModalData] = useState<number>(0);
 
   let likedCount = 0;
   let banCount = 0;
-
-  const totalLists = restaurants.length; // 맛플리의 총 개수
+  const [playlist, setPlaylist] = useState<playList[]>([]);
+  const totalLists = playlist.length; // 맛플리의 총 개수
   const totalLikes = likedRestaurants.length; // 좋아요한 식당의 총 개수
   const totalBan = banRestaurants.length;
+  const [bookmark, setBookmark] = useState<{ [key: string]: number }>({});
+  const fetchPlayList = async () => {
+    try {
+      const response = await axios.get(`tastePlaylist/getTastePlaylist?userId=${id}`);
+      setPlaylist(response.data);
+      const tmp = new Map<string, number>(Object.entries(bookmark));
+
+      response.data.forEach((playlist: playList) => {
+        playlist.playlistDetail.forEach((restaurantId: number) => {
+          const currentCount = tmp.get(restaurantId.toString()) || 0;
+          tmp.set(restaurantId.toString(), currentCount + 1);
+        });
+      });
+      setBookmark(Object.fromEntries(tmp));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const ClickReview = () => {
     setTab(0);
@@ -255,11 +306,27 @@ function Mypage() {
       setIsLoaded(false);
     }
     try {
-      const response = await axios.get(`/users/userId?userId=${userId}`);
+      const response = await axios.get(`/users/userId?userId=${id}`);
       setUser(response.data);
       console.log(response.data);
     } catch (error) {
       console.error('Error fetching data', error);
+    }
+  };
+
+  const fetchFollowData = async () => {
+    try {
+      if (id) {
+        const responseFollowing = await axios.get(`/follows/getMyfollows?userId=${id}`);
+        setFollowingCnt(responseFollowing.data.length);
+        setFollowings(responseFollowing.data);
+
+        const responseFollowers = await axios.get(`/follows/getMyfollowers?userId=${id}`);
+        setFollowerCnt(responseFollowers.data.length);
+        setFollowers(responseFollowers.data);
+      }
+    } catch (error) {
+      console.error('getFollowers error', error);
     }
   };
 
@@ -269,12 +336,75 @@ function Mypage() {
       axios.defaults.headers.common.Authorization = token;
     }
     fetchData();
-  }, []);
+    fetchFollowData();
+    fetchPlayList();
+  }, [id, isFollowing]);
 
   const toggleIsFollowing = () => {
+    follow();
     setIsFollowing(!isFollowing);
   };
 
+  const follow = async () => {
+    const token = sessionStorage.getItem('token');
+    let response;
+    const formData = new FormData();
+    if (token) {
+      axios.defaults.headers.common.Authorization = token;
+    }
+    try {
+      if (id) {
+        formData.append('targetId', id);
+        if (isFollowing) {
+          response = await axios.post(`/follows/unfollow`, formData);
+        } else {
+          response = await axios.post(`/follows/follow`, formData);
+        }
+      }
+    } catch (error) {
+      console.error('Follow Api error', error);
+    }
+  };
+  const addrestaurantToPlayList = async (playlistId: number | any, restaurantId: number) => {
+    const formData = new FormData();
+    formData.append('playlistId', playlistId?.toString());
+    formData.append('restaurantId', String(restaurantId));
+    const response = await axios.post(`tastePlaylist/addDetail`, formData);
+    const tmp = new Map<string, number>(Object.entries(bookmark));
+    const currentCount = tmp.get(restaurantId.toString()) || 0;
+    tmp.set(restaurantId.toString(), currentCount + 1);
+    setBookmark(Object.fromEntries(tmp));
+  };
+  const removerestaurantToPlayList = async (playlistId: number | any, restaurantId: number) => {
+    const formData = new FormData();
+    formData.append('playlistId', playlistId?.toString());
+    formData.append('restaurantId', String(restaurantId));
+    const response = await axios.post(`tastePlaylist/deleteDetail`, formData);
+    const tmp = new Map<string, number>(Object.entries(bookmark));
+    const currentCount = tmp.get(restaurantId.toString()) || 0;
+    tmp.set(restaurantId.toString(), currentCount - 1);
+    setBookmark(Object.fromEntries(tmp));
+  };
+
+  const addPlayList = async (userId: string, playListName: string, playListDesc: string, lock: number) => {
+    const formData = new FormData();
+    formData.append('tastePlaylistName', playListName);
+    formData.append('tastePlaylistDesc', playListDesc);
+    formData.append('publicOrPrivate', String(lock));
+    formData.append('userId', userId);
+    const response = await axios.post(`tastePlaylist/addTastePlaylist`, formData);
+    closeModal();
+    fetchPlayList();
+  };
+  const showFollowerList = () => {
+    setFollowingClicked(false);
+    setShowFollowModal(true);
+  };
+
+  const showFollowingList = () => {
+    setFollowingClicked(true);
+    setShowFollowModal(true);
+  };
   let button;
 
   if (userId === id) {
@@ -303,7 +433,7 @@ function Mypage() {
   } else if (isFollowing) {
     button = (
       <Btncontainer>
-        <StyledButton padding="0.8rem" borderRadius="0.4rem" onClick={toggleIsFollowing}>
+        <StyledButton padding="0.8rem" borderRadius="0.4rem" onClick={toggleIsFollowing} color="rgba(128, 128, 128, 1)">
           <div className={Styles.p2bold}>팔로잉</div>
         </StyledButton>
       </Btncontainer>
@@ -318,15 +448,72 @@ function Mypage() {
     );
   }
 
+  let modal;
+  if (showFollowModal) {
+    if (followingClicked) {
+      modal = (
+        <FollowModal
+          show={showFollowModal}
+          modalRef={modalRef}
+          userList={followings}
+          isFollowing
+          onClose={() => setShowFollowModal(false)}
+          onFollowChange={fetchFollowData}
+        />
+      );
+    } else {
+      modal = (
+        <FollowModal
+          show={showFollowModal}
+          modalRef={modalRef}
+          userList={followers}
+          isFollowing={false}
+          onClose={() => setShowFollowModal(false)}
+          onFollowChange={fetchFollowData}
+        />
+      );
+    }
+  } else {
+    modal = null;
+  }
+
+  const handleBanList = (number: number) => {
+    setShowDeleteModal(1);
+    setModalData(number);
+  };
+  const handlePlayList = (number: number) => {
+    setShowDeleteModal(2);
+    setModalData(number);
+  };
+
+  const DeletePlaylist = async (playlistId: number) => {
+    const formData = new FormData();
+    formData.append('playlistId', playlistId?.toString());
+    const response = await axios.post(`tastePlaylist/deleteTastePlaylist`, formData).then((res) => {
+      fetchPlayList();
+      setShowDeleteModal(0);
+    });
+  };
+
+  const DeleteBanList = async (banRestaurantId: number) => {
+    const formData = new FormData();
+    if (userId) {
+      formData.append('userId', userId);
+    }
+    formData.append('restaurantId', banRestaurantId?.toString());
+    const response = await axios.post(`/likes/unban`, formData).then((res) => {
+      fetchData();
+      setShowDeleteModal(0);
+    });
+  };
+
   return (
     <>
       <MypageContainer>
         <Container>
           <InfoContainer>
             <Imgbox>
-              <Img
-                src={User?.profileImage ? User.profileImage : 'https://cdn-icons-png.flaticon.com/512/1555/1555492.png'}
-              />
+              <Img src={User?.profileImage ? `https://nimatnemat.site${User.profileImage}` : '/default.png'} />
             </Imgbox>
             <Infocontent>
               <Rowbtn>
@@ -334,15 +521,19 @@ function Mypage() {
                 {button}
               </Rowbtn>
               <Row>
-                <div className={Styles.p2bold}>작성한 리뷰 9</div>
-                <div className={Styles.p2bold}>팔로워 10</div>
-                <div className={Styles.p2bold}>팔로우 20</div>
+                <div className={Styles.p2bold}>작성한 리뷰 {totalReviews}</div>
+                <Btn onClick={showFollowerList}>
+                  <div className={Styles.p2bold}>팔로워 {followerCnt}</div>
+                </Btn>
+                <Btn onClick={showFollowingList}>
+                  <div className={Styles.p2bold}>팔로잉 {followingCnt}</div>
+                </Btn>
               </Row>
               <Row>
                 <div className={Styles.p2bold}>{User?.nickName}</div>
               </Row>
               <Info>
-                <div className={Styles.p2regular}>안녕하세요. 저는 손성민 입니다.</div>
+                <div className={Styles.p2regular}>{User?.infoMessage}</div>
               </Info>
             </Infocontent>
           </InfoContainer>
@@ -357,25 +548,60 @@ function Mypage() {
             <Btn className={Styles.p1bold} onClick={ClickLike} clicked={tab === 2}>
               좋아요한 식당
             </Btn>
-            <Btn className={Styles.p1bold} onClick={ClickBan} clicked={tab === 3}>
-              안볼래요 식당
-            </Btn>
+            {id === userId ? (
+              <Btn className={Styles.p1bold} onClick={ClickBan} clicked={tab === 3}>
+                안볼래요 식당
+              </Btn>
+            ) : null}
           </Row>
 
-          {isLoaded && tab === 0 ? <MyReview setTotalReviews={setTotalReviews} /> : null}
+          {isLoaded && tab === 0 ? <MyReview setTotalReviews={setTotalReviews} id={id || ''} /> : null}
           {isLoaded && tab === 1 ? (
             <GridContainer>
-              <Card className={Styles.h3medium}>
-                <CardContent>
-                  <PlusIcon />
-                  <div style={{ color: '#9B9B9B' }}>맛플리 추가하기</div>
-                </CardContent>
-              </Card>
-              {restaurants.map((restaurant: any, index) =>
-                index < renderCnt - 1 ? (
-                  <StyledCard restaurant={restaurant} icon={<FiMoreHorizontal size="2.4rem" />} showIconBox={false} />
-                ) : null
-              )}
+              {id === userId ? (
+                <Card
+                  className={Styles.h3medium}
+                  onClick={openModal}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                >
+                  <CardContent>
+                    <PlusIcon />
+                    <div style={{ color: '#9B9B9B' }}>맛플리 추가하기</div>
+                  </CardContent>
+                </Card>
+              ) : null}
+              {id === userId
+                ? playlist.map((playList: playList) => (
+                    <Playlist
+                      tastePlaylistName={playList.tastePlaylistName}
+                      setModalData={handleModalData}
+                      tastePlaylistId={playList.tastePlaylistId}
+                      publicOrPrivate={playList.publicOrPrivate}
+                      tastePlaylistDesc={playList.tastePlaylistDesc}
+                      icon={
+                        <FiMoreHorizontal
+                          size="2.4rem"
+                          onClick={(event) => {
+                            event.preventDefault();
+                            handlePlayList(playList.tastePlaylistId);
+                          }}
+                        />
+                      }
+                    />
+                  ))
+                : playlist
+                    .filter((playList: playList) => playList.publicOrPrivate === 1)
+                    .map((playList: playList) => (
+                      <Playlist
+                        tastePlaylistName={playList.tastePlaylistName}
+                        setModalData={handleModalData}
+                        tastePlaylistId={playList.tastePlaylistId}
+                        publicOrPrivate={playList.publicOrPrivate}
+                        tastePlaylistDesc={playList.tastePlaylistDesc}
+                      />
+                    ))}
             </GridContainer>
           ) : null}
           {isLoaded && tab === 2 ? (
@@ -397,6 +623,9 @@ function Mypage() {
                           );
                           setLikedRestaurants(updatedLikedRestaurants);
                         }}
+                        showIconBox={userId === id}
+                        bookmark={bookmark}
+                        setBookmark={setBookmark}
                       />
                     );
                   }
@@ -406,7 +635,7 @@ function Mypage() {
             </GridContainer>
           ) : null}
 
-          {isLoaded && tab === 3 ? (
+          {id === userId && isLoaded && tab === 3 ? (
             <GridContainer>
               {banRestaurants.length === 0 ? <div className={Styles.p2bold}>안볼래요 식당이 없습니다.</div> : null}
               {(() => {
@@ -419,6 +648,16 @@ function Mypage() {
                         setModalData={handleModalData}
                         openModal={openModal}
                         key={restaurant.restaurantId}
+                        showIconBox={false}
+                        icon={
+                          <FiMoreHorizontal
+                            size="2.4rem"
+                            onClick={(event) => {
+                              event.preventDefault();
+                              handleBanList(restaurant.restaurantId);
+                            }}
+                          />
+                        }
                         updateLikedRestaurant={() => {
                           const updatedbanRestaurants = banRestaurants.filter(
                             (banRestaurant: Restaurant) => banRestaurant.restaurantId !== restaurant.restaurantId
@@ -449,7 +688,46 @@ function Mypage() {
           ) : null}
         </Container>
       </MypageContainer>
-      {showModal ? <StyledModal show={showModal} onClose={closeModal} data={modalData} modalRef={modalRef} /> : null}
+      {showModal && tab === 1 ? (
+        <StyledModal
+          show={showModal}
+          addbutton={false}
+          onClose={closeModal}
+          modalData={modalData}
+          modalRef={modalRef}
+          addPlayList={addPlayList}
+          addrestaurantToPlayList={addrestaurantToPlayList}
+          removerestaurantToPlayList={removerestaurantToPlayList}
+        />
+      ) : null}
+      {tab === 2 && showModal ? (
+        <StyledModal
+          show={showModal}
+          onClose={closeModal}
+          modalData={modalData}
+          modalRef={modalRef}
+          addPlayList={addPlayList}
+          addrestaurantToPlayList={addrestaurantToPlayList}
+          removerestaurantToPlayList={removerestaurantToPlayList}
+        />
+      ) : null}
+      {modal}
+      {showDeleteModal === 1 ? (
+        <DeleteModal
+          show={showDeleteModal}
+          onClose={() => setShowDeleteModal(0)}
+          onDelete={() => DeleteBanList(modalData)}
+          modalRef={modalRef}
+        />
+      ) : null}
+      {showDeleteModal === 2 ? (
+        <DeleteModal
+          show={showDeleteModal}
+          onClose={() => setShowDeleteModal(0)}
+          onDelete={() => DeletePlaylist(modalData)}
+          modalRef={modalRef}
+        />
+      ) : null}
     </>
   );
 }

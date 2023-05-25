@@ -3,6 +3,7 @@ import Select, { ActionMeta, InputActionMeta, SingleValue, components } from 're
 import axios from 'axios';
 import styled from 'styled-components';
 import { AiOutlineSearch } from 'react-icons/ai';
+import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledTag from '../components/StyledTag';
 import StyledCard from '../components/StyledCard';
@@ -11,6 +12,13 @@ import StyledInput from '../components/StyledInput';
 import StyledButton from '../components/StyledButton';
 import Pagination from '../components/Pagination';
 
+interface playList {
+  tastePlaylistName: string;
+  tastePlaylistDesc: string;
+  publicOrPrivate: number;
+  playlistDetail: number[];
+  tastePlaylistId: number;
+}
 const MainPageContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -80,6 +88,7 @@ const options = [
   { value: 'reco1', label: '진정한 한국인의 추천리스트' },
   { value: 'reco2', label: '당신만을 위한 추천리스트' },
   { value: 'all', label: '니맛내맛 전체 식당리스트' },
+  { value: 'together', label: '함께먹기 추천 식당리스트', isDisabled: true },
 ];
 
 const OptionDiv = styled.div`
@@ -208,6 +217,38 @@ const SelectIdSearchStyle = {
     fontWeight: '700',
   }),
 };
+interface Restaurant {
+  _id: {
+    timestamp: number;
+    date: string;
+  };
+  restaurantId: number;
+  name: string;
+  cuisineType: string;
+  avgPreference: number;
+  address: string;
+  roadAddress: string;
+  number: string;
+  businessHours: string;
+  tags: string[][];
+  imageFile: {
+    timestamp: number;
+    date: string;
+  };
+  menu: string[][];
+  peculiarTaste: null;
+  likeUserList: string[];
+  imageUrl: string;
+  xposition: number;
+  yposition: number;
+  banUserList: string[];
+}
+
+interface User {
+  userId: string;
+  profileImage: string;
+  nickName: string;
+}
 
 function MainPage() {
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -224,45 +265,37 @@ function MainPage() {
   const [showSearchInput, setShowSearchInput] = useState<boolean>(false);
   const [addedUsers, setAddedUsers] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
+  const [playlist, setPlaylist] = useState<playList[]>([]);
 
-  interface Restaurant {
-    _id: {
-      timestamp: number;
-      date: string;
-    };
-    restaurantId: number;
-    name: string;
-    cuisineType: string;
-    avgPreference: number;
-    address: string;
-    roadAddress: string;
-    number: string;
-    businessHours: string;
-    tags: string[][];
-    imageFile: {
-      timestamp: number;
-      date: string;
-    };
-    menu: string[][];
-    peculiarTaste: null;
-    likeUserList: string[];
-    imageUrl: string;
-    xposition: number;
-    yposition: number;
-    banUserList: string[];
-  }
-
-  interface User {
-    userId: string;
-    profileImage: string;
-    nickName: string;
-  }
-
+  const fetchPlayList = async () => {
+    try {
+      const response = await axios.get(`tastePlaylist/getTastePlaylist?userId=${sessionStorage.getItem('userId')}`);
+      setPlaylist(response.data);
+      const tmp = new Map<string, number>(Object.entries(bookmark));
+      response.data.forEach((playlist: playList) => {
+        playlist.playlistDetail.forEach((restaurantId: number) => {
+          const currentCount = tmp.get(restaurantId.toString()) || 0;
+          tmp.set(restaurantId.toString(), currentCount + 1);
+        });
+      });
+      setBookmark(Object.fromEntries(tmp));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const addPlayList = async (userId: string, playListName: string, playListDesc: string, lock: number) => {
+    const formData = new FormData();
+    formData.append('tastePlaylistName', playListName);
+    formData.append('tastePlaylistDesc', playListDesc);
+    formData.append('publicOrPrivate', String(lock));
+    formData.append('userId', userId);
+    const response = await axios.post(`tastePlaylist/addTastePlaylist`, formData);
+  };
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-
+  const [bookmark, setBookmark] = useState<{ [key: string]: number }>({});
   const fetchData = async () => {
     setIsLoaded(false);
     try {
@@ -275,10 +308,12 @@ function MainPage() {
         response = await axios.get(`/restaurant/all`);
       } else if (selected === 'reco1') {
         response = await axios.get(`/recommended/first`);
-      } else {
+      } else if (selected === 'reco2') {
         response = await axios.get('/recommended/second');
       }
-      setRestaurants(response.data);
+      if (response) {
+        setRestaurants(response.data);
+      }
       setIsLoaded(true);
     } catch (error) {
       console.error('Error fetching restaurant data', error);
@@ -296,25 +331,48 @@ function MainPage() {
     }
   };
 
+  const addrestaurantToPlayList = async (playlistId: number | any, restaurantId: number) => {
+    const formData = new FormData();
+    formData.append('playlistId', playlistId?.toString());
+    formData.append('restaurantId', String(restaurantId));
+    const response = await axios.post(`tastePlaylist/addDetail`, formData);
+    const tmp = new Map<string, number>(Object.entries(bookmark));
+    const currentCount = tmp.get(restaurantId.toString()) || 0;
+    tmp.set(restaurantId.toString(), currentCount + 1);
+    setBookmark(Object.fromEntries(tmp));
+  };
+  const removerestaurantToPlayList = async (playlistId: number | any, restaurantId: number) => {
+    const formData = new FormData();
+    formData.append('playlistId', playlistId?.toString());
+    formData.append('restaurantId', String(restaurantId));
+    const response = await axios.post(`tastePlaylist/deleteDetail`, formData);
+    const tmp = new Map<string, number>(Object.entries(bookmark));
+    const currentCount = tmp.get(restaurantId.toString()) || 0;
+    tmp.set(restaurantId.toString(), currentCount - 1);
+    setBookmark(Object.fromEntries(tmp));
+  };
   useEffect(() => {
     fetchData();
+    fetchPlayList();
   }, [selected]);
 
   // 함께먹기 로직
+  const together = () => {
+    setSelected('together');
+    setSelectedLabel('함께먹기 추천 식당리스트');
+    togetherFetchData();
+  };
   const togetherFetchData = async () => {
     setIsLoaded(false);
     const userId = sessionStorage.getItem('userId');
-    if (userId) {
-      setAddedUsers([...addedUsers, userId]);
-    }
     try {
-      const response = await axios.post(`http://127.0.0.1:5000/thirdRecommend`, addedUsers);
-      console.log(response.data);
+      const response = await axios.post(`http://15.165.161.104:5000/thirdRecommend`, [userId, ...addedUsers]);
       setRestaurants(response.data);
       setIsLoaded(true);
     } catch (error) {
       console.error('Error fetching together data', error);
     }
+    setAddedUsers(addedUsers.filter((id) => id !== userId));
   };
   // 사용자 아이디를 검색하는 로직 (함께먹기 부분)
   const toggleSearchInput = () => {
@@ -356,6 +414,10 @@ function MainPage() {
     if (userToAddBack) {
       setUsers([...users, userToAddBack]);
     }
+  };
+
+  const clearUserTag = () => {
+    setAddedUsers([]);
   };
 
   // 페이지네이션 각 페이지 별로 Post할 갯수 정해서 페이지 나누기
@@ -449,6 +511,8 @@ function MainPage() {
                 setModalData={handleModalData}
                 openModal={openModal}
                 key={restaurant.restaurantId}
+                bookmark={bookmark}
+                setBookmark={setBookmark}
               />
             ))
           ) : (
@@ -473,7 +537,11 @@ function MainPage() {
   const formatOptionLabel = ({ value, label, profileImage, nickName }: OptionType) => (
     <OptionDiv>
       <OptionImgDiv>
-        <img src={profileImage} alt={label} style={{ width: '5rem', height: '5rem', borderRadius: '50%' }} />
+        <img
+          src={profileImage || '/default.png'}
+          alt={label}
+          style={{ width: '5rem', height: '5rem', borderRadius: '50%' }}
+        />
       </OptionImgDiv>
       <OptionTextDiv>
         <span>{label}</span>
@@ -481,7 +549,6 @@ function MainPage() {
       </OptionTextDiv>
     </OptionDiv>
   );
-
   return (
     <>
       <MainPageContainer className="MainPage">
@@ -529,7 +596,7 @@ function MainPage() {
                         ? searchedUser.map((user) => ({
                             value: user.userId,
                             label: user.userId,
-                            profileImage: user.profileImage,
+                            profileImage: `https://nimatnemat.site${user.profileImage}`,
                             nickName: user.nickName,
                           }))
                         : []
@@ -560,11 +627,23 @@ function MainPage() {
                   <StyledTag text="+" onClick={toggleSearchInput} />
                 )}
                 {addedUsers.length > 0 ? (
-                  <Btn>
-                    <StyledButton padding="1rem" borderRadius="0.4rem" onClick={togetherFetchData}>
-                      <div className={Styles.p2bold}>함께 먹기</div>
-                    </StyledButton>
-                  </Btn>
+                  <>
+                    <Btn>
+                      <StyledButton
+                        padding="1rem"
+                        borderRadius="0.4rem"
+                        onClick={clearUserTag}
+                        color="rgba(128, 128, 128, 1)"
+                      >
+                        <div className={Styles.p2bold}>초기화</div>
+                      </StyledButton>
+                    </Btn>
+                    <Btn>
+                      <StyledButton padding="1rem" borderRadius="0.4rem" onClick={together}>
+                        <div className={Styles.p2bold}>함께 먹기</div>
+                      </StyledButton>
+                    </Btn>
+                  </>
                 ) : null}
               </TagListContainer>
             </TagContainer>
@@ -584,7 +663,17 @@ function MainPage() {
           </ListContainer>
         </Container>
       </MainPageContainer>
-      {showModal ? <StyledModal show={showModal} onClose={closeModal} data={modalData} modalRef={modalRef} /> : null}
+      {showModal ? (
+        <StyledModal
+          show={showModal}
+          onClose={closeModal}
+          modalData={modalData}
+          modalRef={modalRef}
+          addPlayList={addPlayList}
+          addrestaurantToPlayList={addrestaurantToPlayList}
+          removerestaurantToPlayList={removerestaurantToPlayList}
+        />
+      ) : null}
     </>
   );
 }

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { AiOutlineClose, AiOutlinePlus, AiOutlineLock, AiOutlineUnlock } from 'react-icons/ai';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledInput from './StyledInput';
 import StyledButton from './StyledButton';
@@ -31,6 +30,7 @@ const ModalContent = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
+  border-radius: 2rem;
   gap: 3.2vh;
   @media (max-width: 768px) {
     width: 50%;

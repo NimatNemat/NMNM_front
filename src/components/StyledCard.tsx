@@ -5,6 +5,13 @@ import axios from 'axios';
 import { BsBookmark, BsBookmarkFill, BsFillHeartFill, BsHeart } from 'react-icons/bs';
 import Styles from '../config/globalFontStyle.module.css';
 
+interface playList {
+  tastePlaylistName: string;
+  tastePlaylistDesc: string;
+  publicOrPrivate: number;
+  playlistDetail: number[];
+  tastePlaylistId: number;
+}
 interface Restaurant {
   _id: {
     timestamp: number;
@@ -39,6 +46,8 @@ interface StyledCardProps {
   setModalData?: (data: number) => void;
   updateLikedRestaurant?: () => void;
   icon?: React.ReactNode;
+  bookmark?: { [key: string]: number };
+  setBookmark?: (data: { [key: string]: number }) => void;
 }
 
 const Card = styled.div<{ width?: string }>`
@@ -107,7 +116,7 @@ const StyledLink = styled(Link)`
   :hover {
     cursor: pointer;
     transform: translateY(-5px);
-    box-shadow: 0.5rem 0.5rem 1.5rem rgba(0, 0, 0, 0.3);
+    box-shadow: 0.5rem 0.5rem 1.5rem rgba(255, 137, 35, 0.6);
   }
 `;
 const Icon = styled.div`
@@ -123,10 +132,18 @@ const Icon = styled.div`
 `;
 
 function StyledCard(props: StyledCardProps) {
-  const { restaurant, showIconBox, width, openModal, setModalData, icon, updateLikedRestaurant } = props;
-  const [bookmarked, setBookmarked] = useState(false);
+  const {
+    restaurant,
+    showIconBox,
+    width,
+    openModal,
+    setModalData,
+    icon,
+    updateLikedRestaurant,
+    bookmark,
+    setBookmark,
+  } = props;
   const [liked, setLiked] = useState<boolean>(false);
-
   const likefunction: React.MouseEventHandler<SVGElement> = async (event) => {
     event.preventDefault();
     const formData = new FormData();
@@ -140,7 +157,6 @@ function StyledCard(props: StyledCardProps) {
       console.log(error);
     }
   };
-
   const unlikefunction: React.MouseEventHandler<SVGElement> = async (event) => {
     event.preventDefault();
     const formData = new FormData();
@@ -159,14 +175,14 @@ function StyledCard(props: StyledCardProps) {
 
   const handleBookmarkClick: React.MouseEventHandler<SVGElement> = (event) => {
     event.preventDefault();
-    setBookmarked(!bookmarked);
     if (openModal) {
       openModal();
       if (setModalData) {
-        setModalData(1);
+        setModalData(restaurant.restaurantId);
       }
     }
   };
+
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     const token = sessionStorage.getItem('token');
@@ -182,14 +198,14 @@ function StyledCard(props: StyledCardProps) {
     }
   }, []);
   const [likeCount, setLikeCount] = useState<number>(restaurant.likeUserList ? restaurant.likeUserList.length : 0);
-
+  const [playlist, setPlaylist] = useState<playList[]>([]);
   return (
     <StyledLink to={`/detail/${restaurant.restaurantId}`} style={{ textDecoration: 'none', color: 'black' }}>
       <Card width={width}>
         {restaurant.imageUrl === null ? (
           <CardImage src="/logo.png" alt="" />
         ) : (
-          <CardImage src={`http://3.39.232.5:8080${restaurant.imageUrl}`} alt="" />
+          <CardImage src={`https://nimatnemat.site${restaurant.imageUrl}`} alt="" />
         )}
         <CardInfoBox>
           {showIconBox && (
@@ -204,7 +220,7 @@ function StyledCard(props: StyledCardProps) {
                   )}
                 </Icon>
                 <Icon>
-                  {bookmarked ? (
+                  {bookmark && bookmark[restaurant.restaurantId.toString()] > 0 ? (
                     <BsBookmarkFill size="2.4rem" color="rgba(255, 137, 35, 0.8)" onClick={handleBookmarkClick} />
                   ) : (
                     <BsBookmark size="2.4rem" onClick={handleBookmarkClick} />
@@ -223,17 +239,10 @@ function StyledCard(props: StyledCardProps) {
                   </span>
                 ) : null}
               </InfoHeader>
-              {icon && <div>{icon}</div>}
+              {icon && <Icon>{icon}</Icon>}
             </InfoName>
             <span className={Styles.p2medium}>{restaurant?.cuisineType}</span>
-            <span className={Styles.p2medium}>
-              {restaurant.tags
-                ? restaurant?.tags
-                    .slice(0, 3)
-                    .map((tagGroup) => tagGroup.join(' '))
-                    .join(' ')
-                : ''}
-            </span>
+            <span className={Styles.p2medium}>{restaurant.tags ? restaurant?.tags.slice(0, 3).join(' ') : ''}</span>
           </InfoBox>
         </CardInfoBox>
       </Card>
@@ -248,37 +257,8 @@ StyledCard.defaultProps = {
   setModalData: () => null,
   updateLikedRestaurant: () => null,
   icon: null,
-  // restaurant: {
-  //   _id: {
-  //     timestamp: 1627665600,
-  //     date: '2021-07-30T00:00:00.000Z',
-  //   },
-  //   restaurantId: 1,
-  //   name: '맛집1',
-  //   cuisineType: '한식',
-  //   avgPreference: 4.5,
-  //   address: '서울특별시 강남구 역삼동 123-45',
-  //   roadAddress: '서울특별시 강남구 테헤란로 427',
-  //   number: '02-123-4567',
-  //   businessHours: '10:00 ~ 22:00',
-  //   tags: [
-  //     ['#태그1', '#태그2', '#태그3'],
-  //     ['#태그4', '#태그5', '#태그6'],
-  //   ],
-  //   imageFile: {
-  //     timestamp: 1627665600,
-  //     date: '2021-07-30T00:00:00.000Z',
-  //   },
-  //   menu: [
-  //     ['메뉴1', '메뉴2', '메뉴3'],
-  //     ['메뉴4', '메뉴5', '메뉴6'],
-  //   ],
-  //   peculiarTaste: null,
-  //   likeUserList: ['user1', 'user2', 'user3'],
-  //   imageUrl: '',
-  //   xposition: 37.498095,
-  //   yposition: 127.02861,
-  // },
+  bookmark: new Map(),
+  setBookmark: () => null,
 };
 
 export default StyledCard;
