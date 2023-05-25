@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/nimatnemat/static/css/main.36b88e71.css",
-    "main.js": "/nimatnemat/static/js/main.83c24902.js",
+    "main.js": "/nimatnemat/static/js/main.854fa5a6.js",
     "static/js/787.cb118101.chunk.js": "/nimatnemat/static/js/787.cb118101.chunk.js",
     "static/media/PretendardVariable.ttf": "/nimatnemat/static/media/PretendardVariable.d008a69682c7c6bef29a.ttf",
     "static/media/intro.jpg": "/nimatnemat/static/media/intro.a964ce6f5ed1430108f1.jpg",
@@ -11,11 +11,11 @@
     "static/media/slick.woff": "/nimatnemat/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/nimatnemat/index.html",
     "main.36b88e71.css.map": "/nimatnemat/static/css/main.36b88e71.css.map",
-    "main.83c24902.js.map": "/nimatnemat/static/js/main.83c24902.js.map",
+    "main.854fa5a6.js.map": "/nimatnemat/static/js/main.854fa5a6.js.map",
     "787.cb118101.chunk.js.map": "/nimatnemat/static/js/787.cb118101.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.36b88e71.css",
-    "static/js/main.83c24902.js"
+    "static/js/main.854fa5a6.js"
   ]
 }
