@@ -11,6 +11,7 @@ interface ModalProps {
   onClose?: () => void;
   show: boolean;
   modalData: number;
+  addbutton?: boolean;
   modalRef: React.ForwardedRef<HTMLDivElement>;
   addPlayList: (userId: string, playListName: string, playListDesc: string, lock: number) => void;
   addrestaurantToPlayList: (playlistId: number, restaurantId: number) => void;
@@ -72,9 +73,6 @@ const TextBox = styled.div`
   align-items: center;
   width: 100%;
   flex-grow: 1;
-  &:hover {
-    cursor: pointer;
-  }
 `;
 const ButtonBox = styled.div`
   display: flex;
@@ -102,6 +100,14 @@ const RowDiv = styled.div`
   align-items: center;
   width: 100%;
   gap: 1.2vh;
+`;
+const ModalBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 1.6vh;
+  width: 100%;
 `;
 const Styledselect = styled.select`
   display: flex;
@@ -132,6 +138,7 @@ function StyledModal(props: ModalProps) {
     show,
     modalData,
     modalRef,
+    addbutton,
     addPlayList,
     addrestaurantToPlayList,
     removerestaurantToPlayList,
@@ -247,59 +254,63 @@ function StyledModal(props: ModalProps) {
       <ModalContent onClick={(event) => event.stopPropagation()}>
         <ModalHeader>
           <span className={Styles.h3}>그룹선택</span>
-          <AiOutlineClose size="2.4rem" onClick={handleClose} />
+          <AiOutlineClose size="2.4rem" onClick={handleClose} style={{ cursor: 'pointer' }} />
         </ModalHeader>
-        {playlist.map((data) => (
-          <ModalRow key={data.tastePlaylistName}>
-            <IconBox>
-              {data.playlistDetail.includes(modalData) ? (
-                <BiCheckboxChecked
-                  size="2rem"
-                  color="#6E6E6E"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => {
-                    handleremovereataurantToPlayList(data.tastePlaylistId);
-                  }}
-                />
-              ) : (
-                <BiCheckbox
-                  size="2rem"
-                  color="#372323"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => {
-                    handleaddrestaurantToPlayList(data.tastePlaylistId);
-                  }}
-                />
-              )}
-            </IconBox>
-            <TextBox>
-              <span className={Styles.p1bold} style={{ color: '#6E6E6E' }}>
-                {data.tastePlaylistName}
-              </span>
-            </TextBox>
-            <IconBox>
-              {data.publicOrPrivate === 1 ? (
-                <AiOutlineLock size="2rem" color="#6E6E6E" />
-              ) : (
-                <AiOutlineUnlock size="2rem" color="#6E6E6E" />
-              )}
-            </IconBox>
-          </ModalRow>
-        ))}
-        {inputVisible ? (
-          showInputBox()
-        ) : (
-          <ModalRow onClick={() => setInputVisible(true)}>
-            <IconBox>
-              <AiOutlinePlus size="2rem" color="#6E6E6E" />
-            </IconBox>
-            <TextBox>
-              <span className={Styles.p1bold} style={{ color: '#6E6E6E' }}>
-                새폴더 생성
-              </span>
-            </TextBox>
-          </ModalRow>
-        )}
+        <ModalBody>
+          {addbutton && !inputVisible
+            ? playlist.map((data) => (
+                <ModalRow key={data.tastePlaylistName}>
+                  <IconBox>
+                    {data.playlistDetail.includes(modalData) ? (
+                      <BiCheckboxChecked
+                        size="2rem"
+                        color="#6E6E6E"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                          handleremovereataurantToPlayList(data.tastePlaylistId);
+                        }}
+                      />
+                    ) : (
+                      <BiCheckbox
+                        size="2rem"
+                        color="#372323"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                          handleaddrestaurantToPlayList(data.tastePlaylistId);
+                        }}
+                      />
+                    )}
+                  </IconBox>
+                  <TextBox>
+                    <span className={Styles.p1bold} style={{ color: '#6E6E6E' }}>
+                      {data.tastePlaylistName}
+                    </span>
+                  </TextBox>
+                  <IconBox>
+                    {data.publicOrPrivate === 2 ? (
+                      <AiOutlineLock size="2rem" color="#6E6E6E" />
+                    ) : (
+                      <AiOutlineUnlock size="2rem" color="#6E6E6E" />
+                    )}
+                  </IconBox>
+                </ModalRow>
+              ))
+            : null}
+          {inputVisible ? (
+            showInputBox()
+          ) : (
+            <ModalRow onClick={() => setInputVisible(true)}>
+              <IconBox>
+                <AiOutlinePlus size="2rem" color="#6E6E6E" />
+              </IconBox>
+              <TextBox style={{ cursor: 'pointer' }}>
+                <span className={Styles.p1bold} style={{ color: '#6E6E6E' }}>
+                  새폴더 생성
+                </span>
+              </TextBox>
+            </ModalRow>
+          )}
+        </ModalBody>
       </ModalContent>
     </ModalWrapper>
   );
@@ -307,5 +318,6 @@ function StyledModal(props: ModalProps) {
 
 StyledModal.defaultProps = {
   onClose: () => null,
+  addbutton: true,
 };
 export default StyledModal;

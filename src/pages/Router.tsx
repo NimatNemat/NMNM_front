@@ -47,7 +47,7 @@ export default function Router() {
           {/* 인증을 반드시 해야지만 접속 가능한 페이지 정의 */}
           <Route element={<PrivateRoute authentication />}>
             <Route path="/main/*" element={<Main />} />
-            <Route path="/playlistpage/*" element={<PlayListPage />} />
+            <Route path="/playlistpage/:id" element={<PlayListPage />} />
             <Route path="/detail/:id" element={<DetailPage />} />
             <Route path="/mypage/:id" element={<Mypage />} />
             <Route path="/modify/*" element={<ModifyPage />} />
