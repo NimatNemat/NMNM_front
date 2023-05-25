@@ -223,7 +223,7 @@ function RegisterPage() {
     formData.append('birthdate', birthdate.toISOString());
     formData.append('gender', gender.toString());
     formData.append('nickName', nickname);
-    // formData.append('groupId', groupid)
+    formData.append('profileImage', '/default.png');
     const jsonObject = formDataToJson(formData);
     registerUser(jsonObject);
   };

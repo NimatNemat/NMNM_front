@@ -58,7 +58,6 @@ function ImageUpload(props: Props) {
     const { files } = event.target;
     if (files) {
       setFile(files);
-
       const newFileURL = URL.createObjectURL(files[0]);
       setFileURL(newFileURL);
     }
@@ -67,7 +66,7 @@ function ImageUpload(props: Props) {
 
   const onImageRemove = (): void => {
     URL.revokeObjectURL(fileURL);
-    setFileURL('https://cdn-icons-png.flaticon.com/512/1555/1555492.png'); // 렌더링 이미지 초기화
+    setFileURL('/default.png'); // 렌더링 이미지 초기화
     setFile(null);
   };
   useEffect(() => {

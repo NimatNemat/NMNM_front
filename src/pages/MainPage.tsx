@@ -537,7 +537,11 @@ function MainPage() {
   const formatOptionLabel = ({ value, label, profileImage, nickName }: OptionType) => (
     <OptionDiv>
       <OptionImgDiv>
-        <img src={profileImage} alt={label} style={{ width: '5rem', height: '5rem', borderRadius: '50%' }} />
+        <img
+          src={profileImage || '/default.png'}
+          alt={label}
+          style={{ width: '5rem', height: '5rem', borderRadius: '50%' }}
+        />
       </OptionImgDiv>
       <OptionTextDiv>
         <span>{label}</span>
