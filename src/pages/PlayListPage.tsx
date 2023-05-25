@@ -141,7 +141,7 @@ function PlayListPage() {
                 <div style={{ color: '#9B9B9B' }}>맛집 추가하기</div>
               </CardContent>
             </Card>
-            {restaurant.map((item, index) => (
+            {restaurant.map((item) => (
               <StyledCard
                 key={item.address}
                 restaurant={item}

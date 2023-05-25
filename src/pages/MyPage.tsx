@@ -338,7 +338,6 @@ function Mypage() {
     fetchData();
     fetchFollowData();
     fetchPlayList();
-    fetchPlayList();
   }, [id, isFollowing]);
 
   const toggleIsFollowing = () => {
@@ -478,11 +477,11 @@ function Mypage() {
     modal = null;
   }
 
-  const handleIconClick: React.MouseEventHandler<SVGElement> = (event) => {
-    event.preventDefault();
+  const handleBanList = (number: number) => {
     setShowDeleteModal(1);
+    setModalData(number);
   };
-  const handle = (number: number) => {
+  const handlePlayList = (number: number) => {
     setShowDeleteModal(2);
     setModalData(number);
   };
@@ -496,13 +495,18 @@ function Mypage() {
     });
   };
 
-  const handleDeleteModalData = (data: number) => {
-    setDeleteModalData(data);
+  const DeleteBanList = async (banRestaurantId: number) => {
+    const formData = new FormData();
+    if (userId) {
+      formData.append('userId', userId);
+    }
+    formData.append('restaurantId', banRestaurantId?.toString());
+    const response = await axios.post(`/likes/unban`, formData).then((res) => {
+      fetchData();
+      setShowDeleteModal(0);
+    });
   };
 
-  const deleteFromBanList = () => {
-    setbanRestaurants(banRestaurants.filter((restaurant: Restaurant) => restaurant.restaurantId === deleteModalData));
-  };
   return (
     <>
       <MypageContainer>
@@ -580,7 +584,7 @@ function Mypage() {
                       size="2.4rem"
                       onClick={(event) => {
                         event.preventDefault();
-                        handle(playList.tastePlaylistId);
+                        handlePlayList(playList.tastePlaylistId);
                       }}
                     />
                   }
@@ -629,11 +633,19 @@ function Mypage() {
                     return (
                       <StyledCard
                         restaurant={restaurant}
-                        setModalData={handleDeleteModalData}
+                        setModalData={handleModalData}
                         openModal={openModal}
                         key={restaurant.restaurantId}
                         showIconBox={false}
-                        icon={<FiMoreHorizontal size="2.4rem" onClick={handleIconClick} />}
+                        icon={
+                          <FiMoreHorizontal
+                            size="2.4rem"
+                            onClick={(event) => {
+                              event.preventDefault();
+                              handleBanList(restaurant.restaurantId);
+                            }}
+                          />
+                        }
                         updateLikedRestaurant={() => {
                           const updatedbanRestaurants = banRestaurants.filter(
                             (banRestaurant: Restaurant) => banRestaurant.restaurantId !== restaurant.restaurantId
@@ -692,7 +704,7 @@ function Mypage() {
         <DeleteModal
           show={showDeleteModal}
           onClose={() => setShowDeleteModal(0)}
-          onDelete={() => console.log(modalData)}
+          onDelete={() => DeleteBanList(modalData)}
           modalRef={modalRef}
         />
       ) : null}
