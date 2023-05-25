@@ -235,6 +235,7 @@ function Mypage() {
   const [followings, setFollowings] = useState<FollowUser[]>([]);
   const [followingClicked, setFollowingClicked] = useState<boolean>(false);
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [deleteModalData, setDeleteModalData] = useState<number>(0);
 
   let likedCount = 0;
   let banCount = 0;
@@ -462,6 +463,13 @@ function Mypage() {
     setShowDeleteModal(true);
   };
 
+  const handleDeleteModalData = (data: number) => {
+    setDeleteModalData(data);
+  };
+
+  const deleteFromBanList = () => {
+    setbanRestaurants(banRestaurants.filter((restaurant: Restaurant) => restaurant.restaurantId === deleteModalData));
+  };
   return (
     <>
       <MypageContainer>
@@ -580,7 +588,7 @@ function Mypage() {
                     return (
                       <StyledCard
                         restaurant={restaurant}
-                        setModalData={handleModalData}
+                        setModalData={handleDeleteModalData}
                         openModal={openModal}
                         key={restaurant.restaurantId}
                         showIconBox={false}
@@ -631,7 +639,7 @@ function Mypage() {
         <DeleteModal
           show={showDeleteModal}
           onClose={() => setShowDeleteModal(false)}
-          onDelete={() => console.log('clicked')}
+          onDelete={deleteFromBanList}
           modalRef={modalRef}
         />
       ) : null}
