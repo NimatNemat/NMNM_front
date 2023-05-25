@@ -6,7 +6,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import GlobalStyle from './\bGlobalStyle';
 
-axios.defaults.baseURL = 'http://15.165.161.104:8080/api';
+axios.defaults.baseURL = 'https://nimatnemat.site/api';
 // axios.defaults.withCredentials = true;
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
