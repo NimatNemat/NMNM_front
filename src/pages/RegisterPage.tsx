@@ -147,7 +147,7 @@ function RegisterPage() {
       return false;
     }
     try {
-      const res = await axios.get(`http://3.39.232.5:8080/api/users/all`, {
+      const res = await axios.get(`users/all`, {
         headers: {
           'Content-Type': 'application/json',
         },
