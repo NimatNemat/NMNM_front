@@ -96,7 +96,7 @@ function PwFindComponent() {
       </Btnbox>
       <StyledInput
         value={confirmValue}
-        type="number"
+        type="text"
         placeholder="인증번호를 입력해주세요"
         style={{ width: '100%' }}
         onChange={handleConfirmEvent}

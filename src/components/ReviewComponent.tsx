@@ -185,7 +185,14 @@ function ReviewComponent(props: Props) {
           </StaylistSlider>
         </SliderContainer>
         <ReviewTextContainer className={Styles.p2regular} isMoreView={isMoreView}>
-          {review.reviewInfo}
+          {review.reviewInfo.split('\n').map((line) => {
+            return (
+              <span>
+                {line}
+                <br />
+              </span>
+            );
+          })}
         </ReviewTextContainer>
       </Content>
       <BtnContainer>
