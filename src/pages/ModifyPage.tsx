@@ -35,8 +35,15 @@ function ModifyPage() {
     setDetailValue(event.target.value);
   };
   const modifyUser = async (formData: FormData) => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common.Authorization = token;
+    }
     try {
-      // const response = await axios.post('#', formData);
+      const response = await axios.put(`/users/update?userId=${sessionStorage.getItem('userId')}`, {
+        nickName: nicknameValue,
+        infoMessage: detailValue,
+      });
       window.location.href = '/main';
     } catch (error) {
       alert('에러');
@@ -47,6 +54,7 @@ function ModifyPage() {
       const response = await axios.get(`/users/userId?userId=${sessionStorage.getItem('userId')}`);
       setUser(response.data);
       setNicknameValue(response.data.nickName);
+      setDetailValue(response.data.infoMessage);
       setFileurl(response.data.profileImage);
     } catch (error) {
       console.error('Error fetching data', error);
@@ -76,8 +84,8 @@ function ModifyPage() {
     if (file !== null) {
       await postImage(file);
     }
-    formData.append('nickname', nicknameValue);
-    formData.append('detail', detailValue);
+    formData.append('nickName', nicknameValue);
+    formData.append('infoMessage', detailValue);
     await modifyUser(formData);
   };
   useEffect(() => {
