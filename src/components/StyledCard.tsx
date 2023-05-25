@@ -205,7 +205,7 @@ function StyledCard(props: StyledCardProps) {
         {restaurant.imageUrl === null ? (
           <CardImage src="/logo.png" alt="" />
         ) : (
-          <CardImage src={`http://15.165.161.104:8080${restaurant.imageUrl}`} alt="" />
+          <CardImage src={`https://nimatnemat.site${restaurant.imageUrl}`} alt="" />
         )}
         <CardInfoBox>
           {showIconBox && (

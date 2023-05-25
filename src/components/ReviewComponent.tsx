@@ -179,7 +179,7 @@ function ReviewComponent(props: Props) {
           <StaylistSlider num={1}>
             {review.reviewImage.map((image, index) => (
               <div style={{ width: '100%' }}>
-                <img src={image} alt="sdf" />
+                <img src={`https://nimatnemat.site${image}`} alt="sdf" />
               </div>
             ))}
           </StaylistSlider>
