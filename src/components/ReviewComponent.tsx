@@ -61,9 +61,8 @@ const ReviewTextContainer = styled.p<{ isMoreView: boolean }>`
   margin: 0;
   gap: 0.5rem;
   width: 100%;
-  height: 100%;
-  min-height: 5rem;
-  max-height: ${({ isMoreView }) => (isMoreView ? '100%' : '4.8rem')};
+  min-height: 2rem;
+  height: ${({ isMoreView }) => (isMoreView ? '100%' : '4.8rem')};
   overflow-y: hidden;
   word-wrap: break-word;
   text-overflow: ellipsis;
@@ -74,6 +73,8 @@ const SliderContainer = styled.div`
 `;
 const BtnContainer = styled.div`
   width: 100%;
+  display: flex;
+  justify-content: center;
 `;
 
 const EvaluationPicker = styled.ul`
@@ -98,7 +99,11 @@ const Evaluation = styled.div`
   flex-direction: column;
   width: 6rem;
 `;
-
+const Line = styled.div`
+  width: 100%;
+  background-color: rgba(128, 128, 128, 0.3);
+  height: 1px;
+`;
 interface Review {
   _id: {
     timestamp: number;
@@ -122,6 +127,10 @@ function ReviewComponent(props: Props) {
   const { review } = props;
   const userId = sessionStorage.getItem('userId');
   const [isMoreView, setIsMoreView] = useState<boolean>(false);
+
+  const toggleMoreView = () => {
+    setIsMoreView(!isMoreView);
+  };
   const navigate = useNavigate();
 
   const handleProfileClick = () => {
@@ -197,16 +206,22 @@ function ReviewComponent(props: Props) {
           })}
         </ReviewTextContainer>
       </Content>
+      <Line />
       <BtnContainer>
-        <StyledButton
-          onClick={() => {
-            setIsMoreView(!isMoreView);
+        <button
+          type="button"
+          onClick={toggleMoreView}
+          className={Styles.p2regular}
+          style={{
+            border: 'none',
+            background: 'none',
+            padding: '0',
+            cursor: 'pointer',
+            color: 'rgb(128, 128, 128)',
           }}
-          fontsize="1.2rem"
-          padding="0.5rem"
         >
           {isMoreView ? '접기' : '더보기'}
-        </StyledButton>
+        </button>
       </BtnContainer>
     </ReviewContainer>
   );
