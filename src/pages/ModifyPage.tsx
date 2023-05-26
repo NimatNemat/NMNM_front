@@ -39,15 +39,18 @@ function ModifyPage() {
     if (token) {
       axios.defaults.headers.common.Authorization = token;
     }
-    try {
-      const response = await axios.put(`/users/update?userId=${sessionStorage.getItem('userId')}`, {
+
+    const response = await axios
+      .put(`/users/update?userId=${sessionStorage.getItem('userId')}`, {
         nickName: nicknameValue,
         infoMessage: detailValue,
+      })
+      .then((res) => {
+        window.location.href = '/main';
+      })
+      .catch((err) => {
+        alert(err.response.data);
       });
-      window.location.href = '/main';
-    } catch (error) {
-      alert('에러');
-    }
   };
   const loadUser = async () => {
     try {
@@ -68,7 +71,7 @@ function ModifyPage() {
       const response = await axios.post(`/users/upload-image?userId=${sessionStorage.getItem('userId')}`, formData);
       setFileurl(response.data);
     } catch (error) {
-      console.error('Error fetching data', error);
+      alert('이미지 업로드에 실패했습니다.');
     }
   };
   const Submitfunction = async () => {
@@ -81,12 +84,12 @@ function ModifyPage() {
       alert('세부사항을 입력해주세요.');
       return;
     }
-    if (file !== null) {
-      await postImage(file);
-    }
     formData.append('nickName', nicknameValue);
     formData.append('infoMessage', detailValue);
     await modifyUser(formData);
+    if (file !== null) {
+      await postImage(file);
+    }
   };
   useEffect(() => {
     const token = sessionStorage.getItem('token');

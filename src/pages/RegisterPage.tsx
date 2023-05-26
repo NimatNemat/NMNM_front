@@ -223,27 +223,30 @@ function RegisterPage() {
     formData.append('birthdate', birthdate.toISOString());
     formData.append('gender', gender.toString());
     formData.append('nickName', nickname);
-    formData.append('profileImage', 'images/646f673fe659b357ce17f902');
+    formData.append('profileImage', '/images/646f673fe659b357ce17f902');
     const jsonObject = formDataToJson(formData);
     registerUser(jsonObject);
   };
   const registerUser = async (formData: Record<string, any>) => {
     try {
-      const resposne = await axios.post('/users/register', formData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      if (resposne.status === 200 || resposne.status === 201) {
-        alert('회원가입이 완료되었습니다.');
-        Loginfunction();
-      } else {
-        alert('회원가입에 실패하였습니다.');
-      }
+      const resposne = await axios
+        .post('/users/register', formData, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((res) => {
+          alert('회원가입이 완료되었습니다.');
+          Loginfunction();
+        })
+        .catch((err) => {
+          alert(err.response.data);
+        });
     } catch (error) {
       alert('회원가입에 실패하였습니다.');
     }
   };
+
   const navigate = useNavigate();
   const loginUser = async (formData: FormData) => {
     try {
