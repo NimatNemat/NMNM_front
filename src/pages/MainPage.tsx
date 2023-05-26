@@ -295,6 +295,7 @@ function MainPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [bookmark, setBookmark] = useState<{ [key: string]: number }>({});
   const fetchData = async () => {
     setIsLoaded(false);
@@ -358,17 +359,20 @@ function MainPage() {
 
   // 함께먹기 로직
   const together = () => {
-    setIsLoaded(false);
+    setLoading(false);
     setSelected('together');
     setSelectedLabel('함께먹기 추천 식당리스트');
     togetherFetchData();
   };
   const togetherFetchData = async () => {
+    setIsLoaded(false);
+    setLoading(false);
     const userId = sessionStorage.getItem('userId');
     try {
       const response = await axios.post(`/thirdRecommend`, [userId, ...addedUsers]);
       setRestaurants(response.data);
       setIsLoaded(true);
+      setLoading(true);
     } catch (error) {
       console.error('Error fetching together data', error);
     }
@@ -659,7 +663,7 @@ function MainPage() {
                 }}
               />
             </GridHeaderContainer>
-            {isLoaded ? showAllRestaurant() : <h1>로딩중입니다.</h1>}
+            {loading ? showAllRestaurant() : <h1>로딩중입니다.</h1>}
           </ListContainer>
         </Container>
       </MainPageContainer>
