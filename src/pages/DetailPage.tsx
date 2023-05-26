@@ -202,6 +202,11 @@ function DetailPage() {
   const [review, setReview] = useState<number>(0);
   const likefunction: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
+    if (sessionStorage.getItem('userId') === null) {
+      alert('로그인이 필요합니다.');
+      window.location.href = '/login';
+      return;
+    }
     const formData = new FormData();
     formData.append('restaurantId', restaurant?.restaurantId.toString() as never);
     try {
@@ -215,6 +220,11 @@ function DetailPage() {
 
   const unlikefunction: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
+    if (sessionStorage.getItem('userId') === null) {
+      alert('로그인이 필요합니다.');
+      window.location.href = '/login';
+      return;
+    }
     const formData = new FormData();
     formData.append('restaurantId', restaurant.restaurantId.toString() as never);
     try {
@@ -226,6 +236,11 @@ function DetailPage() {
   };
   const banfunction: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
+    if (sessionStorage.getItem('userId') === null) {
+      alert('로그인이 필요합니다.');
+      window.location.href = '/login';
+      return;
+    }
     const formData = new FormData();
     formData.append('restaurantId', restaurant?.restaurantId.toString() as never);
     formData.append('userId', sessionStorage.getItem('userId') as never);
@@ -238,6 +253,10 @@ function DetailPage() {
   };
   const unbanfunction: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
+    if (sessionStorage.getItem('userId') === null) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
     const formData = new FormData();
     formData.append('restaurantId', restaurant?.restaurantId.toString() as never);
     formData.append('userId', sessionStorage.getItem('userId') as never);

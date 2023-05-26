@@ -36,6 +36,7 @@ export default function Router() {
           {/* <Route path="/" element={<NavPage />} /> */}
           <Route path="/preference/*" element={<PreferencePage />} />
           <Route path="/privacy/*" element={<PrivacyPage />} />
+          <Route path="/detail/:id" element={<DetailPage />} />
 
           {/* 인증을 반드시 하지 않아야만 접속 가능한 페이지 정의 */}
           <Route element={<PrivateRoute authentication={false} />}>
@@ -48,7 +49,6 @@ export default function Router() {
           <Route element={<PrivateRoute authentication />}>
             <Route path="/main/*" element={<Main />} />
             <Route path="/playlistpage/:id" element={<PlayListPage />} />
-            <Route path="/detail/:id" element={<DetailPage />} />
             <Route path="/mypage/:id" element={<Mypage />} />
             <Route path="/modify/*" element={<ModifyPage />} />
             <Route path="/review/:id" element={<ReviewPage />} />
