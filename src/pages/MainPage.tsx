@@ -358,12 +358,12 @@ function MainPage() {
 
   // 함께먹기 로직
   const together = () => {
+    setIsLoaded(false);
     setSelected('together');
     setSelectedLabel('함께먹기 추천 식당리스트');
     togetherFetchData();
   };
   const togetherFetchData = async () => {
-    setIsLoaded(false);
     const userId = sessionStorage.getItem('userId');
     try {
       const response = await axios.post(`/thirdRecommend`, [userId, ...addedUsers]);
@@ -659,7 +659,7 @@ function MainPage() {
                 }}
               />
             </GridHeaderContainer>
-            {showAllRestaurant()}
+            {isLoaded ? showAllRestaurant() : <h1>로딩중입니다.</h1>}
           </ListContainer>
         </Container>
       </MainPageContainer>
