@@ -467,6 +467,7 @@ function DetailPage() {
           }}
           show={showModal}
           modalRef={modalRef}
+          share={false}
         >
           <ShareComponent shareUrl={shareUrl} title={title} />
         </Modal>

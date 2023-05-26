@@ -11,6 +11,7 @@ interface ModalProps {
   show: boolean;
   modalRef: React.ForwardedRef<HTMLDivElement>;
   children: React.ReactNode;
+  share?: boolean;
 }
 
 const ModalWrapper = styled.div<{ show: boolean }>`
@@ -72,7 +73,7 @@ const Btn = styled.div`
 `;
 
 function Modal(props: ModalProps) {
-  const { onClose = () => null, show, modalRef, children } = props;
+  const { onClose = () => null, show, modalRef, children, share } = props;
 
   const handleClose = () => {
     onClose();
@@ -81,10 +82,12 @@ function Modal(props: ModalProps) {
   return (
     <ModalWrapper show={show} ref={modalRef} onClick={onClose}>
       <ModalContent onClick={(event) => event.stopPropagation()}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-          <div style={{ fontSize: '1.6rem', fontWeight: 700 }}>공유하기</div>
-          <Btn onClick={handleClose}>나가기</Btn>
-        </div>
+        {!share && (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+            <div style={{ fontSize: '1.6rem', fontWeight: 700 }}>공유하기</div>
+            <Btn onClick={handleClose}>나가기</Btn>
+          </div>
+        )}
         {children}
       </ModalContent>
     </ModalWrapper>
@@ -93,6 +96,7 @@ function Modal(props: ModalProps) {
 
 Modal.defaultProps = {
   onClose: () => null,
+  share: true,
 };
 
 export default Modal;

@@ -1,11 +1,28 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import axios from 'axios';
 import StyledInput from '../components/StyledInput';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledButton from '../components/StyledButton';
 import Calendar from '../components/Calendar';
+import Modal from '../components/Modal';
+
+const spin = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`;
+
+// Define a Spinner styled-component
+const Spinner = styled.div`
+  margin: 1rem auto;
+  border: 16px solid #f3f3f3;
+  border-top: 16px solid rgba(255, 137, 35, 1);
+  border-radius: 50%;
+  width: 6rem;
+  height: 6rem;
+  animation: ${spin} 2s linear infinite;
+`;
 
 interface ResisterProps {
   groupId: number;
@@ -228,6 +245,7 @@ function RegisterPage() {
     registerUser(jsonObject);
   };
   const registerUser = async (formData: Record<string, any>) => {
+    setShowModal(true);
     try {
       const resposne = await axios
         .post('/users/register', formData, {
@@ -236,8 +254,8 @@ function RegisterPage() {
           },
         })
         .then((res) => {
-          alert('회원가입이 완료되었습니다.');
           Loginfunction();
+          setShowModal(false);
         })
         .catch((err) => {
           alert(err.response.data);
@@ -248,6 +266,14 @@ function RegisterPage() {
   };
 
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const openModal = () => {
+    setShowModal(true);
+  };
+  const closeModal = () => {
+    setShowModal(false);
+  };
+  const modalRef = useRef<HTMLDivElement>(null);
   const loginUser = async (formData: FormData) => {
     try {
       const response = await axios.post('/users/login', formData);
@@ -272,117 +298,125 @@ function RegisterPage() {
     loginUser(formData);
   };
   return (
-    <RegisterPageContainer>
-      <Container>
-        <span className={Styles.h3}>회원 정보</span>
-        <InputContainer>
-          <Line />
-          <Linebox>
-            <SubTitle className={Styles.p1bold}>아이디</SubTitle>
-            <StyledInput
-              value={id}
-              type="text"
-              placeholder="아이디를 입력하세요."
-              style={{
-                width: '100%',
-                backgroundImage: `url(${process.env.PUBLIC_URL}${checkIcon})`,
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'right 10px center',
-                backgroundSize: 'auto 50%',
-              }}
-              onChange={handleIdEvent}
-              onBlur={Idcheck}
-            />
-          </Linebox>
-          <Linebox>
-            <SubTitle className={Styles.p1bold}>비밀번호</SubTitle>
-            <StyledInput
-              value={password}
-              type="password"
-              placeholder="비밀번호를 입력하세요."
-              style={{ width: '100%' }}
-              onChange={handlePasswordEvent}
-            />
-          </Linebox>
-          <Linebox>
-            <SubTitle className={Styles.p1bold}>비밀번호 확인</SubTitle>
-            <StyledInput
-              value={password2}
-              type="password"
-              placeholder="비밀번호를 입력하세요."
-              style={{ width: '100%' }}
-              onChange={handlePassword2Event}
-            />
-          </Linebox>
-          <Linebox>
-            <SubTitle className={Styles.p1bold}>이메일</SubTitle>
-            <StyledInput
-              value={email}
-              type="email"
-              placeholder="이메일을 입력하세요."
-              style={{ width: '100%' }}
-              onChange={handleEmailEvent}
-            />
-          </Linebox>
-          <Linebox>
-            <SubTitle className={Styles.p1bold}>생년월일</SubTitle>
-            <OptionBox>
-              <Calendar date={birthdate} setDate={handleBirthdateEvent} />
-            </OptionBox>
-          </Linebox>
-          <Linebox>
-            <SubTitle className={Styles.p1bold}>성별</SubTitle>
-            <Rightbox>
-              <Styeldselect className={Styles.p1regular} value={gender} onChange={handleGenderEvent}>
-                <option value={0}>남자</option>
-                <option value={1}>여자</option>
-              </Styeldselect>
-            </Rightbox>
-          </Linebox>
-
-          <Linebox>
-            <SubTitle className={Styles.p1bold}>닉네임</SubTitle>
-            <StyledInput
-              value={nickname}
-              type="text"
-              placeholder="닉네임을 입력하세요."
-              style={{ width: '100%' }}
-              onChange={handleNicknameEvent}
-            />
-          </Linebox>
-          <Line />
-        </InputContainer>
-        <span className={Styles.h3}>개인정보 수집 및 이용 동의</span>
-        <PrivacyContainer>
-          <Linebox>
+    <>
+      <RegisterPageContainer>
+        <Container>
+          <span className={Styles.h3}>회원 정보</span>
+          <InputContainer>
+            <Line />
             <Linebox>
-              <Checkbox type="checkbox" checked={check} onChange={AllCheck} />
-              <span className={Styles.p1bold}>전체 동의</span>
+              <SubTitle className={Styles.p1bold}>아이디</SubTitle>
+              <StyledInput
+                value={id}
+                type="text"
+                placeholder="아이디를 입력하세요."
+                style={{
+                  width: '100%',
+                  backgroundImage: `url(${process.env.PUBLIC_URL}${checkIcon})`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 10px center',
+                  backgroundSize: 'auto 50%',
+                }}
+                onChange={handleIdEvent}
+                onBlur={Idcheck}
+              />
             </Linebox>
-            <PrivacyLink to="/privacy" className={Styles.p1midium}>
-              개인정보 처리 방침 약관보기
-            </PrivacyLink>
-          </Linebox>
-          <Line />
-          <Linebox>
-            <Checkbox type="checkbox" checked={privacy1} onChange={() => setPrivacy1(!privacy1)} />
-            <span className={Styles.p1regular}>개인정보 수집 및 이용 동의</span>
-          </Linebox>
-          <Linebox>
-            <Checkbox type="checkbox" checked={privacy2} onChange={() => setPrivacy2(!privacy2)} />
-            <span className={Styles.p1regular}>개인정보 제3자 제공 동의</span>
-          </Linebox>
+            <Linebox>
+              <SubTitle className={Styles.p1bold}>비밀번호</SubTitle>
+              <StyledInput
+                value={password}
+                type="password"
+                placeholder="비밀번호를 입력하세요."
+                style={{ width: '100%' }}
+                onChange={handlePasswordEvent}
+              />
+            </Linebox>
+            <Linebox>
+              <SubTitle className={Styles.p1bold}>비밀번호 확인</SubTitle>
+              <StyledInput
+                value={password2}
+                type="password"
+                placeholder="비밀번호를 입력하세요."
+                style={{ width: '100%' }}
+                onChange={handlePassword2Event}
+              />
+            </Linebox>
+            <Linebox>
+              <SubTitle className={Styles.p1bold}>이메일</SubTitle>
+              <StyledInput
+                value={email}
+                type="email"
+                placeholder="이메일을 입력하세요."
+                style={{ width: '100%' }}
+                onChange={handleEmailEvent}
+              />
+            </Linebox>
+            <Linebox>
+              <SubTitle className={Styles.p1bold}>생년월일</SubTitle>
+              <OptionBox>
+                <Calendar date={birthdate} setDate={handleBirthdateEvent} />
+              </OptionBox>
+            </Linebox>
+            <Linebox>
+              <SubTitle className={Styles.p1bold}>성별</SubTitle>
+              <Rightbox>
+                <Styeldselect className={Styles.p1regular} value={gender} onChange={handleGenderEvent}>
+                  <option value={0}>남자</option>
+                  <option value={1}>여자</option>
+                </Styeldselect>
+              </Rightbox>
+            </Linebox>
 
-          <Linebox>
-            <Checkbox type="checkbox" checked={privacy3} onChange={() => setPrivacy3(!privacy3)} />
-            <span className={Styles.p1regular}>마케팅 정보 수신 동의</span>
-          </Linebox>
-        </PrivacyContainer>
-        <StyledButton onClick={Submit}>
-          <span className={Styles.p1bold}>회원가입</span>
-        </StyledButton>
-      </Container>
-    </RegisterPageContainer>
+            <Linebox>
+              <SubTitle className={Styles.p1bold}>닉네임</SubTitle>
+              <StyledInput
+                value={nickname}
+                type="text"
+                placeholder="닉네임을 입력하세요."
+                style={{ width: '100%' }}
+                onChange={handleNicknameEvent}
+              />
+            </Linebox>
+            <Line />
+          </InputContainer>
+          <span className={Styles.h3}>개인정보 수집 및 이용 동의</span>
+          <PrivacyContainer>
+            <Linebox>
+              <Linebox>
+                <Checkbox type="checkbox" checked={check} onChange={AllCheck} />
+                <span className={Styles.p1bold}>전체 동의</span>
+              </Linebox>
+              <PrivacyLink to="/privacy" className={Styles.p1midium}>
+                개인정보 처리 방침 약관보기
+              </PrivacyLink>
+            </Linebox>
+            <Line />
+            <Linebox>
+              <Checkbox type="checkbox" checked={privacy1} onChange={() => setPrivacy1(!privacy1)} />
+              <span className={Styles.p1regular}>개인정보 수집 및 이용 동의</span>
+            </Linebox>
+            <Linebox>
+              <Checkbox type="checkbox" checked={privacy2} onChange={() => setPrivacy2(!privacy2)} />
+              <span className={Styles.p1regular}>개인정보 제3자 제공 동의</span>
+            </Linebox>
+
+            <Linebox>
+              <Checkbox type="checkbox" checked={privacy3} onChange={() => setPrivacy3(!privacy3)} />
+              <span className={Styles.p1regular}>마케팅 정보 수신 동의</span>
+            </Linebox>
+          </PrivacyContainer>
+          <StyledButton onClick={Submit}>
+            <span className={Styles.p1bold}>회원가입</span>
+          </StyledButton>
+        </Container>
+      </RegisterPageContainer>
+      {showModal && (
+        <Modal show={showModal} onClose={closeModal} modalRef={modalRef}>
+          <h1>잠시만 기다려 주세요...</h1>
+          <Spinner />
+        </Modal>
+      )}
+    </>
   );
 }
 

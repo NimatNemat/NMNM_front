@@ -84,12 +84,12 @@ function ModifyPage() {
       alert('세부사항을 입력해주세요.');
       return;
     }
-    formData.append('nickName', nicknameValue);
-    formData.append('infoMessage', detailValue);
-    await modifyUser(formData);
     if (file !== null) {
       await postImage(file);
     }
+    formData.append('nickName', nicknameValue);
+    formData.append('infoMessage', detailValue);
+    await modifyUser(formData);
   };
   useEffect(() => {
     const token = sessionStorage.getItem('token');
