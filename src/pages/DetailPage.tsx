@@ -135,6 +135,7 @@ const Icon = styled.button`
   border: none;
   background-color: white;
   justify-content: center;
+  color: 'black';
   &:hover {
     cursor: pointer;
     transform: translateY(-3px);
@@ -320,12 +321,12 @@ function DetailPage() {
                   {liked ? (
                     <Icon onClick={unlikefunction} className={Styles.h4}>
                       <BsFillHeartFill color="red" />
-                      <div color="black">좋아요</div>
+                      좋아요
                     </Icon>
                   ) : (
                     <Icon onClick={likefunction} className={Styles.h4}>
                       <BsHeart color="black" />
-                      <div color="black">좋아요</div>
+                      좋아요
                     </Icon>
                   )}
 
