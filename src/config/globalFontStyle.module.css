@@ -46,6 +46,10 @@
   font-size: 1.2rem;
   font-weight: 400;
 }
+.p3bold {
+  font-size: 1rem;
+  font-weight: 700;
+}
 .gray {
   color: rgba(128, 128, 128, 1);
 }

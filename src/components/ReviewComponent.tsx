@@ -61,8 +61,8 @@ const ReviewTextContainer = styled.p<{ isMoreView: boolean }>`
   margin: 0;
   gap: 0.5rem;
   width: 100%;
-  min-height: 2rem;
-  height: ${({ isMoreView }) => (isMoreView ? '100%' : '4.8rem')};
+  min-height: 3rem;
+  height: ${({ isMoreView }) => (isMoreView ? '100%' : '3rem')};
   overflow-y: hidden;
   word-wrap: break-word;
   text-overflow: ellipsis;
@@ -211,7 +211,7 @@ function ReviewComponent(props: Props) {
         <button
           type="button"
           onClick={toggleMoreView}
-          className={Styles.p2regular}
+          className={Styles.p3bold}
           style={{
             border: 'none',
             background: 'none',
