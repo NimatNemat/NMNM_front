@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -22,6 +22,8 @@ import Styles from '../config/globalFontStyle.module.css';
 import ReviewComponent from '../components/ReviewComponent';
 import StaylistSlider from '../components/StaylistSlider';
 import StyledButton from '../components/StyledButton';
+import ShareComponent from '../components/ShareComponent';
+import Modal from '../components/Modal';
 
 const DetailPageContainer = styled.div`
   display: flex;
@@ -80,7 +82,24 @@ const Rowcenterbox = styled.div`
   align-items: center;
   gap: 2vw;
 `;
-
+const RowMenubox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @media (max-width: 450px) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  }
+`;
+const Titlebox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2vw;
+  @media (max-width: 450px) {
+    flex-direction: column;
+  }
+`;
 const StyledImg = styled.img`
   width: 100%;
   height: 25vh;
@@ -118,12 +137,12 @@ const Flexbox = styled.div`
 const Icon = styled.button`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
   transition: transform 0.3s ease;
   gap: 0.5vw;
   border: none;
   background-color: white;
+  justify-content: center;
   &:hover {
     cursor: pointer;
     transform: translateY(-3px);
@@ -245,195 +264,220 @@ function DetailPage() {
     }
     fetchData();
   }, []);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const openModal = () => {
+    setShowModal(true);
+  };
+  const closeModal = () => {
+    setShowModal(false);
+  };
+  const modalRef = useRef<HTMLDivElement>(null);
+  const shareUrl = `https://nimatnemat.github.io/detail/${id}`;
+  const title = '맛집 공유';
   return (
-    <DetailPageContainer>
-      {isLoaded ? (
-        <Container>
-          <Section>
-            {restaurant.imageUrl === null ? (
-              <StyledImg src="/logo.png" alt="" />
-            ) : (
-              <StyledImg src={`https://nimatnemat.site${restaurant.imageUrl}`} alt="" />
-            )}
-            <Content>
-              <Rowcenterbox>
-                <Text className={Styles.h4}>{restaurant.cuisineType}</Text>
-              </Rowcenterbox>
-              <Rowcenterbox>
-                <Text className={Styles.h2}>{restaurant.name}</Text>
-                <Text className={Styles.h2} style={{ color: 'rgba(255, 137, 35, 0.8)' }}>
-                  {restaurant.avgPreference.toFixed(1)}
-                </Text>
-              </Rowcenterbox>
-              <Rowcenterbox style={{ gap: '5px' }}>
-                {restaurant.tags?.map(
-                  (tag, index) =>
-                    index < 3 && (
-                      <Text className={Styles.p2bold} key={tag.toString()}>
-                        {tag}
-                      </Text>
-                    )
-                )}
-              </Rowcenterbox>
-              <Rowcenterbox>
-                <Text className={Styles.h4}>
+    <>
+      <DetailPageContainer>
+        {isLoaded ? (
+          <Container>
+            <Section>
+              {restaurant.imageUrl === null ? (
+                <StyledImg src="/logo.png" alt="" />
+              ) : (
+                <StyledImg src={`https://nimatnemat.site${restaurant.imageUrl}`} alt="" />
+              )}
+              <Content>
+                <Rowcenterbox>
+                  <Text className={Styles.h4}>{restaurant.cuisineType}</Text>
+                </Rowcenterbox>
+                <Titlebox>
+                  <Text className={Styles.h2}>{restaurant.name}</Text>
+                  <Text className={Styles.h2} style={{ color: 'rgba(255, 137, 35, 0.8)' }}>
+                    {restaurant.avgPreference.toFixed(1)}
+                  </Text>
+                </Titlebox>
+                <Rowcenterbox style={{ gap: '5px' }}>
+                  {restaurant.tags?.map(
+                    (tag, index) =>
+                      index < 3 && (
+                        <Text className={Styles.p2bold} key={tag.toString()}>
+                          {tag}
+                        </Text>
+                      )
+                  )}
+                </Rowcenterbox>
+                <RowMenubox>
                   {liked ? (
-                    <Icon type="button" onClick={unlikefunction} className={Styles.h4}>
+                    <Icon onClick={unlikefunction} className={Styles.h4}>
                       <BsFillHeartFill color="red" />
-                      <div>좋아요</div>
+                      <div color="black">좋아요</div>
                     </Icon>
                   ) : (
                     <Icon onClick={likefunction} className={Styles.h4}>
-                      <BsHeart />
-                      <div>좋아요</div>
+                      <BsHeart color="black" />
+                      <div color="black">좋아요</div>
                     </Icon>
                   )}
-                </Text>
-                <Icon className={Styles.h4}>
-                  <AiOutlineShareAlt />
-                  <Link to="/" style={{ textDecoration: 'none', color: 'black' }}>
+
+                  <Icon
+                    className={Styles.h4}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      setShowModal(true);
+                    }}
+                  >
+                    <AiOutlineShareAlt color="black" />
                     공유하기
-                  </Link>
-                </Icon>
-                <Icon className={Styles.h4}>
-                  <AiOutlineStar />
-                  <Link to={`/review/${restaurant.restaurantId}`} style={{ textDecoration: 'none', color: 'black' }}>
-                    평가하기
-                  </Link>
-                </Icon>
-                <Icon className={Styles.h4}>
+                  </Icon>
+                  <Icon className={Styles.h4}>
+                    <AiOutlineStar color="black" />
+                    <Link to={`/review/${restaurant.restaurantId}`} style={{ textDecoration: 'none', color: 'black' }}>
+                      평가하기
+                    </Link>
+                  </Icon>
+
                   {ban ? (
                     <Icon type="button" onClick={unbanfunction} className={Styles.h4}>
-                      <AiOutlineUnlock />
-                      <div>볼래요</div>
+                      <AiOutlineUnlock color="black" />
+                      <div color="black">볼래요</div>
                     </Icon>
                   ) : (
                     <Icon type="button" onClick={banfunction} className={Styles.h4}>
-                      <AiOutlineLock />
-                      <div>안볼래요</div>
+                      <AiOutlineLock color="black" />
+                      <div color="black">안볼래요</div>
                     </Icon>
                   )}
-                </Icon>
-              </Rowcenterbox>
-            </Content>
-          </Section>
-          <Section>
-            <Content>
-              <Title>
-                <Text className={Styles.h4}>상세정보</Text>
-                <Link
-                  to={`/Suggestion/${id}`}
-                  className={Styles.p2bold}
-                  style={{
-                    textDecoration: 'none',
-                    color: 'black',
-                  }}
-                >
-                  정보수정요청
-                </Link>
-              </Title>
-              <Box>
-                <Text className={Styles.p1regular}>
-                  <AiOutlineBulb />
-                  주소 : {restaurant.address} / {restaurant.roadAddress}
-                </Text>
+                </RowMenubox>
+              </Content>
+            </Section>
+            <Section>
+              <Content>
+                <Title>
+                  <Text className={Styles.h4}>상세정보</Text>
+                  <Link
+                    to={`/Suggestion/${id}`}
+                    className={Styles.p2bold}
+                    style={{
+                      textDecoration: 'none',
+                      color: 'black',
+                    }}
+                  >
+                    정보수정요청
+                  </Link>
+                </Title>
+                <Box>
+                  <Text className={Styles.p1regular}>
+                    <AiOutlineBulb />
+                    주소 : {restaurant.address} / {restaurant.roadAddress}
+                  </Text>
 
-                <Text className={Styles.p1regular}>
-                  <AiOutlineClockCircle />
-                  운영시간 : {restaurant.businessHours}
-                </Text>
-                <Text className={Styles.p1regular}>
-                  <AiOutlineBulb />
-                  전화번호 : {restaurant.number}
-                </Text>
-              </Box>
-            </Content>
-          </Section>
-          <Section>
-            <Content>
-              <Title>
-                <Text className={Styles.h4}>지도</Text>
-              </Title>
-              <div style={{ width: '100%', height: '300px' }}>
-                <Map x={restaurant.xposition} y={restaurant.yposition} name={restaurant.name} />
-              </div>
-            </Content>
-          </Section>
-          <Section>
-            <Content>
-              <Title>
-                <Text className={Styles.h4}>메뉴</Text>
-              </Title>
-              <Box>
-                {restaurant.menu.map((item) => (
-                  <Menu>
-                    <MenuTitle>
-                      <Text className={Styles.p2bold}>{item[0]}</Text>
-                    </MenuTitle>
+                  <Text className={Styles.p1regular}>
+                    <AiOutlineClockCircle />
+                    운영시간 : {restaurant.businessHours}
+                  </Text>
+                  <Text className={Styles.p1regular}>
+                    <AiOutlineBulb />
+                    전화번호 : {restaurant.number}
+                  </Text>
+                </Box>
+              </Content>
+            </Section>
+            <Section>
+              <Content>
+                <Title>
+                  <Text className={Styles.h4}>지도</Text>
+                </Title>
+                <div style={{ width: '100%', height: '300px' }}>
+                  <Map x={restaurant.xposition} y={restaurant.yposition} name={restaurant.name} />
+                </div>
+              </Content>
+            </Section>
+            <Section>
+              <Content>
+                <Title>
+                  <Text className={Styles.h4}>메뉴</Text>
+                </Title>
+                <Box>
+                  {restaurant.menu.map((item) => (
+                    <Menu>
+                      <MenuTitle>
+                        <Text className={Styles.p2bold}>{item[0]}</Text>
+                      </MenuTitle>
 
-                    <div style={{ width: '30%', backgroundColor: 'black', height: '1px' }} />
-                    <Menuprice>
-                      <Text className={Styles.p2bold}>{item[1]}</Text>
-                    </Menuprice>
-                  </Menu>
-                ))}
-              </Box>
-            </Content>
-          </Section>
-          <Section>
-            <Content>
-              <Title>
-                <Text className={Styles.h4}>리뷰</Text>
-              </Title>
-              <Box>
-                {restaurant.reviews.length === 0 ? (
-                  <Text className={Styles.p2bold}>리뷰가 없습니다.</Text>
-                ) : (
-                  restaurant.reviews.map((Review, index) => {
-                    if (index < review) {
-                      return <ReviewComponent review={Review} />;
+                      <div style={{ width: '30%', backgroundColor: 'black', height: '1px' }} />
+                      <Menuprice>
+                        <Text className={Styles.p2bold}>{item[1]}</Text>
+                      </Menuprice>
+                    </Menu>
+                  ))}
+                </Box>
+              </Content>
+            </Section>
+            <Section>
+              <Content>
+                <Title>
+                  <Text className={Styles.h4}>리뷰</Text>
+                </Title>
+                <Box>
+                  {restaurant.reviews.length === 0 ? (
+                    <Text className={Styles.p2bold}>리뷰가 없습니다.</Text>
+                  ) : (
+                    restaurant.reviews.map((Review, index) => {
+                      if (index < review) {
+                        return <ReviewComponent review={Review} />;
+                      }
+                      return null;
+                    })
+                  )}
+                </Box>
+              </Content>
+              {review < restaurant.reviews.length && (
+                <StyledButton
+                  onClick={() => {
+                    if (review <= restaurant.reviews.length) {
+                      setReview((prev) => prev + 3);
                     }
-                    return null;
-                  })
-                )}
-              </Box>
-            </Content>
-            {review < restaurant.reviews.length && (
-              <StyledButton
-                onClick={() => {
-                  if (review <= restaurant.reviews.length) {
-                    setReview((prev) => prev + 3);
-                  }
-                }}
-                fontsize="1.2rem"
-                padding="0.5rem 0"
-              >
-                더보기
-              </StyledButton>
-            )}
-          </Section>
-          <Section>
-            <Content>
-              <Title>
-                <Text className={Styles.h4}>이런 가게는 어때요?</Text>
-              </Title>
-              <Box>
-                <StaylistSlider num={1}>
-                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
-                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
-                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
-                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
-                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
-                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
-                </StaylistSlider>
-              </Box>
-            </Content>
-          </Section>
-        </Container>
-      ) : (
-        <h1>로딩중입니다.</h1>
+                  }}
+                  fontsize="1.2rem"
+                  padding="0.5rem 0"
+                >
+                  더보기
+                </StyledButton>
+              )}
+            </Section>
+            <Section>
+              <Content>
+                <Title>
+                  <Text className={Styles.h4}>이런 가게는 어때요?</Text>
+                </Title>
+                <Box>
+                  <StaylistSlider num={1}>
+                    <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
+                    <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
+                    <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
+                    <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
+                    <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
+                    <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
+                  </StaylistSlider>
+                </Box>
+              </Content>
+            </Section>
+          </Container>
+        ) : (
+          <h1>로딩중입니다.</h1>
+        )}
+      </DetailPageContainer>
+      {showModal && (
+        <Modal
+          onClose={() => {
+            setShowModal(false);
+          }}
+          show={showModal}
+          modalRef={modalRef}
+        >
+          <ShareComponent shareUrl={shareUrl} title={title} />
+        </Modal>
       )}
-    </DetailPageContainer>
+    </>
   );
 }
 
