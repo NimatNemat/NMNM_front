@@ -125,15 +125,7 @@ const Menuprice = styled.div`
   width: 25%;
   justify-content: center;
 `;
-const Flexbox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 2rem;
-  margin-bottom: 1vh;
-  overflow: auto;
-  padding: 1vh 0 2vh 0;
-`;
+
 const Icon = styled.button`
   display: flex;
   flex-direction: row;
@@ -421,12 +413,14 @@ function DetailPage() {
                   {restaurant.reviews.length === 0 ? (
                     <Text className={Styles.p2bold}>리뷰가 없습니다.</Text>
                   ) : (
-                    restaurant.reviews.map((Review, index) => {
-                      if (index < review) {
-                        return <ReviewComponent review={Review} />;
-                      }
-                      return null;
-                    })
+                    restaurant.reviews
+                      .map((item: any) => item.review)
+                      .map((Review, index) => {
+                        if (index < review) {
+                          return <ReviewComponent review={Review} />;
+                        }
+                        return null;
+                      })
                   )}
                 </Box>
               </Content>
