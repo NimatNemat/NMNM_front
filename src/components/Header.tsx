@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
+import { AiOutlineClose } from 'react-icons/ai';
 import { BsFillSearchHeartFill, BsSearch } from 'react-icons/bs';
 import StyledInput from './StyledInput';
 import Styles from '../config/globalFontStyle.module.css';
@@ -88,7 +89,14 @@ interface User {
   profileImage: string;
   nickName: string;
 }
-
+const ModalHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem;
+`;
 const Searchedbox = styled.div`
   display: flex;
   align-items: center;
@@ -108,10 +116,8 @@ function Header() {
   const [inputValue, setInputValue] = useState<string>('');
   const [searchUserID, setSearchUserID] = useState<string>('');
   const [searchedUser, setSearchedUser] = useState<User[]>([]);
-  const [filteredUser, setFilteredUser] = useState<User[]>([]);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
 
   const openModal = () => {
     setShowModal(true);
@@ -128,9 +134,8 @@ function Header() {
       const userId = sessionStorage.getItem('userId');
       const userList = response.data;
       setAllUsers(userList.filter((user: User) => user.userId !== userId));
-      console.log(allUsers);
     } catch (error) {
-      console.error('Error fetching user data', error);
+      alert('서버오류입니다. 다시 시도해주세요');
     }
   };
 
@@ -236,6 +241,15 @@ function Header() {
           show={showModal}
           modalRef={modalRef}
         >
+          <ModalHeader>
+            <span className={Styles.h4}>사용자 검색</span>
+            <AiOutlineClose
+              size="2.4rem"
+              onClick={() => {
+                closeModal();
+              }}
+            />
+          </ModalHeader>
           <RowDiv>
             <StyledInput
               style={{ width: '100%' }}
@@ -244,14 +258,18 @@ function Header() {
                 setInputValue(e.target.value);
                 searchUser(e.target.value);
               }}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  searchUser(inputValue);
+                }
+              }}
               placeholder="사용자 검색"
               type="text"
             />
-
             <Icon>
               <BsSearch
                 onClick={() => {
-                  setInputValue('');
+                  searchUser(inputValue);
                 }}
               />
             </Icon>
