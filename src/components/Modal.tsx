@@ -12,6 +12,7 @@ interface ModalProps {
   modalRef: React.ForwardedRef<HTMLDivElement>;
   children: React.ReactNode;
   share?: boolean;
+  background?: string;
 }
 
 const ModalWrapper = styled.div<{ show: boolean }>`
@@ -26,15 +27,19 @@ const ModalWrapper = styled.div<{ show: boolean }>`
   align-items: center;
   z-index: 2;
 `;
-const ModalContent = styled.div`
+const ModalContent = styled.div<{
+  background?: string;
+}>`
   display: flex;
-  background-color: #ffffff;
+  /* background-color: ${(props) => props.background}; */
+  background-color: white;
   border-radius: 2rem;
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
   padding: 2rem;
   width: 80%;
+  height: ${(props) => (props.background === 'white' ? 'auto' : '50%')};
   @media (min-width: 320px) {
     width: 80vw;
   }
@@ -73,7 +78,7 @@ const Btn = styled.div`
 `;
 
 function Modal(props: ModalProps) {
-  const { onClose = () => null, show, modalRef, children, share } = props;
+  const { onClose = () => null, show, modalRef, children, share, background } = props;
 
   const handleClose = () => {
     onClose();
@@ -81,7 +86,7 @@ function Modal(props: ModalProps) {
 
   return (
     <ModalWrapper show={show} ref={modalRef} onClick={onClose}>
-      <ModalContent onClick={(event) => event.stopPropagation()}>
+      <ModalContent background={background} onClick={(event) => event.stopPropagation()}>
         {!share && (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
             <div style={{ fontSize: '1.6rem', fontWeight: 700 }}>공유하기</div>
@@ -97,6 +102,7 @@ function Modal(props: ModalProps) {
 Modal.defaultProps = {
   onClose: () => null,
   share: true,
+  background: 'white',
 };
 
 export default Modal;
