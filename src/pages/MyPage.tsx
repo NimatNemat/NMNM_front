@@ -288,17 +288,21 @@ function Mypage() {
     setTab(3);
     setRenderCnt(12);
   };
+
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
   const checkUser = async () => {
     try {
       const response = await axios.get(`/users/userId?userId=${id}`);
     } catch (error) {
-      alert('없는 페이지입니다');
-      navigate('/main');
+      navigate('/Errorpage');
     }
   };
+
   useEffect(() => {
     checkUser();
   }, []);
+
   const fetchData = async () => {
     setIsLoaded(false);
     try {
