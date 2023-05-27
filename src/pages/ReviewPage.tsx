@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { AiOutlineFrown, AiOutlineSmile, AiOutlineMeh, AiOutlineStar, AiFillStar } from 'react-icons/ai';
@@ -118,6 +118,34 @@ const Btn = styled.div`
 
 const MAX_UPLOAD_COMPONENTS = 3;
 
+interface Restaurant {
+  _id: {
+    timestamp: number;
+    date: string;
+  };
+  restaurantId: number;
+  name: string;
+  cuisineType: string;
+  avgPreference: number;
+  address: string;
+  roadAddress: string;
+  number: string;
+  businessHours: string;
+  tags: string[][];
+  imageFile: {
+    timestamp: number;
+    date: string;
+  };
+  menu: string[][];
+  peculiarTaste: null;
+  likeUserList: string[];
+  imageUrl: string;
+  xposition: number;
+  yposition: number;
+  reviews: [];
+  banUserList: string[];
+}
+
 function ReviewPage() {
   const [selectedEvaluation, setSelectedEvaluation] = useState<number>(0); // 간단평가항목 선택
   const [reviewTextValue, setReviewTextValue] = useState<string>(''); // 리뷰텍스트
@@ -125,7 +153,20 @@ function ReviewPage() {
   const [uploadComponents, setUploadComponents] = useState<number[]>([0]);
   const [fileList, setFileList] = useState<[FileList]>(); // 업로드한 파일 목록
   const [ImageList, setImageList] = useState<string[]>([]); // 업로드한 이미지 목록
+  const [restaurant, setRestaurant] = useState<Restaurant>({} as Restaurant);
   const { id } = useParams<{ id: string }>();
+
+  const fetchData = async () => {
+    const response = await axios.get(`/restaurant/${id}`);
+    setRestaurant(response.data);
+  };
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      axios.defaults.headers.common.Authorization = token;
+    }
+    fetchData();
+  }, []);
   const handleEvaluationClickEvent = (evaluation: number) => {
     setSelectedEvaluation(evaluation);
   };
@@ -253,7 +294,7 @@ function ReviewPage() {
   return (
     <ReviewPageContainer>
       <Container>
-        <Header className={Styles.h3}>가츠시에 대한 솔직한 리뷰를 써주세요.</Header>
+        <Header className={Styles.h3}>{restaurant.name}에 대한 솔직한 리뷰를 써주세요.</Header>
         <Content>
           <StarDiv>
             {starArray.map((el) =>

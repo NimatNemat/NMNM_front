@@ -1,21 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { FiMoreHorizontal } from 'react-icons/fi';
 import {
   AiOutlineFrown,
   AiOutlineSmile,
   AiOutlineMeh,
   AiOutlineStar,
   AiFillStar,
-  AiFillCloseCircle,
-  AiFillDelete,
   AiOutlineDelete,
 } from 'react-icons/ai';
 import axios from 'axios';
 import Styles from '../config/globalFontStyle.module.css';
 import StaylistSlider from './StaylistSlider';
-import StyledButton from './StyledButton';
 
 const ReviewContainer = styled.div`
   display: flex;
@@ -45,6 +41,12 @@ const Rowbox = styled.div`
   width: 100%;
   justify-content: space-between;
 `;
+const RowText = styled.div`
+  display: flex;
+  :hover {
+    cursor: pointer;
+  }
+`;
 const ProfileContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -52,6 +54,15 @@ const ProfileContainer = styled.div`
   justify-content: center;
   gap: 1rem;
   width: 100%;
+  :hover {
+    cursor: pointer;
+  }
+`;
+const ProfileImg = styled.img`
+  display: flex;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
   :hover {
     cursor: pointer;
   }
@@ -84,10 +95,6 @@ const EvaluationPicker = styled.ul`
   padding: 0;
   gap: 1rem;
   margin: 0;
-`;
-const StarDiv = styled.div`
-  display: flex;
-  flex-direction: row;
 `;
 const Evaluation = styled.div`
   border: none;
@@ -148,28 +155,23 @@ function ReviewComponent(props: Props) {
   return (
     <ReviewContainer>
       <Rowbox>
-        <div className={Styles.p2bold}>{review.restaurantName}</div>
+        <RowText onClick={() => navigate(`/detail/${review.restaurantId}`)} className={Styles.p2bold}>
+          {review.restaurantName}
+        </RowText>
         {userId === review.userId && (
           <AiOutlineDelete size="2.4rem" onClick={handleDelete} style={{ cursor: 'pointer' }} />
         )}
       </Rowbox>
       <ProfileContainer>
-        <button
-          type="button"
-          onClick={handleProfileClick}
-          style={{ width: '4rem', height: '4rem', cursor: 'pointer', border: 'none', background: 'none', padding: '0' }}
-        >
-          <img src="/img.png" alt="profile" style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
-        </button>
-
+        <ProfileImg src="/img.png" alt="profile" onClick={handleProfileClick} />
         <Colbox className={Styles.p2bold}>
           <div>{review.userNickName}</div>
           <div>{review.reviewDate.split('T')[0]}</div>
           <div>
-            {[...Array(review.reviewScore)].map((index, i) => (
+            {[...Array(review.reviewScore)].map(() => (
               <AiFillStar style={{ color: 'rgba(255, 137, 35,0.6)' }} />
             ))}
-            {[...Array(5 - review.reviewScore)].map((index, i) => (
+            {[...Array(5 - review.reviewScore)].map(() => (
               <AiOutlineStar style={{ color: 'rgba(255, 137, 35,0.6)' }} />
             ))}
           </div>
@@ -188,7 +190,7 @@ function ReviewComponent(props: Props) {
       <Content className={Styles.p2medium}>
         <SliderContainer>
           <StaylistSlider num={1}>
-            {review.reviewImage.map((image, index) => (
+            {review.reviewImage.map((image) => (
               <div style={{ width: '100%' }}>
                 <img src={`https://nimatnemat.site${image}`} alt="sdf" />
               </div>
