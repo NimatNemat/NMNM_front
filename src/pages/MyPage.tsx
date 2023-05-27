@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FiMoreHorizontal } from 'react-icons/fi';
 import { AiFillPlusCircle } from 'react-icons/ai';
@@ -248,6 +248,7 @@ function Mypage() {
 
   let likedCount = 0;
   let banCount = 0;
+  const navigate = useNavigate();
   const [playlist, setPlaylist] = useState<playList[]>([]);
   const totalLists = playlist.length; // 맛플리의 총 개수
   const totalLikes = likedRestaurants.length; // 좋아요한 식당의 총 개수
@@ -287,6 +288,17 @@ function Mypage() {
     setTab(3);
     setRenderCnt(12);
   };
+  const checkUser = async () => {
+    try {
+      const response = await axios.get(`/users/userId?userId=${id}`);
+    } catch (error) {
+      alert('없는 페이지입니다');
+      navigate('/main');
+    }
+  };
+  useEffect(() => {
+    checkUser();
+  }, []);
   const fetchData = async () => {
     setIsLoaded(false);
     try {

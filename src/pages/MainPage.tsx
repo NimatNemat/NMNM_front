@@ -85,9 +85,9 @@ const GridHeaderContainer = styled.div`
 const icons = require.context('../assets/icons', true);
 
 const options = [
+  { value: 'all', label: '니맛내맛 전체 식당리스트' },
   { value: 'reco1', label: '진정한 한국인의 추천리스트' },
   { value: 'reco2', label: '당신만을 위한 추천리스트' },
-  { value: 'all', label: '니맛내맛 전체 식당리스트' },
   { value: 'together', label: '함께먹기 추천 식당리스트', isDisabled: true },
 ];
 
