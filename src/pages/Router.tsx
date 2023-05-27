@@ -19,6 +19,7 @@ import ReviewPage from './ReviewPage';
 import Suggestion from './Suggestion';
 import MydetailPage from './MyDetailPage';
 import PwdChangePage from './PwdChangePage';
+import ErrorPage from './ErrorPage';
 
 const Container = styled.div`
   padding: 2.4rem;
@@ -37,7 +38,7 @@ export default function Router() {
           <Route path="/preference/*" element={<PreferencePage />} />
           <Route path="/privacy/*" element={<PrivacyPage />} />
           <Route path="/detail/:id" element={<DetailPage />} />
-
+          <Route path="/ErrorPage/*" element={<ErrorPage />} />
           {/* 인증을 반드시 하지 않아야만 접속 가능한 페이지 정의 */}
           <Route element={<PrivateRoute authentication={false} />}>
             <Route path="/login/*" element={<LoginPage />} />
