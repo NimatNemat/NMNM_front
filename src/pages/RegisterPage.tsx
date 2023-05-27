@@ -1,28 +1,13 @@
 import React, { useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import axios from 'axios';
 import StyledInput from '../components/StyledInput';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledButton from '../components/StyledButton';
 import Calendar from '../components/Calendar';
 import Modal from '../components/Modal';
-
-const spin = keyframes`
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-`;
-
-// Define a Spinner styled-component
-const Spinner = styled.div`
-  margin: 1rem auto;
-  border: 16px solid #f3f3f3;
-  border-top: 16px solid rgba(255, 137, 35, 1);
-  border-radius: 50%;
-  width: 6rem;
-  height: 6rem;
-  animation: ${spin} 2s linear infinite;
-`;
+import SpinnerComponent from '../components/Spinner';
 
 interface ResisterProps {
   groupId: number;
@@ -413,7 +398,7 @@ function RegisterPage() {
       {showModal && (
         <Modal show={showModal} onClose={closeModal} modalRef={modalRef}>
           <h1>잠시만 기다려 주세요...</h1>
-          <Spinner />
+          <SpinnerComponent />
         </Modal>
       )}
     </>

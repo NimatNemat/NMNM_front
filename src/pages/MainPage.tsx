@@ -11,6 +11,7 @@ import StyledModal from '../components/StyledModal';
 import StyledInput from '../components/StyledInput';
 import StyledButton from '../components/StyledButton';
 import Pagination from '../components/Pagination';
+import SpinnerComponent from '../components/Spinner';
 
 interface playList {
   tastePlaylistName: string;
@@ -663,7 +664,7 @@ function MainPage() {
                 }}
               />
             </GridHeaderContainer>
-            {loading ? showAllRestaurant() : <h1>로딩중입니다.</h1>}
+            {loading ? showAllRestaurant() : <SpinnerComponent />}
           </ListContainer>
         </Container>
       </MainPageContainer>
