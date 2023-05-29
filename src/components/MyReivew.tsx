@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import ReviewComponent from './ReviewComponent';
 import Styles from '../config/globalFontStyle.module.css';
+import SpinnerComponent from './Spinner';
 
 const GridContainer = styled.div`
   display: grid;
@@ -15,6 +16,7 @@ const GridContainer = styled.div`
 interface MyReviewProps {
   setTotalReviews: (value: number) => void;
   id: string;
+  rendercnt: number;
 }
 interface Review {
   _id: {
@@ -40,15 +42,18 @@ const Text = styled.div`
   align-items: center;
   gap: 0.5vw;
 `;
-function MyReview({ setTotalReviews, id }: MyReviewProps) {
+function MyReview({ setTotalReviews, id, rendercnt }: MyReviewProps) {
   const [reviewList, setReviewList] = useState<Review[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`/reviews/user/${id}`)
       .then((res) => {
         const reviews = res.data.map((item: any) => item.review);
         setReviewList(reviews);
         setTotalReviews(reviews.length);
+        setLoading(false);
       })
       .catch((err) => {
         alert(err);
@@ -56,10 +61,10 @@ function MyReview({ setTotalReviews, id }: MyReviewProps) {
   }, []);
   return (
     <GridContainer>
-      {reviewList.length === 0 && <Text className={Styles.p2bold}>작성한 리뷰가 없습니다.</Text>}
-      {reviewList.map((review) => (
-        <ReviewComponent review={review} key={review.reviewId} />
-      ))}
+      {reviewList.length === 0 && <SpinnerComponent />}
+      {reviewList.map(
+        (review, index) => index < rendercnt && <ReviewComponent review={review} key={review.reviewId} />
+      )}
     </GridContainer>
   );
 }

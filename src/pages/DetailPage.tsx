@@ -409,7 +409,8 @@ function DetailPage() {
                   <Text className={Styles.h4}>메뉴</Text>
                 </Title>
                 <Box>
-                  {restaurant.menu.map((item) => (
+                  {restaurant.menu ? null : <Text className={Styles.p2bold}>등록된 메뉴가 없습니다!</Text>}
+                  {restaurant.menu?.map((item) => (
                     <Menu>
                       <MenuTitle>
                         <Text className={Styles.p2bold}>{item[0]}</Text>

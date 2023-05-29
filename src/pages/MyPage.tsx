@@ -571,7 +571,9 @@ function Mypage() {
             ) : null}
           </Row>
 
-          {isLoaded && tab === 0 ? <MyReview setTotalReviews={setTotalReviews} id={id || ''} /> : null}
+          {isLoaded && tab === 0 ? (
+            <MyReview setTotalReviews={setTotalReviews} rendercnt={renderCnt} id={id || ''} />
+          ) : null}
           {isLoaded && tab === 1 ? (
             <GridContainer>
               {id === userId ? (
