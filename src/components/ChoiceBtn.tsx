@@ -3,11 +3,12 @@ import styled from 'styled-components';
 
 interface IChoicebtn {
   selected: boolean;
+  isMobile: boolean;
 }
 
 const ChoiceContainer = styled.button<IChoicebtn>`
   display: flex;
-  flex-direction: row;
+  flex-direction: ${(props) => (props.isMobile ? 'column' : 'row')};
   justify-content: center;
   align-items: center;
   padding: 1vh 1vh;
@@ -24,12 +25,13 @@ const ChoiceContainer = styled.button<IChoicebtn>`
 `;
 interface IChoicebtnProps {
   selected: boolean;
+  isMobile: boolean;
   onClick: () => void;
 }
 function ChoiceBtn(props: React.PropsWithChildren<IChoicebtnProps>) {
-  const { selected, onClick, children } = props;
+  const { selected, onClick, children, isMobile } = props;
   return (
-    <ChoiceContainer selected={selected} onClick={onClick}>
+    <ChoiceContainer selected={selected} onClick={onClick} isMobile={isMobile}>
       {children}
     </ChoiceContainer>
   );

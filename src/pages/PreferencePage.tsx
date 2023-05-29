@@ -14,7 +14,7 @@ const PreferencePageContainer = styled.div`
 
 const Container = styled.div`
   @media (max-width: 768px) {
-    width: 80%;
+    width: 100%;
   }
   @media (min-width: 768px) {
     width: 70%;
@@ -90,14 +90,6 @@ const Text = styled.div`
 `;
 
 function PreferencePage() {
-  const data = {
-    imgSrc: '/img.png',
-    likes: 5,
-    name: '가츠시',
-    category: '일식',
-    hashtag: ['돈까스', '우동'],
-    id: 1,
-  };
   const [selected, setSelected] = useState<number>(1);
   const onClick = () => {
     setSelected(1);
@@ -140,41 +132,76 @@ function PreferencePage() {
     yposition: number;
     banUserList: string[];
   }
-  const [restaurant, setRestaurant] = useState<Restaurant>({} as Restaurant);
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   const fetchData = async () => {
     setIsLoaded(false);
-    const response = await axios.get(`/restaurant/10`);
-    setRestaurant(response.data);
+    const response = await axios.get(`/recommended/groupChoice`);
+    setRestaurants(response.data);
+    console.log(response.data);
     setIsLoaded(true);
   };
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const updateIsMobile = () => {
+      if (window.innerWidth <= 767) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    };
+
+    updateIsMobile();
+    // 이벤트 리스너 추가
+    window.addEventListener('resize', updateIsMobile);
+
+    // 컴포넌트가 언마운트되면 리스너를 제거
+    return () => {
+      window.removeEventListener('resize', updateIsMobile);
+    };
+  }, []);
+
+  const showSelectedRestaurants = () => {
+    const idx = (selected - 1) * 10;
+    const selectedRestaurants: Restaurant[] = restaurants.slice(idx, idx + 10);
+    return (
+      <StaylistSlider num={1}>
+        {selectedRestaurants.length > 0
+          ? selectedRestaurants.map((restaurant: Restaurant) => (
+              <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
+            ))
+          : null}
+      </StaylistSlider>
+    );
+  };
   return (
     <PreferencePageContainer>
       <Container>
         <Title className={Styles.h3}>나에게 맞는 그룹을 선택해보세요!</Title>
         <SubTitle className={Styles.h4}>해당 그룹의 데이터를 바탕으로 음식점을 추천해 드립니다.</SubTitle>
         <Menu>
-          <Choicebtn selected={selected === 1} onClick={onClick}>
+          <Choicebtn selected={selected === 1} onClick={onClick} isMobile={isMobile}>
             <SubTitle className={Styles.h3}>👅</SubTitle>
             <SubTitle className={Styles.h4}>미식가</SubTitle>
           </Choicebtn>
-          <Choicebtn selected={selected === 2} onClick={onClick2}>
-            <SubTitle className={Styles.h3}>💵</SubTitle>
-            <SubTitle className={Styles.h4}>가성비</SubTitle>
-          </Choicebtn>
-          <Choicebtn selected={selected === 3} onClick={onClick3}>
+          <Choicebtn selected={selected === 2} onClick={onClick2} isMobile={isMobile}>
             <SubTitle className={Styles.h3}>🥬</SubTitle>
             <SubTitle className={Styles.h4}>웰빙</SubTitle>
           </Choicebtn>
-          <Choicebtn selected={selected === 4} onClick={onClick4}>
+          <Choicebtn selected={selected === 3} onClick={onClick3} isMobile={isMobile}>
             <SubTitle className={Styles.h3}>🥩</SubTitle>
             <SubTitle className={Styles.h4}>육식맨</SubTitle>
           </Choicebtn>
-          <Choicebtn selected={selected === 5} onClick={onClick5}>
+          <Choicebtn selected={selected === 4} onClick={onClick4} isMobile={isMobile}>
+            <SubTitle className={Styles.h3}>💵</SubTitle>
+            <SubTitle className={Styles.h4}>가성비</SubTitle>
+          </Choicebtn>
+          <Choicebtn selected={selected === 5} onClick={onClick5} isMobile={isMobile}>
             <SubTitle className={Styles.h3}>👶🏻</SubTitle>
             <SubTitle className={Styles.h4}>초딩입맛</SubTitle>
           </Choicebtn>
@@ -185,16 +212,7 @@ function PreferencePage() {
               <Title>
                 <Text className={Styles.h4}>이런 가게는 어때요?</Text>
               </Title>
-              <Box>
-                <StaylistSlider num={1}>
-                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
-                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
-                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
-                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
-                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
-                  <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
-                </StaylistSlider>
-              </Box>
+              <Box>{showSelectedRestaurants()}</Box>
             </ContentSection>
           </Section>
         ) : null}

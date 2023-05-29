@@ -234,7 +234,7 @@ function Mypage() {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const [likedRestaurants, setLikedRestaurants] = useState<Restaurant[]>([]);
   const [banRestaurants, setbanRestaurants] = useState<Restaurant[]>([]);
-  const [User, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const { id } = useParams<{ id: string }>();
   const userId = sessionStorage.getItem('userId');
   const [totalReviews, setTotalReviews] = useState<number>(0);
@@ -529,7 +529,7 @@ function Mypage() {
         <Container>
           <InfoContainer>
             <Imgbox>
-              <Img src={User?.profileImage ? `https://nimatnemat.site${User.profileImage}` : '/default.png'} />
+              <Img src={user?.profileImage ? `https://nimatnemat.site${user.profileImage}` : '/default.png'} />
             </Imgbox>
             <Infocontent>
               <Rowbtn>
@@ -546,10 +546,10 @@ function Mypage() {
                 </Btn>
               </Row>
               <Row>
-                <div className={Styles.p2bold}>{User?.nickName}</div>
+                <div className={Styles.p2bold}>{user?.nickName}</div>
               </Row>
               <Info>
-                <div className={Styles.p2regular}>{User?.infoMessage}</div>
+                <div className={Styles.p2regular}>{user?.infoMessage}</div>
               </Info>
             </Infocontent>
           </InfoContainer>

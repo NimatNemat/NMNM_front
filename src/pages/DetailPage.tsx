@@ -172,16 +172,16 @@ function DetailPage() {
     reviews: [];
     banUserList: string[];
   }
+
   const [restaurant, setRestaurant] = useState<Restaurant>({} as Restaurant);
   const [liked, setLiked] = useState<boolean>(false);
   const [ban, setBan] = useState<boolean>(false);
+
   const fetchData = async () => {
     setIsLoaded(false);
     const response = await axios.get(`/restaurant/${id}`);
     setRestaurant(response.data);
     setReview(response.data.reviews.length);
-    console.log(response.data.reviews);
-    console.log(response.data);
 
     if (response.data.likeUserList) {
       response.data.likeUserList.forEach((user: string) => {

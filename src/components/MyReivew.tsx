@@ -34,38 +34,36 @@ interface Review {
   reviewDate: string;
   reviewImage: string[];
 }
-interface ReviewArray {
-  reveiw: Review;
-}
-const Text = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5vw;
-`;
+
 function MyReview({ setTotalReviews, id, rendercnt }: MyReviewProps) {
   const [reviewList, setReviewList] = useState<Review[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loaded, setLoaded] = useState<boolean>(false);
   useEffect(() => {
-    setLoading(true);
+    setLoaded(false);
     axios
       .get(`/reviews/user/${id}`)
       .then((res) => {
         const reviews = res.data.map((item: any) => item.review);
         setReviewList(reviews);
         setTotalReviews(reviews.length);
-        setLoading(false);
+        setLoaded(true);
       })
       .catch((err) => {
         alert(err);
       });
   }, []);
-  return (
-    <GridContainer>
-      {reviewList.length === 0 && <SpinnerComponent />}
-      {reviewList.map(
-        (review, index) => index < rendercnt && <ReviewComponent review={review} key={review.reviewId} />
-      )}
-    </GridContainer>
-  );
+  let content;
+
+  if (loaded === false) {
+    content = <SpinnerComponent />;
+  } else if (reviewList.length === 0) {
+    content = null;
+  } else {
+    content = reviewList.map(
+      (review, index) => index < rendercnt && <ReviewComponent review={review} key={review.reviewId} />
+    );
+  }
+
+  return <GridContainer>{content}</GridContainer>;
 }
 export default MyReview;

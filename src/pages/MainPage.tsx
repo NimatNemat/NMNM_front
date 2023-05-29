@@ -11,7 +11,6 @@ import StyledModal from '../components/StyledModal';
 import StyledInput from '../components/StyledInput';
 import StyledButton from '../components/StyledButton';
 import Pagination from '../components/Pagination';
-import SpinnerComponent from '../components/Spinner';
 
 interface playList {
   tastePlaylistName: string;
@@ -19,6 +18,21 @@ interface playList {
   publicOrPrivate: number;
   playlistDetail: number[];
   tastePlaylistId: number;
+}
+interface MyUser {
+  _id: {
+    timestamp: number;
+    date: string;
+  };
+  birthdate: string;
+  email: string;
+  gender: number;
+  groupName: number | null;
+  nickName: string;
+  password: string;
+  profileImage: string | null;
+  Id: string;
+  infoMessage: string;
 }
 const MainPageContainer = styled.div`
   display: flex;
@@ -84,13 +98,6 @@ const GridHeaderContainer = styled.div`
 `;
 
 const icons = require.context('../assets/icons', true);
-
-const options = [
-  { value: 'all', label: '니맛내맛 전체 식당리스트' },
-  { value: 'reco1', label: '진정한 한국인의 추천리스트' },
-  { value: 'reco2', label: '당신만을 위한 추천리스트' },
-  { value: 'together', label: '함께먹기 추천 식당리스트', isDisabled: true },
-];
 
 const OptionDiv = styled.div`
   display: flex;
@@ -294,6 +301,7 @@ function MainPage() {
   };
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [users, setUsers] = useState<User[]>([]);
+  const [User, setUser] = useState<MyUser | null>(null);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -331,7 +339,20 @@ function MainPage() {
     } catch (error) {
       console.error('Error fetching user data', error);
     }
+    try {
+      const response = await axios.get(`/users/userId?userId=${sessionStorage.getItem('userId')}`);
+      setUser(response.data);
+    } catch (error) {
+      console.error('Error fetching data', error);
+    }
   };
+
+  const options = [
+    { value: 'all', label: '니맛내맛 전체 식당리스트' },
+    { value: 'reco1', label: `${User?.groupName}을 위한 추천식당` },
+    { value: 'reco2', label: '당신만을 위한 추천식당' },
+    { value: 'together', label: '함께먹기 추천 식당', isDisabled: true },
+  ];
 
   const addrestaurantToPlayList = async (playlistId: number | any, restaurantId: number) => {
     const formData = new FormData();
@@ -664,7 +685,7 @@ function MainPage() {
                 }}
               />
             </GridHeaderContainer>
-            {loading ? showAllRestaurant() : <SpinnerComponent />}
+            {loading ? showAllRestaurant() : <h1>로딩중입니다.</h1>}
           </ListContainer>
         </Container>
       </MainPageContainer>

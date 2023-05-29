@@ -127,6 +127,7 @@ interface Review {
   reviewDate: string;
   reviewImage: string[];
 }
+
 interface Props {
   review: Review;
 }

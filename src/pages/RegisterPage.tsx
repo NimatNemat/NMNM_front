@@ -226,6 +226,21 @@ function RegisterPage() {
     formData.append('gender', gender.toString());
     formData.append('nickName', nickname);
     formData.append('profileImage', '/images/646f673fe659b357ce17f902');
+    let groupName = '';
+    if (groupid) {
+      if (groupid === '1') {
+        groupName = '육식맨';
+      } else if (groupid === '2') {
+        groupName = '웰빙';
+      } else if (groupid === '3') {
+        groupName = '가성비';
+      } else if (groupid === '4') {
+        groupName = '초딩입맛';
+      } else {
+        groupName = '미식가';
+      }
+    }
+    formData.append('groupName', groupName);
     const jsonObject = formDataToJson(formData);
     registerUser(jsonObject);
   };
