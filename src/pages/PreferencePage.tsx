@@ -139,7 +139,6 @@ function PreferencePage() {
     setIsLoaded(false);
     const response = await axios.get(`/recommended/groupChoice`);
     setRestaurants(response.data);
-    console.log(response.data);
     setIsLoaded(true);
   };
   const [isLoaded, setIsLoaded] = useState(false);
