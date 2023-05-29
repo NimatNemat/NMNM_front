@@ -340,6 +340,11 @@ function Mypage() {
         const responseFollowers = await axios.get(`/follows/getMyfollowers?userId=${id}`);
         setFollowerCnt(responseFollowers.data.length);
         setFollowers(responseFollowers.data);
+        if (responseFollowers.data.find((user: FollowUser) => user.userId === userId)) {
+          setIsFollowing(true);
+        } else {
+          setIsFollowing(false);
+        }
       }
     } catch (error) {
       console.error('getFollowers error', error);

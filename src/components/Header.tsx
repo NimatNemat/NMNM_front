@@ -114,7 +114,6 @@ function Header() {
   const navigate = useNavigate();
   const isAuthenticated = sessionStorage.getItem('isAuthenticated');
   const [inputValue, setInputValue] = useState<string>('');
-  const [searchUserID, setSearchUserID] = useState<string>('');
   const [searchedUser, setSearchedUser] = useState<User[]>([]);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -152,11 +151,10 @@ function Header() {
       setSearchedUser([]);
       return;
     }
-    setSearchUserID(newValue);
     // 사용자 아이디 검색하는 로직
     let filtered = allUsers;
-    filtered = filtered?.filter((user) => user.userId.includes(searchUserID)) || null;
-    setSearchedUser(filtered || []);
+    filtered = filtered?.filter((user) => user.userId.includes(newValue));
+    setSearchedUser(filtered);
   };
 
   return (
