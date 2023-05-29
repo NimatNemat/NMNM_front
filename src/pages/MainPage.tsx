@@ -27,7 +27,7 @@ interface MyUser {
   birthdate: string;
   email: string;
   gender: number;
-  groupName: number | null;
+  groupName: string;
   nickName: string;
   password: string;
   profileImage: string | null;
@@ -347,9 +347,22 @@ function MainPage() {
     }
   };
 
+  let groupName;
+  if (User?.groupName === 'A') {
+    groupName = '미식가';
+  } else if (User?.groupName === 'B') {
+    groupName = '웰빙';
+  } else if (User?.groupName === 'C') {
+    groupName = '육식맨';
+  } else if (User?.groupName === 'D') {
+    groupName = '가성비';
+  } else {
+    groupName = '초딩입맛';
+  }
+
   const options = [
     { value: 'all', label: '니맛내맛 전체 식당리스트' },
-    { value: 'reco1', label: `${User?.groupName}그룹을 위한 추천식당` },
+    { value: 'reco1', label: `${groupName}그룹을 위한 추천식당` },
     { value: 'reco2', label: '당신만을 위한 추천식당' },
     { value: 'together', label: '함께먹기 추천 식당', isDisabled: true },
   ];

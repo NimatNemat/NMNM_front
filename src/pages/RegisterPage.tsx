@@ -229,15 +229,15 @@ function RegisterPage() {
     let groupName = '';
     if (groupid) {
       if (groupid === '1') {
-        groupName = '미식가';
+        groupName = 'A';
       } else if (groupid === '2') {
-        groupName = '웰빙';
+        groupName = 'B';
       } else if (groupid === '3') {
-        groupName = '육식맨';
+        groupName = 'C';
       } else if (groupid === '4') {
-        groupName = '가성비';
+        groupName = 'D';
       } else {
-        groupName = '초딩입맛';
+        groupName = 'E';
       }
     }
     formData.append('groupName', groupName);
