@@ -191,7 +191,7 @@ function IntroPage() {
             <div className={Styles.p1regular}>나만의 맛플리</div>
             <div className={Styles.p1regular}>친구들과 공유해보세요!</div>
           </StyledTextDiv>
-          <StyledImage src="/intro6.png" alt="" />
+          <StyledImage src="/intro4.png" alt="" />
         </ContentContainer>
       </Container>
       <Container backGround="#FFFDF5">
