@@ -168,7 +168,7 @@ function PreferencePage() {
 
   const showSelectedRestaurants = () => {
     const idx = (selected - 1) * 10;
-    const selectedRestaurants: Restaurant[] = restaurants.slice(idx, idx + 10);
+    const selectedRestaurants: Restaurant[] = restaurants.slice(idx, idx + 9);
     return (
       <StaylistSlider num={1}>
         {selectedRestaurants.length > 0
