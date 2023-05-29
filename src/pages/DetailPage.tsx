@@ -24,6 +24,7 @@ import StaylistSlider from '../components/StaylistSlider';
 import StyledButton from '../components/StyledButton';
 import ShareComponent from '../components/ShareComponent';
 import Modal from '../components/Modal';
+import SpinnerComponent from '../components/Spinner';
 
 const DetailPageContainer = styled.div`
   display: flex;
@@ -176,6 +177,20 @@ function DetailPage() {
   const [restaurant, setRestaurant] = useState<Restaurant>({} as Restaurant);
   const [liked, setLiked] = useState<boolean>(false);
   const [ban, setBan] = useState<boolean>(false);
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [loading2, setLoading2] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const fetchRestaurants = async () => {
+    setLoading2(false);
+    try {
+      const response = await axios.get(`/recommended/groupChoice`);
+      setRestaurants(response.data.sort(() => Math.random() - 0.5));
+      setLoading2(true);
+    } catch (e) {
+      setError(true);
+      setLoading2(true);
+    }
+  };
 
   const fetchData = async () => {
     setIsLoaded(false);
@@ -275,6 +290,7 @@ function DetailPage() {
       axios.defaults.headers.common.Authorization = token;
     }
     fetchData();
+    fetchRestaurants();
   }, []);
   const [showModal, setShowModal] = useState<boolean>(false);
   const openModal = () => {
@@ -283,6 +299,13 @@ function DetailPage() {
   const closeModal = () => {
     setShowModal(false);
   };
+  const loadingfunction = () => {
+    if (error) {
+      return <Text>서버오류</Text>;
+    }
+    return <SpinnerComponent />;
+  };
+
   const modalRef = useRef<HTMLDivElement>(null);
   const shareUrl = `https://nimatnemat.github.io/detail/${id}`;
   const title = '맛집 공유';
@@ -460,21 +483,23 @@ function DetailPage() {
               )}
             </Section>
             <Section>
-              <Content>
-                <Title>
-                  <Text className={Styles.h4}>이런 가게는 어때요?</Text>
-                </Title>
-                <Box>
-                  <StaylistSlider num={1}>
-                    <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
-                    <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
-                    <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
-                    <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
-                    <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
-                    <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
-                  </StaylistSlider>
-                </Box>
-              </Content>
+              {loading2 && !error ? (
+                <Content>
+                  <Title>
+                    <Text className={Styles.h4}>이런 가게는 어때요?</Text>
+                  </Title>
+                  <Box>
+                    <StaylistSlider num={1}>
+                      {restaurants?.map(
+                        (restaurant, index) =>
+                          index < 8 && <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
+                      )}
+                    </StaylistSlider>
+                  </Box>
+                </Content>
+              ) : (
+                loadingfunction()
+              )}
             </Section>
           </Container>
         ) : (

@@ -209,9 +209,6 @@ function PreferencePage() {
         {isLoaded ? (
           <Section>
             <ContentSection>
-              <Title>
-                <Text className={Styles.h4}>이런 가게는 어때요?</Text>
-              </Title>
               <Box>{showSelectedRestaurants()}</Box>
             </ContentSection>
           </Section>
