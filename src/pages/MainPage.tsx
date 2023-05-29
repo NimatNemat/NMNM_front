@@ -349,7 +349,7 @@ function MainPage() {
 
   const options = [
     { value: 'all', label: '니맛내맛 전체 식당리스트' },
-    { value: 'reco1', label: `${User?.groupName}을 위한 추천식당` },
+    { value: 'reco1', label: `${User?.groupName}그룹을 위한 추천식당` },
     { value: 'reco2', label: '당신만을 위한 추천식당' },
     { value: 'together', label: '함께먹기 추천 식당', isDisabled: true },
   ];
