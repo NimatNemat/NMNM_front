@@ -349,15 +349,15 @@ function MainPage() {
 
   let groupName;
   if (User?.groupName === 'A') {
-    groupName = '미식가';
+    groupName = '육식맨';
   } else if (User?.groupName === 'B') {
     groupName = '웰빙';
   } else if (User?.groupName === 'C') {
-    groupName = '육식맨';
-  } else if (User?.groupName === 'D') {
     groupName = '가성비';
-  } else {
+  } else if (User?.groupName === 'D') {
     groupName = '초딩입맛';
+  } else {
+    groupName = '미식가';
   }
 
   const options = [

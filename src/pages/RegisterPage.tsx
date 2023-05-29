@@ -229,15 +229,15 @@ function RegisterPage() {
     let groupName = '';
     if (groupid) {
       if (groupid === '1') {
-        groupName = 'A';
+        groupName = 'E';
       } else if (groupid === '2') {
         groupName = 'B';
       } else if (groupid === '3') {
-        groupName = 'C';
+        groupName = 'A';
       } else if (groupid === '4') {
-        groupName = 'D';
+        groupName = 'C';
       } else {
-        groupName = 'E';
+        groupName = 'D';
       }
     }
     formData.append('groupName', groupName);
