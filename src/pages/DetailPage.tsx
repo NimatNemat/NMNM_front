@@ -136,7 +136,7 @@ const Icon = styled.button`
   border: none;
   background-color: white;
   justify-content: center;
-  color: 'black';
+  color: black;
   &:hover {
     cursor: pointer;
     transform: translateY(-3px);
