@@ -55,7 +55,7 @@ const Section = styled.div`
   flex-direction: column;
   width: 100%;
   background-color: white;
-  box-shadow: 5rem 5rem 12rem 0rem rgba(0, 0, 0, 0.1);
+  box-shadow: 5px 5px 12px 0px rgba(0, 0, 0, 0.1);
 `;
 const Content = styled.div`
   display: flex;

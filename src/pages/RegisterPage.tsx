@@ -243,7 +243,8 @@ function RegisterPage() {
           setShowModal(false);
         })
         .catch((err) => {
-          alert(err.response.data);
+          alert('회원가입에 실패하였습니다.');
+          closeModal();
         });
     } catch (error) {
       alert('회원가입에 실패하였습니다.');
