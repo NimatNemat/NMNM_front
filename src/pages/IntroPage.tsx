@@ -158,7 +158,7 @@ function IntroPage() {
             className={`${Styles.fadeInOnScroll} ${Styles.visible}`}
           >
             <div className={className}>나만의</div>
-            <div className={className}>맛집리스트</div>
+            <div className={className}>맛플리스트</div>
             <div className={Styles.p1regular}>자신이 원하는 테마별로</div>
             <div className={Styles.p1regular}>맛집을 저장해 보세요!</div>
           </StyledTextDiv>
@@ -185,7 +185,7 @@ function IntroPage() {
             ref={contentRefs.current[3]}
             className={`${Styles.fadeInOnScroll} ${Styles.visible}`}
           >
-            <div className={className}>여기 뭐라쓰지?</div>
+            <div className={className}>서로의 맛집 공유</div>
             <div className={Styles.p1regular}>내가 쓴 리뷰,</div>
             <div className={Styles.p1regular}>좋아요한 식당</div>
             <div className={Styles.p1regular}>나만의 맛플리</div>
