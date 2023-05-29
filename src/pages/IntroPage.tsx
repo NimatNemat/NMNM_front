@@ -47,7 +47,7 @@ const StyledLogoDiv = styled.div`
 `;
 const StyledImage = styled.img`
   width: 50%;
-  object-fit: cover;
+  object-fit: fill;
 `;
 const StyledTextDiv = styled.div<{ alignItems: string }>`
   display: flex;
@@ -136,62 +136,62 @@ function IntroPage() {
         </ContentContainer>
       </FirstContainer>
       <Container backGround="#FFFDF5">
-        <ContentContainer justifyContent="flex-start">
-          <StyledTextDiv
-            alignItems="flex-start"
-            ref={contentRefs.current[0]}
-            className={`${Styles.fadeInOnScroll} ${Styles.visible}`}
-          >
+        <ContentContainer
+          justifyContent="flex-start"
+          ref={contentRefs.current[0]}
+          className={`${Styles.fadeInOnScroll} ${Styles.visible}`}
+        >
+          <StyledTextDiv alignItems="flex-start">
             <div className={className}>세상에 없던</div>
             <div className={className}>새로운 추천</div>
             <div className={Styles.p1regular}>개인의 취향분석을 통해</div>
-            <div className={Styles.p1regular}>같은 그룹에 속한 사람들로부터 추천받기</div>
+            <div className={Styles.p1regular}>자신과 취향이 비슷한 사람들로부터 추천받기</div>
           </StyledTextDiv>
-          <StyledImage src="/logo.png" alt="" />
+          <StyledImage src="/intro1.png" alt="" />
         </ContentContainer>
       </Container>
       <Container backGround="#FFFFFF">
-        <ContentContainer justifyContent="flex-start">
-          <StyledTextDiv
-            alignItems="flex-start"
-            ref={contentRefs.current[1]}
-            className={`${Styles.fadeInOnScroll} ${Styles.visible}`}
-          >
+        <ContentContainer
+          justifyContent="flex-start"
+          ref={contentRefs.current[1]}
+          className={`${Styles.fadeInOnScroll} ${Styles.visible}`}
+        >
+          <StyledTextDiv alignItems="flex-start">
             <div className={className}>나만의</div>
             <div className={className}>맛플리스트</div>
             <div className={Styles.p1regular}>자신이 원하는 테마별로</div>
             <div className={Styles.p1regular}>맛집을 저장해 보세요!</div>
           </StyledTextDiv>
-          <StyledImage src="/logo.png" alt="" />
+          <StyledImage src="/intro2.png" alt="" />
         </ContentContainer>
       </Container>
       <Container backGround="#FFFDF5">
-        <ContentContainer justifyContent="flex-start">
-          <StyledTextDiv
-            alignItems="flex-start"
-            ref={contentRefs.current[2]}
-            className={`${Styles.fadeInOnScroll} ${Styles.visible}`}
-          >
+        <ContentContainer
+          justifyContent="flex-start"
+          ref={contentRefs.current[2]}
+          className={`${Styles.fadeInOnScroll} ${Styles.visible}`}
+        >
+          <StyledTextDiv alignItems="flex-start">
             <div className={className}>우리 뭐 먹을래?</div>
             <div className={Styles.p1regular}>친구와 함께 맛집을 찾아보세요!</div>
           </StyledTextDiv>
-          <StyledImage src="/logo.png" alt="" />
+          <StyledImage src="/intro3.png" alt="" />
         </ContentContainer>
       </Container>
       <Container backGround="#FFFFFF">
-        <ContentContainer justifyContent="flex-start">
-          <StyledTextDiv
-            alignItems="flex-start"
-            ref={contentRefs.current[3]}
-            className={`${Styles.fadeInOnScroll} ${Styles.visible}`}
-          >
+        <ContentContainer
+          justifyContent="flex-start"
+          ref={contentRefs.current[3]}
+          className={`${Styles.fadeInOnScroll} ${Styles.visible}`}
+        >
+          <StyledTextDiv alignItems="flex-start">
             <div className={className}>서로의 맛집 공유</div>
             <div className={Styles.p1regular}>내가 쓴 리뷰,</div>
             <div className={Styles.p1regular}>좋아요한 식당</div>
             <div className={Styles.p1regular}>나만의 맛플리</div>
             <div className={Styles.p1regular}>친구들과 공유해보세요!</div>
           </StyledTextDiv>
-          <StyledImage src="/logo.png" alt="" />
+          <StyledImage src="/intro6.png" alt="" />
         </ContentContainer>
       </Container>
       <Container backGround="#FFFDF5">
