@@ -35,9 +35,11 @@ const PageSpan = styled.button<{ active?: boolean }>`
   background-color: #fffdf5;
   background-color: ${({ active }) => (active ? 'rgba(255, 137, 35, 0.6)' : '#fffdf5')};
   border-radius: 1rem;
-  &:hover {
-    color: white;
-    background-color: rgba(255, 137, 35, 0.6);
+  @media (min-width: 768px) {
+    &:hover {
+      color: white;
+      background-color: rgba(255, 137, 35, 0.6);
+    }
   }
 `;
 
@@ -100,10 +102,10 @@ function Pagination(props: pageProps) {
   return (
     <StyledNav>
       <PageUl>
-        <PageSpan className={Styles.p2bold} onClick={firstPage}>
+        <PageSpan className={Styles.p3bold} onClick={firstPage}>
           처음
         </PageSpan>
-        <PageSpan className={Styles.p2bold} onClick={prevPage}>
+        <PageSpan className={Styles.p3bold} onClick={prevPage}>
           이전
         </PageSpan>
         {currentButtons.map((number) => (
@@ -119,10 +121,10 @@ function Pagination(props: pageProps) {
             {number}
           </PageSpan>
         ))}
-        <PageSpan className={Styles.p2bold} onClick={nextPage}>
+        <PageSpan className={Styles.p3bold} onClick={nextPage}>
           다음
         </PageSpan>
-        <PageSpan className={Styles.p2bold} onClick={LastPage}>
+        <PageSpan className={Styles.p3bold} onClick={LastPage}>
           끝
         </PageSpan>
       </PageUl>

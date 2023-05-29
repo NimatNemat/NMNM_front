@@ -25,8 +25,8 @@ interface User {
 function MydetailPage() {
   const [User, setUser] = useState<User | null>(null);
   const [email, setEmail] = useState('');
-  const [detailValue, setDetailValue] = useState<string>('');
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [pwdChangeClicked, setPwdChangeClicked] = useState<boolean>(false);
   const navigate = useNavigate();
   const handleNicknameEvent = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -94,6 +94,7 @@ function MydetailPage() {
 
   const ChangePwdFunction = () => {
     setShowModal(true);
+    setPwdChangeClicked(true);
   };
   const modalRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -114,8 +115,12 @@ function MydetailPage() {
       const response = await axios.post('/users/login', formData);
       const userId = sessionStorage.getItem('userId');
       if (response.status === 200) {
-        sessionStorage.setItem('pwdAuthenticated', 'true');
-        navigate(`/pwdchange/${userId}`);
+        if (pwdChangeClicked) {
+          sessionStorage.setItem('pwdAuthenticated', 'true');
+          navigate(`/pwdchange/${userId}`);
+        } else {
+          UserOutfunction();
+        }
       } else {
         alert('아이디, 비밀번호를 다시 한번 확인하세요.');
       }
@@ -182,7 +187,7 @@ function MydetailPage() {
                 </UseroutBtn>
               </div>
               <div>
-                <UseroutBtn onClick={UserOutfunction} btnColor="#ff0000">
+                <UseroutBtn onClick={() => setShowModal(true)} btnColor="#ff0000">
                   <span className={Styles.p1bold}>회원탈퇴</span>
                 </UseroutBtn>
               </div>
@@ -193,7 +198,10 @@ function MydetailPage() {
       {showModal ? (
         <PwdModal
           show={showModal}
-          onClose={() => setShowModal(false)}
+          onClose={() => {
+            setShowModal(false);
+            setPwdChangeClicked(false);
+          }}
           onConfirm={(pwd) => {
             Loginfunction(pwd);
           }}
