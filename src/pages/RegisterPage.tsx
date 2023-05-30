@@ -225,7 +225,7 @@ function RegisterPage() {
     formData.append('birthdate', birthdate.toISOString());
     formData.append('gender', gender.toString());
     formData.append('nickName', nickname);
-    formData.append('profileImage', '/images/646f673fe659b357ce17f902');
+    formData.append('profileImage', '/images/64760a512ffc18134eb7e712');
     let groupName = '';
     if (groupid) {
       if (groupid === '1') {
