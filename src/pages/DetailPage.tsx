@@ -8,14 +8,10 @@ import {
   AiOutlineStar,
   AiOutlineBulb,
   AiOutlineClockCircle,
-  AiFillSignal,
-  AiOutlineBlock,
-  AiFillUnlock,
   AiOutlineUnlock,
   AiOutlineLock,
 } from 'react-icons/ai';
-import { BsBookmark, BsBookmarkFill, BsFillHeartFill, BsHeart } from 'react-icons/bs';
-import { FiSlash } from 'react-icons/fi';
+import { BsFillHeartFill, BsHeart } from 'react-icons/bs';
 import Map from '../components/Map';
 import StyledCard from '../components/StyledCard';
 import Styles from '../config/globalFontStyle.module.css';
@@ -293,12 +289,7 @@ function DetailPage() {
     fetchRestaurants();
   }, []);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const openModal = () => {
-    setShowModal(true);
-  };
-  const closeModal = () => {
-    setShowModal(false);
-  };
+
   const loadingfunction = () => {
     if (error) {
       return <Text>서버오류</Text>;

@@ -242,8 +242,6 @@ function Mypage() {
   const [followers, setFollowers] = useState<FollowUser[]>([]);
   const [followings, setFollowings] = useState<FollowUser[]>([]);
   const [followingClicked, setFollowingClicked] = useState<boolean>(false);
-  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
-  const [deleteModalData, setDeleteModalData] = useState<number>(0);
 
   let likedCount = 0;
   let banCount = 0;
@@ -288,8 +286,6 @@ function Mypage() {
     setRenderCnt(12);
   };
 
-  const [errorMessage, setErrorMessage] = useState<string>('');
-
   const checkUser = async () => {
     try {
       const response = await axios.get(`/users/userId?userId=${id}`);
@@ -306,7 +302,6 @@ function Mypage() {
     setIsLoaded(false);
     try {
       const response = await axios.get(`/restaurant/all`);
-      setRestaurants(response.data);
       setIsLoaded(true);
       const liked = response.data.filter((restaurant: Restaurant) => {
         return id && restaurant.likeUserList && restaurant.likeUserList.includes(id);
