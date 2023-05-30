@@ -142,7 +142,23 @@ const Icon = styled.button`
     transform: translateY(-3px);
   }
 `;
-
+interface Review {
+  _id: {
+    timestamp: number;
+    date: string;
+  };
+  reviewId: number;
+  restaurantId: number;
+  userId: string;
+  restaurantName: string;
+  userNickName: string;
+  reviewInfo: string;
+  reviewScore: number;
+  simpleEvaluation: number;
+  reviewDate: string;
+  reviewImage: string[];
+  profileImage: string;
+}
 function DetailPage() {
   const { id } = useParams<{ id: string }>();
 
@@ -170,7 +186,7 @@ function DetailPage() {
     imageUrl: string;
     xposition: number;
     yposition: number;
-    reviews: [];
+    reviews: Review[];
     banUserList: string[];
   }
 
@@ -180,6 +196,7 @@ function DetailPage() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading2, setLoading2] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+
   const fetchRestaurants = async () => {
     setLoading2(false);
     try {
@@ -196,7 +213,6 @@ function DetailPage() {
     setIsLoaded(false);
     const response = await axios.get(`/restaurant/${id}`);
     setRestaurant(response.data);
-    setReview(response.data.reviews.length);
 
     if (response.data.likeUserList) {
       response.data.likeUserList.forEach((user: string) => {
@@ -212,10 +228,11 @@ function DetailPage() {
         }
       });
     }
+
     setIsLoaded(true);
   };
   const [isLoaded, setIsLoaded] = useState(false);
-  const [review, setReview] = useState<number>(0);
+  const [review, setReview] = useState<number>(5);
   const likefunction: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
     if (sessionStorage.getItem('userId') === null) {
@@ -292,6 +309,7 @@ function DetailPage() {
     fetchData();
     fetchRestaurants();
   }, []);
+
   const [showModal, setShowModal] = useState<boolean>(false);
   const openModal = () => {
     setShowModal(true);
@@ -309,6 +327,7 @@ function DetailPage() {
   const modalRef = useRef<HTMLDivElement>(null);
   const shareUrl = `https://nimatnemat.github.io/detail/${id}`;
   const title = '맛집 공유';
+
   return (
     <>
       <DetailPageContainer>
@@ -459,6 +478,7 @@ function DetailPage() {
                   ) : (
                     restaurant.reviews
                       .map((item: any) => item.review)
+                      .reverse()
                       .map((Review, index) => {
                         if (index < review) {
                           return <ReviewComponent review={Review} />;
@@ -467,20 +487,16 @@ function DetailPage() {
                       })
                   )}
                 </Box>
-              </Content>
-              {review < restaurant.reviews.length && (
                 <StyledButton
                   onClick={() => {
-                    if (review <= restaurant.reviews.length) {
-                      setReview((prev) => prev + 3);
-                    }
+                    setReview((prev) => prev + 3);
                   }}
                   fontsize="1.2rem"
                   padding="0.5rem 0"
                 >
                   더보기
                 </StyledButton>
-              )}
+              </Content>
             </Section>
             <Section>
               {loading2 && !error ? (
