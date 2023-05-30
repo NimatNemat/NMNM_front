@@ -33,6 +33,7 @@ interface Review {
   simpleEvaluation: number;
   reviewDate: string;
   reviewImage: string[];
+  profileImage: string;
 }
 
 function MyReview({ setTotalReviews, id, rendercnt }: MyReviewProps) {

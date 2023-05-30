@@ -7,7 +7,6 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 import StyledButton from '../components/StyledButton';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledCard from '../components/StyledCard';
-import ReviewComponent from '../components/ReviewComponent';
 import StyledModal from '../components/StyledModal';
 import FollowModal from '../components/FollowModal';
 import DeleteModal from '../components/DeleteModal';

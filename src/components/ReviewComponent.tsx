@@ -126,6 +126,7 @@ interface Review {
   simpleEvaluation: number;
   reviewDate: string;
   reviewImage: string[];
+  profileImage: string;
 }
 
 interface Props {
@@ -164,7 +165,7 @@ function ReviewComponent(props: Props) {
         )}
       </Rowbox>
       <ProfileContainer>
-        <ProfileImg src="/img.png" alt="profile" onClick={handleProfileClick} />
+        <ProfileImg src={`https://nimatnemat.site${review.profileImage}`} alt="profile" onClick={handleProfileClick} />
         <Colbox className={Styles.p2bold}>
           <div>{review.userNickName}</div>
           <div>{review.reviewDate.split('T')[0]}</div>
