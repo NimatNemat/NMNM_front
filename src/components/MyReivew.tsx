@@ -58,7 +58,7 @@ function MyReview({ setTotalReviews, id, rendercnt }: MyReviewProps) {
   if (loaded === false) {
     content = <SpinnerComponent />;
   } else if (reviewList.length === 0) {
-    content = null;
+    content = <div className={Styles.p1bold}>작성한 리뷰가 없습니다.</div>;
   } else {
     content = reviewList.map(
       (review, index) => index < rendercnt && <ReviewComponent review={review} key={review.reviewId} />
