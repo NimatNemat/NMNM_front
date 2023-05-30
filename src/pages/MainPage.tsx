@@ -134,6 +134,7 @@ const SelectListStyle = {
     border: '#0.1rem solid rgba(128, 128, 128, 0.3)',
     height: '3.8rem',
     boxShadow: 'none',
+    width: '25rem',
   }),
   indicatorsContainer: (provided: any) => ({
     ...provided,
@@ -699,7 +700,7 @@ function MainPage() {
                 }}
               />
             </GridHeaderContainer>
-            {loading ? showAllRestaurant() : <h1>로딩중입니다.</h1>}
+            {loading ? showAllRestaurant() : <SpinnerComponent />}
           </ListContainer>
         </Container>
       </MainPageContainer>
