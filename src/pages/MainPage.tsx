@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Select, { ActionMeta, InputActionMeta, SingleValue } from 'react-select';
 import axios from 'axios';
 import styled from 'styled-components';
-import { AiOutlineSearch } from 'react-icons/ai';
+import { AiOutlineSearch, AiOutlineReload } from 'react-icons/ai';
 import Styles from '../config/globalFontStyle.module.css';
 import StyledTag from '../components/StyledTag';
 import StyledCard from '../components/StyledCard';
@@ -79,6 +79,18 @@ const ListContainer = styled.div`
   @media (max-width: 470px) {
     justify-content: center;
     align-items: center;
+  }
+`;
+
+const Icon = styled.button`
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background-color: white;
+  &:hover {
+    cursor: pointer;
   }
 `;
 
@@ -685,6 +697,9 @@ function MainPage() {
                     </Btn>
                   </>
                 ) : null}
+                <Icon>
+                  <AiOutlineReload size="3rem" />
+                </Icon>
               </TagListContainer>
             </TagContainer>
             <GridHeaderContainer>

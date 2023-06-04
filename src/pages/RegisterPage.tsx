@@ -9,10 +9,6 @@ import Calendar from '../components/Calendar';
 import Modal from '../components/Modal';
 import SpinnerComponent from '../components/Spinner';
 
-interface ResisterProps {
-  groupId: number;
-}
-
 const RegisterPageContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -253,11 +249,11 @@ function RegisterPage() {
             'Content-Type': 'application/json',
           },
         })
-        .then((res) => {
+        .then(() => {
           Loginfunction();
           setShowModal(false);
         })
-        .catch((err) => {
+        .catch(() => {
           alert('회원가입에 실패하였습니다.');
           closeModal();
         });
@@ -268,9 +264,6 @@ function RegisterPage() {
 
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState<boolean>(false);
-  const openModal = () => {
-    setShowModal(true);
-  };
   const closeModal = () => {
     setShowModal(false);
   };
