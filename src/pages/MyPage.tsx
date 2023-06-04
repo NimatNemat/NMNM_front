@@ -353,7 +353,10 @@ function Mypage() {
     fetchData();
     fetchFollowData();
     fetchPlayList();
-  }, [id, isFollowing]);
+  }, [id]);
+  useEffect(() => {
+    fetchFollowData();
+  }, [isFollowing]);
 
   const toggleIsFollowing = () => {
     follow();
