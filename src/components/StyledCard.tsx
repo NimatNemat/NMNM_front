@@ -200,10 +200,7 @@ function StyledCard(props: StyledCardProps) {
   const [likeCount, setLikeCount] = useState<number>(restaurant.likeUserList ? restaurant.likeUserList.length : 0);
   const [playlist, setPlaylist] = useState<playList[]>([]);
   return (
-    <StyledLink
-      to={`https:nimatnemat.github.io/detail/${restaurant.restaurantId}`}
-      style={{ textDecoration: 'none', color: 'black' }}
-    >
+    <StyledLink to={`/detail/${restaurant.restaurantId}`} style={{ textDecoration: 'none', color: 'black' }}>
       <Card width={width}>
         {restaurant.imageUrl === null ? (
           <CardImage src="/logo.png" alt="" />

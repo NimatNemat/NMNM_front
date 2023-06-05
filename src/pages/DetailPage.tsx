@@ -8,10 +8,14 @@ import {
   AiOutlineStar,
   AiOutlineBulb,
   AiOutlineClockCircle,
+  AiFillSignal,
+  AiOutlineBlock,
+  AiFillUnlock,
   AiOutlineUnlock,
   AiOutlineLock,
 } from 'react-icons/ai';
-import { BsFillHeartFill, BsHeart } from 'react-icons/bs';
+import { BsBookmark, BsBookmarkFill, BsFillHeartFill, BsHeart } from 'react-icons/bs';
+import { FiSlash } from 'react-icons/fi';
 import Map from '../components/Map';
 import StyledCard from '../components/StyledCard';
 import Styles from '../config/globalFontStyle.module.css';
@@ -304,10 +308,15 @@ function DetailPage() {
     }
     fetchData();
     fetchRestaurants();
-  }, []);
+  }, [id]);
 
   const [showModal, setShowModal] = useState<boolean>(false);
-
+  const openModal = () => {
+    setShowModal(true);
+  };
+  const closeModal = () => {
+    setShowModal(false);
+  };
   const loadingfunction = () => {
     if (error) {
       return <Text>서버오류</Text>;
@@ -499,19 +508,7 @@ function DetailPage() {
                     <StaylistSlider num={1}>
                       {restaurants?.map(
                         (restaurant, index) =>
-                          index < 8 && (
-                            <Link
-                              to={`/detail/${restaurant.restaurantId}`}
-                              style={{ textDecoration: 'none', color: 'black' }}
-                            >
-                              <StyledCard
-                                restaurant={restaurant}
-                                showIconBox={false}
-                                width="100%"
-                                key={restaurant.restaurantId}
-                              />
-                            </Link>
-                          )
+                          index < 8 && <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
                       )}
                     </StaylistSlider>
                   </Box>
