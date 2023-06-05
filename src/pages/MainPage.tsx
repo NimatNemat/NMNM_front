@@ -697,9 +697,6 @@ function MainPage() {
                     </Btn>
                   </>
                 ) : null}
-                <Icon>
-                  <AiOutlineReload size="3rem" />
-                </Icon>
               </TagListContainer>
             </TagContainer>
             <GridHeaderContainer>
@@ -713,6 +710,9 @@ function MainPage() {
                   setSelectedLabel(option.label);
                 }}
               />
+              <Icon>
+                <AiOutlineReload size="3rem" />
+              </Icon>
             </GridHeaderContainer>
             {loading ? showAllRestaurant() : <SpinnerComponent />}
           </ListContainer>

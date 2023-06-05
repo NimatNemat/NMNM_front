@@ -54,7 +54,7 @@ export default function Router() {
             <Route path="/modify/*" element={<ModifyPage />} />
             <Route path="/review/:id" element={<ReviewPage />} />
             <Route path="/Suggestion/:id" element={<Suggestion />} />
-            <Route path="/mydetail/:id*" element={<MydetailPage />} />
+            <Route path="/mydetail/:id" element={<MydetailPage />} />
           </Route>
           <Route element={<PwdRoute />}>
             <Route path="/pwdchange/:id" element={<PwdChangePage />} />

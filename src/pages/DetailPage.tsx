@@ -499,7 +499,19 @@ function DetailPage() {
                     <StaylistSlider num={1}>
                       {restaurants?.map(
                         (restaurant, index) =>
-                          index < 8 && <StyledCard restaurant={restaurant} showIconBox={false} width="100%" />
+                          index < 8 && (
+                            <Link
+                              to={`/detail/${restaurant.restaurantId}`}
+                              style={{ textDecoration: 'none', color: 'black' }}
+                            >
+                              <StyledCard
+                                restaurant={restaurant}
+                                showIconBox={false}
+                                width="100%"
+                                key={restaurant.restaurantId}
+                              />
+                            </Link>
+                          )
                       )}
                     </StaylistSlider>
                   </Box>
