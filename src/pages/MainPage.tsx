@@ -11,6 +11,7 @@ import StyledInput from '../components/StyledInput';
 import StyledButton from '../components/StyledButton';
 import Pagination from '../components/Pagination';
 import SpinnerComponent from '../components/Spinner';
+import Modal from '../components/Modal';
 
 interface playList {
   tastePlaylistName: string;
@@ -601,6 +602,28 @@ function MainPage() {
       </OptionTextDiv>
     </OptionDiv>
   );
+  const [refreshModal, setRefreshModal] = useState(false);
+  const secondRefresh = async () => {
+    try {
+      setRefreshModal(true);
+      const res = await axios.get(`/secondRecommendUpdate?userId=${sessionStorage.getItem('userId')}`);
+      fetchData();
+      setRefreshModal(false);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const firstRefresh = async () => {
+    try {
+      setRefreshModal(true);
+      const res = await axios.get(`/firstRecommendUpdate?groupName=${User?.groupName}`);
+      fetchData();
+      setRefreshModal(false);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <>
       <MainPageContainer className="MainPage">
@@ -711,7 +734,9 @@ function MainPage() {
                 }}
               />
               <Icon>
-                <AiOutlineReload size="3rem" />
+                {/* 새로고침 */}
+                {selected === 'reco1' && <AiOutlineReload size="3rem" onClick={secondRefresh} />}
+                {selected === 'reco2' && <AiOutlineReload size="3rem" onClick={firstRefresh} />}
               </Icon>
             </GridHeaderContainer>
             {loading ? showAllRestaurant() : <SpinnerComponent />}
@@ -729,6 +754,13 @@ function MainPage() {
           removerestaurantToPlayList={removerestaurantToPlayList}
         />
       ) : null}
+      {refreshModal && (
+        <Modal show={refreshModal} modalRef={modalRef}>
+          <div className={Styles.h4}>사용자 정보를 업데이트 중 입니다.</div>
+          <SpinnerComponent />
+          <div className={Styles.p2bold}>잠시만 기다려 주세요.</div>
+        </Modal>
+      )}
     </>
   );
 }
