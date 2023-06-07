@@ -735,8 +735,8 @@ function MainPage() {
               />
               <Icon>
                 {/* 새로고침 */}
-                {selected === 'reco1' && <AiOutlineReload size="3rem" onClick={secondRefresh} />}
-                {selected === 'reco2' && <AiOutlineReload size="3rem" onClick={firstRefresh} />}
+                {selected === 'reco2' && <AiOutlineReload size="3rem" onClick={secondRefresh} />}
+                {selected === 'reco1' && <AiOutlineReload size="3rem" onClick={firstRefresh} />}
               </Icon>
             </GridHeaderContainer>
             {loading ? showAllRestaurant() : <SpinnerComponent />}
